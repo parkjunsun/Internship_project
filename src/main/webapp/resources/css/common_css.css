@@ -1,0 +1,135 @@
+@charset "UTF-8";
+
+.table>:not(caption)>*>* {
+    border-top-width: 1px !important;
+    border-bottom-width: 1px !important;
+    border-left-width: 1px !important;
+    border-right-width: 1px !important;
+    vertical-align: middle;
+}
+
+.table th {
+    background-color: #e9ecef;
+}
+
+.tab_span {
+    color: #212529;
+    font-size: 28px;
+}
+
+.w10{
+   width: 10px !important;
+}
+
+.w20{
+    width: 20px !important;
+}
+
+.w30{
+    width: 30px !important;
+}
+
+.w40{
+    width: 40px !important;
+}
+
+.w50{
+    width: 50px !important;
+}
+
+.w60{
+    width: 60px !important;
+}
+
+.w70{
+    width: 70px !important;
+}
+
+.w80{
+    width: 80px !important;
+}
+
+.w90{
+    width: 90px !important;
+}
+
+.w100{
+    width: 100px !important;
+}
+
+.w110{
+    width: 110px !important;
+}
+
+.w120{
+    width: 120px !important;
+}
+
+.w130{
+    width: 130px !important;
+}
+
+.w140{
+    width: 140px !important;
+}
+
+.w150{
+    width: 150px !important;
+}
+
+.w10p{
+    width: 10% !important;
+}
+
+.w15p{
+    width: 15% !important;
+}
+
+.w20p{
+    width: 20% !important;
+}
+
+.w30p{
+    width: 30% !important;
+}
+
+.w33p{
+    width: 33% !important;
+}
+
+.w100p{
+    width: 100% !important;
+}
+
+.ctr_td {
+    text-align: center;
+}
+
+.ctr_td i {
+    font-size: 24px;
+}
+
+.invert90 {
+    -webkit-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+}
+
+.invert180 {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+}
+i.disabled {
+    color: #a0a0a0;
+}
+
+.flSpan {
+    float: left;
+}
+.border_head {
+    border : 1px solid #e9ecef;
+    padding: 6px 4px 6px 4px;
+}
+
+.no_border_head {
+    padding: 6px 4px 6px 4px;
+}
