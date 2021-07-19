@@ -15,7 +15,7 @@ package sptek.spdevteam.intern;
 //@MapperScan(basePackages="sptek.spdevteam.intern.*.mybatis")
 //@EnableTransactionManagement
 public class DatabaseConfig {
-
+//      DB 생성되면 설정해주세요
 //    @Bean
 //    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
 //        final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
