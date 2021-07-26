@@ -15,6 +15,7 @@ public class HomeController {
 
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST })
     public String home(HttpServletRequest request, HttpServletResponse response){
+        // 소스추가
         log.page("/","home()");
         return "redirect:/temp/list";
     }
