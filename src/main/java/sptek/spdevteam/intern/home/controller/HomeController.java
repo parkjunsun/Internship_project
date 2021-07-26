@@ -16,6 +16,7 @@ public class HomeController {
     @RequestMapping(value = "/", method = { RequestMethod.GET, RequestMethod.POST })
     public String home(HttpServletRequest request, HttpServletResponse response){
         log.page("/","home()");
+        System.out.println("HomeController.home");
         return "redirect:/temp/list";
     }
 }
