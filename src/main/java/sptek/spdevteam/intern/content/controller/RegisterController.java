@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import sptek.spdevteam.intern.common.CommonService;
 import sptek.spdevteam.intern.content.domain.Content;
 import sptek.spdevteam.intern.content.domain.Image;
+import sptek.spdevteam.intern.content.domain.SrcDto;
 import sptek.spdevteam.intern.content.service.RegisterService;
 
 import java.io.IOException;
@@ -20,13 +22,13 @@ public class RegisterController {
 
     private final RegisterService registerService;
 
+    private final CommonService commonService;
+
     @GetMapping("/register")
     public ModelAndView registerPage() {
 
         ModelAndView mv = new ModelAndView("content/content_register");
-        List<HashMap<String, String>> srcList = registerService.getSrcList();
-
-        System.out.println(srcList);
+        List<SrcDto> srcList = commonService.getSrcList();
 
         mv.addObject("srcList", srcList);
 

@@ -153,9 +153,11 @@
                             <td colspan="2">
                                 <select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
                                     <option selected>전체</option>
-                                    <option value="S0004">네이버뉴스</option>
-                                    <option value="S0009">서울경제</option>
-                                    <option value="S0014">디미토리</option>
+                                    <c:forEach var="item" items="${srcList}">
+                                        <option value="${item.cd}">${item.cd_nm}</option>
+                                    </c:forEach>
+<%--                                    <option value="S0009">서울경제</option>--%>
+<%--                                    <option value="S0014">디미토리</option>--%>
                                 </select>
                             </td>
                             <td></td>
