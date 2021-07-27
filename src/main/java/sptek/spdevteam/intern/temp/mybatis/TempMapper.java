@@ -5,7 +5,7 @@ import sptek.spdevteam.intern.temp.domain.TempDomain;
 
 import java.util.List;
 
-//@Repository
+@Repository
 public interface TempMapper {
 
     public List<TempDomain> getTemplist() throws Exception;

@@ -31,7 +31,6 @@ public class WebConfigStarter implements WebMvcConfigurer {
         registry.jsp("/WEB-INF/jsp/", ".jsp");
     }
 
-    /*
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/error").setViewName("error");
@@ -43,5 +42,5 @@ public class WebConfigStarter implements WebMvcConfigurer {
         registry.addViewController("/error/500").setViewName("error");
         registry.addViewController("/error/501").setViewName("error");
 
-    }*/
+    }
 }

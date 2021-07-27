@@ -15,8 +15,8 @@ public class TempServiceImpl implements TempService {
 
     private LogUtil log = new LogUtil(TempServiceImpl.class);
 
-    /*@Autowired
-    TempMapper tempMapper;*/
+    @Autowired
+    TempMapper tempMapper;
 
     @Override
     public TempDomain testMethod(TempDomain tempDomain) throws Exception {
@@ -26,10 +26,11 @@ public class TempServiceImpl implements TempService {
         map.put("key2","value2");
         tempDomain.setMap(map);
 
-//        tempDomain.setList(tempMapper.getTemplist());
+        tempDomain.setList(tempMapper.getTemplist());
 
         tempDomain.setS("string1");
 
         return tempDomain;
     }
+
 }

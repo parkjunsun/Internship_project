@@ -4,4 +4,7 @@
     <select id="getTemplist" resultType="sptek.spdevteam.intern.temp.domain.TempDomain">
         SELECT 1 AS i
     </select>
+<!--    <select id="getList" resultType="sptek.spdevteam.intern.temp.domain.commonDomain">-->
+<!--        SELECT cd_nm FROM internsc.tb_cd-->
+<!--    </select>-->
 </mapper>
