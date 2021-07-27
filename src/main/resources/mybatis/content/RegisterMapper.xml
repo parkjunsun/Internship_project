@@ -39,7 +39,4 @@
          'Y'
         )
     </insert>
-    <select id="getSrcList" resultType="HashMap">
-        SELECT cd,cd_nm FROM internsc.tb_cd WHERE grp_cd = 'SRC_TY'
-    </select>
 </mapper>

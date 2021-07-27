@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sptek.spdevteam.intern.common.mybatis.CommonMapper">
+    <select id="getSrcList" resultType="sptek.spdevteam.intern.content.domain.SrcDto">
+        SELECT cd,cd_nm FROM internsc.tb_cd WHERE grp_cd = 'SRC_TY'
+    </select>
+</mapper>
