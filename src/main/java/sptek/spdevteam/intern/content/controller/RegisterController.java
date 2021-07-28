@@ -9,6 +9,7 @@ import sptek.spdevteam.intern.common.CommonService;
 import sptek.spdevteam.intern.content.domain.Content;
 import sptek.spdevteam.intern.content.domain.Image;
 import sptek.spdevteam.intern.content.domain.SrcDto;
+import sptek.spdevteam.intern.content.domain.TplDto;
 import sptek.spdevteam.intern.content.service.RegisterService;
 
 import java.io.IOException;
@@ -29,7 +30,9 @@ public class RegisterController {
 
         ModelAndView mv = new ModelAndView("content/content_register");
         List<SrcDto> srcList = commonService.getSrcList();
+        List<TplDto> tplList = commonService.getTplList();
 
+        mv.addObject("tplList", tplList);
         mv.addObject("srcList", srcList);
 
         return mv;

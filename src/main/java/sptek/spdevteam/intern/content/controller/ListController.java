@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import sptek.spdevteam.intern.common.LogUtil;
 import sptek.spdevteam.intern.content.domain.ListDomain;
-import sptek.spdevteam.intern.content.service.ListService;
+import sptek.spdevteam.intern.content.service.impl.ListServiceImpl;
 import sptek.spdevteam.intern.temp.domain.TempDomain;
 
 import javax.servlet.http.HttpServletRequest;
