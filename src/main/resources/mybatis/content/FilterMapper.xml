@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sptek.spdevteam.intern.content.mybatis.FilterMapper">
+    <select id="getTempList" resultType="sptek.spdevteam.intern.content.domain.TempType">
+        SELECT cd,cd_nm FROM internsc.tb_cd WHERE grp_cd = 'TPL_TY'
+    </select>
+</mapper>
