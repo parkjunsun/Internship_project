@@ -76,7 +76,6 @@
                         alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
                         $('#enddate').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
                     }
-
                 }
             });
 
@@ -171,32 +170,26 @@
                         <td>
                             <div>
                                 <input class="form-check-input" type="radio" name="templateTypeRadio" id="flexRadio4" checked style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio4">
-                                    전체형
-                                </label>
-                                <input class="form-check-input" type="radio" name="templateTypeRadio" id="flexRadio5" style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio5">
-                                    블로그형
-                                </label>
-                                <input class="form-check-input" type="radio" name="templateTypeRadio" id="flexRadio6" style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio6">
-                                    카드
-                                </label>
+                                <label class="form-check-label" for="flexRadio4"> 전체 </label>
+                                <c:forEach var="temp" items="${tempList}">
+                                    <input class="form-check-input" type="radio" name="templateTypeRadio" id="flexRadio5" style="margin-left:6px; margin-right:6px;">
+                                    <label class="form-check-label" for="flexRadio5">${temp.cd_nm}</label>
+                                </c:forEach>
                             </div>
                         </td>
                         <th>콘텐츠 구분</th>
                         <td>
                             <div>
-                                <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio7" checked style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio7">
+                                <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio6" checked style="margin-left:6px; margin-right:6px;">
+                                <label class="form-check-label" for="flexRadio6">
                                     전체
+                                </label>
+                                <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio7" style="margin-left:6px; margin-right:6px;">
+                                <label class="form-check-label" for="flexRadio7">
+                                    내부
                                 </label>
                                 <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio8" style="margin-left:6px; margin-right:6px;">
                                 <label class="form-check-label" for="flexRadio8">
-                                    내부
-                                </label>
-                                <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio9" style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio9">
                                     외부
                                 </label>
                             </div>

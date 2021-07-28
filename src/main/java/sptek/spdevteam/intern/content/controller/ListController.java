@@ -11,6 +11,7 @@ import sptek.spdevteam.intern.common.CommonService;
 import sptek.spdevteam.intern.common.LogUtil;
 import sptek.spdevteam.intern.content.domain.ListDomain;
 import sptek.spdevteam.intern.content.domain.SrcDto;
+import sptek.spdevteam.intern.content.domain.TempType;
 import sptek.spdevteam.intern.content.service.ListService;
 import sptek.spdevteam.intern.temp.domain.TempDomain;
 
@@ -34,9 +35,14 @@ public class ListController {
     public ModelAndView searchMainPage(HttpServletRequest request, HttpServletResponse response) throws Exception{
         log.page("/content/search", "searchMainPage");
         List<SrcDto> srcList = commonService.getSrcList();
+        List<TempType> tempList = listService.getTempList();
+
+        System.out.println("tempList = " + tempList);
 
         ModelAndView mv = new ModelAndView("/content/content_search");
+
         mv.addObject("srcList", srcList);
+        mv.addObject("tempList", tempList);
         return mv;
     }
 
@@ -45,10 +51,7 @@ public class ListController {
         log.page("/content/search", "searchMainPage");
         ModelAndView mv = new ModelAndView("/content/content_list");
 
-        ListDomain temp = new ListDomain();
-        ListDomain temp2 = listService.listMethod(temp);
 
-        mv.addObject("result",temp2);
         return mv;
     }
 
