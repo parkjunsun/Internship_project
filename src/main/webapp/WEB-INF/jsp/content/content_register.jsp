@@ -287,7 +287,7 @@
                 </div>
             </div>
             <!-- Form Table 영역 // -->
-            <form action="/content/register" method="post" id="registerForm" enctype="multipart/form-data">
+            <form action="/content/register" method="post" id="registerForm" enctype="multipart/form-data" style="display: inline">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
                     <table class="table table-sm search-table">
                         <tbody>
