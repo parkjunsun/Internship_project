@@ -147,7 +147,8 @@
             const cur = Number(e.id[e.id.length-1]);
             const table = document.getElementById('extraContent');
             table.deleteRow(cur);
-            for (var i = cur+1 ; i <= idx_list.length; i++){
+            ctn_index -= 1;
+            for (var i = cur+1 ; i <= 5; i++){
                 var findTr = document.getElementById('tr' + String(i));
                 findTr.id = 'tr' + String(i - 1);
 
@@ -170,7 +171,6 @@
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
                 inputFile.name = 'ctn_img' + String(i - 1);
-                inputFile.addEventListener('change', function () {ctn_loadFile(this, String(i - 1))});
 
                 var removeBtn = document.getElementById('remove_btn' + String(i));
                 removeBtn.id = 'remove_btn' + String(i - 1)
