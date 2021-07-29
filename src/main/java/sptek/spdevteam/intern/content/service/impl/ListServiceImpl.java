@@ -31,7 +31,7 @@ public class ListServiceImpl implements ListService {
 
     @Override
     public List<ContentExcel> getList(ContentExcel contentExcel) throws Exception {
-        return listMapper.getList();
+        return listMapper.getList(contentExcel);
     }
 
 

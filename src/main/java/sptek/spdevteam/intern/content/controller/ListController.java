@@ -55,14 +55,11 @@ public class ListController {
     public ModelAndView searchResultPage(HttpServletRequest request, HttpServletResponse  response) throws Exception{
         log.page("/content/search", "searchMainPage");
         for (String name : Collections.<String>list(request.getParameterNames())) {
-            System.out.println("name, value = " + name);
+            System.out.println("name, value = " + name + ", "+ request.getParameter(name));
         }
 
         Map<String, String[]> paramMap = request.getParameterMap();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate startDate = LocalDate.parse(paramMap.get("dspStDt")[0], formatter);
-        LocalDate endDate = LocalDate.parse(paramMap.get("dspEndDt")[0], formatter);
 
         ContentExcel contentExcel = new ContentExcel();
 
@@ -70,20 +67,15 @@ public class ListController {
         contentExcel.setCtnSeq(100);
         contentExcel.setDspEndDt(paramMap.get("dspEndDt")[0]);
         contentExcel.setDspStDt(paramMap.get("dspStDt")[0]);
-        contentExcel.setCtnNm("%"+paramMap.get("ctnNm")[0]+"%");
+        contentExcel.setCtnNm(paramMap.get("ctnNm")[0]);
         contentExcel.setSrcCd(paramMap.get("srcCd")[0]);
         contentExcel.setDspYn(paramMap.get("dspYn")[0]);
         contentExcel.setTplCd(paramMap.get("tplCd")[0]);
 
+
+        System.out.println("contentExcel = " + contentExcel);
+
         List<ContentExcel> contentExcelList = listService.getList(contentExcel);
-
-        if (contentExcelList.isEmpty()) {
-            System.out.println("empty");
-        }
-        for (ContentExcel excel : contentExcelList) {
-            System.out.println("excel.toString() = " + excel.toString());
-        }
-
 
         ModelAndView mv = new ModelAndView("/content/content_list");
         mv.addObject("contentExcelList", contentExcelList);

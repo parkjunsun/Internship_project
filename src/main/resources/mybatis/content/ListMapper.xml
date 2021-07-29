@@ -12,11 +12,12 @@
             ctn_div as ctnDiv,
             dsp_yn as dspYn
         FROM internsc.tb_ctn
-        WHERE
-            dsp_st_dt <![CDATA[>=]]> #{dspStDt}
-            AND dsp_end_dt <![CDATA[<=]]> #{dspEndDt}
-            AND
-            ctn_nm LIKE '%' || #{ctnNm} || '%'
+        WHERE 1=1
+            AND dsp_st_dt <![CDATA[>=]]> to_timestamp(#{dspStDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
+            AND dsp_end_dt <![CDATA[<=]]> to_timestamp(#{dspEndDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+            <if test="ctnNm!=null and ctnNm!=''">
+                AND ctn_nm LIKE '%' || #{ctnNm} || '%'
+            </if>
             <if test='dspYn!=null &amp;&amp; !dspYn.equals("all")'>
                 AND dsp_yn = #{dspYn}
             </if>

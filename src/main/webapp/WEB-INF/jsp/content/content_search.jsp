@@ -100,19 +100,18 @@
                 var srcCd = $('#srcCd').val();
                 var tplCd = $(':radio[name="tplCd"]:checked').val();
                 var ctnDiv = $(':radio[name="ctnDiv"]:checked').val();
-                var queryJson = {"dspStDt":dspStDt
-                                ,"&dspEndDt":dspEndDt
-                                ,"&dspYn":dspYn
-                                ,"&ctnNm":ctnNm
-                                ,"&srcCd":srcCd
-                                ,"&tplCd":tplCd
-                                ,"&ctnDiv":ctnDiv}
+                var params = "dspStDt=" + dspStDt
+                                +"&dspEndDt=" + dspEndDt
+                                +"&dspYn=" + dspYn
+                                +"&ctnNm=" + ctnNm
+                                +"&srcCd=" + srcCd
+                                +"&tplCd=" + tplCd
+                                +"&ctnDiv=" + ctnDiv;
                 $.ajax({
-                    url:'/content/search'
-                    , method : 'POST'
-                    , data : queryJson
-                    , success :  function(resp){
-                        alert( JSON.stringify(queryJson))
+                    url:"/content/search"
+                    , method : "post"
+                    , data : params
+                    , success :  function(){
                     }
                 })
             }

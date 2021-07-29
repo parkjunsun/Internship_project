@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface ListMapper {
 
-    List<ContentExcel> getList();
+    List<ContentExcel> getList(ContentExcel contentExcel);
 
 }
