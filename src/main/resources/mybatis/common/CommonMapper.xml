@@ -4,4 +4,8 @@
     <select id="getSrcList" resultType="sptek.spdevteam.intern.content.domain.SrcDto">
         SELECT cd,cd_nm FROM internsc.tb_cd WHERE grp_cd = 'SRC_TY'
     </select>
+    
+    <select id="getTplList" resultType="sptek.spdevteam.intern.content.domain.TplDto">
+        SELECT cd,cd_nm FROM internsc.tb_cd WHERE grp_cd = 'TPL_TY' ORDER BY cd;
+    </select>
 </mapper>

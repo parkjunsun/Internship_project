@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sptek.spdevteam.intern.common.mybatis.CommonMapper;
 import sptek.spdevteam.intern.content.domain.SrcDto;
+import sptek.spdevteam.intern.content.domain.TplDto;
 
 import java.util.List;
 
@@ -18,5 +19,8 @@ public class CommonServiceImpl implements CommonService {
         return commonMapper.getSrcList();
     }
 
-
+    @Override
+    public List<TplDto> getTplList() {
+        return commonMapper.getTplList();
+    }
 }
