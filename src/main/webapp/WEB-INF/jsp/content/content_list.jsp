@@ -7,13 +7,47 @@
 <head>
     <%@ include file="/WEB-INF/jsp/include/common_plugin.jsp" %>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/free-jqgrid/4.8.0/css/ui.jqgrid.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/free-jqgrid/4.8.0/js/i18n/grid.locale-de.js"></script>
+    <script src="https://cdn.jsdelivr.net/free-jqgrid/4.8.0/js/jquery.jqgrid.min.js"></script>
     <script type="text/javascript">
         var params ='<c:out value="${result}"/>';
 
         $(document).ready(function() {
             $.initPage();
+            $("table").after('<div id="nav"></div>');
+            var rowPerPage = 4;
+            var tr = $("table tbody tr");
+            var rowsTotal = tr.length;
+            var pagesTotal = Math.ceil(rowsTotal/rowPerPage);
+            for (i = 0; i < pagesTotal; i++){
+                $("<a href=\"#\"></a>").attr("id", i).text(i + 1).appendTo("#nav");
+                // $("#nav").append($("<a href=\"#\"></a>").attr("id", i).text(i + 1));
+            }
+
+            tr
+                .addClass("overflowHidden")
+                //.slice(0, rowPerPage)
+                .removeClass("overflowHidden");
+
+            $("#nav a").click(function(){
+                $("#nav a").removeClass("active");
+                $(this).addClass("active");
+
+                var currPage = $(this).attr("id");
+                var startItem = currPage * rowPerPage;
+                var endItem = startItem + rowPerPage;
+                tr
+                    .css("opacity","0")
+                    .addClass("overflowHidden")
+                    .slice(startItem, endItem)
+                    .removeClass("overflowHidden")
+                    .animate({opacity:1}, 300);
+                return false();
+            });
+            $("#nav a:first").addClass("active");
         });
 
         ;(function($){
@@ -86,6 +120,85 @@
             $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
 
 
+            // $(function(){
+            //
+            //     // 변수 선언
+            //
+            //     var i, max, myData, grid = $("#list4");
+            //
+            //
+            //
+            //     // grid 설정
+            //
+            //     grid.jqGrid({
+            //
+            //         datatype: "local",
+            //
+            //         height: 'auto',
+            //
+            //         colNames:['Inv No','Date', 'Client', 'Amount','Tax','Total','Notes'],
+            //
+            //         colModel:[
+            //
+            //             {name:'id',index:'id', width:60, sorttype:"int"},
+            //
+            //             {name:'invdate',index:'invdate', width:90, sorttype:"date"},
+            //
+            //             {name:'name',index:'name', width:100},
+            //
+            //             {name:'amount',index:'amount', width:80, align:"right",sorttype:"float"},
+            //
+            //             {name:'tax',index:'tax', width:80, align:"right",sorttype:"float"},
+            //
+            //             {name:'total',index:'total', width:80,align:"right",sorttype:"float"},
+            //
+            //             {name:'note',index:'note', width:150, sortable:false}
+            //
+            //         ],
+            //
+            //         multiselect: true,
+            //
+            //         caption: "Manipulating Array Data"
+            //
+            //     });
+            //
+            //
+            //
+            //     // 로컬 데이터
+            //
+            //     myData = [
+            //
+            //         {id:"1",invdate:"2007-10-01",name:"test",note:"note",amount:"200.00",tax:"10.00",total:"210.00"},
+            //
+            //         {id:"2",invdate:"2007-10-02",name:"test2",note:"note2",amount:"300.00",tax:"20.00",total:"320.00"},
+            //
+            //         {id:"3",invdate:"2007-09-01",name:"test3",note:"note3",amount:"400.00",tax:"30.00",total:"430.00"},
+            //
+            //         {id:"4",invdate:"2007-10-04",name:"test",note:"note",amount:"200.00",tax:"10.00",total:"210.00"},
+            //
+            //         {id:"5",invdate:"2007-10-05",name:"test2",note:"note2",amount:"300.00",tax:"20.00",total:"320.00"},
+            //
+            //         {id:"6",invdate:"2007-09-06",name:"test3",note:"note3",amount:"400.00",tax:"30.00",total:"430.00"},
+            //
+            //         {id:"7",invdate:"2007-10-04",name:"test",note:"note",amount:"200.00",tax:"10.00",total:"210.00"},
+            //
+            //         {id:"8",invdate:"2007-10-03",name:"test2",note:"note2",amount:"300.00",tax:"20.00",total:"320.00"},
+            //
+            //         {id:"9",invdate:"2007-09-01",name:"test3",note:"note3",amount:"400.00",tax:"30.00",total:"430.00"}
+            //
+            //     ];
+            //
+            //
+            //
+            //     // 데이터 추가
+            //
+            //     for( i=0, max = myData.length ; i<=max ; i++ ){
+            //
+            //         grid.jqGrid('addRowData', i+1, myData[i]);
+            //
+            //     }
+
+            });
         });
 
     </script>
@@ -219,6 +332,92 @@
             <div class="frameLine mb-3"></div>
             <!-- // Button Set (middle 정렬) -->
 
+            <table id="products" summary="창수가 사고 싶은 물건들을 번호, 카테고리, 제품, 가격별로 제공한 표">
+                <caption>창수가 사고 싶은 물건 목록</caption>
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Clothing</td>
+                    <td>North Face Jacket</td>
+                    <td>$189.99</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Shoes</td>
+                    <td>Nike</td>
+                    <td>$59.99</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Electronics</td>
+                    <td>LED TV</td>
+                    <td>$589.99</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Sporting Goods</td>
+                    <td>Ping Golf Clubs</td>
+                    <td>$159.99</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Clothing</td>
+                    <td>Sweater</td>
+                    <td>$19.99</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Clothing</td>
+                    <td>North Face Jacket</td>
+                    <td>$189.99</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Shoes</td>
+                    <td>Nike</td>
+                    <td>$59.99</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Electronics</td>
+                    <td>LED TV</td>
+                    <td>$589.99</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Sporting Goods</td>
+                    <td>Ping Golf Clubs</td>
+                    <td>$159.99</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Shoes</td>
+                    <td>Nike</td>
+                    <td>$59.99</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>Electronics</td>
+                    <td>LED TV</td>
+                    <td>$589.99</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>Sporting Goods</td>
+                    <td>Ping Golf Clubs</td>
+                    <td>$159.99</td>
+                </tr>
+                </tbody>
+            </table>
+
             <!-- grid Semple 영역 // -->
             <span class="tab_span">Grid title</span>
             <div class="table-responsive">
@@ -296,6 +495,80 @@
                     </tbody>
                 </table>
             </div>
+
+            <table id="products" border="1">
+                <caption>product list
+                    <form action="" id="setRows">
+                        <p>
+                            showing
+                            <input type="text" name="rowPerPage" value="3">
+                            item per page
+                        </p>
+                    </form>
+
+                </caption>
+
+                <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Category</th>
+                    <th>Product</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Clothing</td>
+                    <td>Jacket</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>life</td>
+                    <td>dish</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Clothing</td>
+                    <td>shocks</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Clothing</td>
+                    <td>sports</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>shoes</td>
+                    <td>nike</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>shoes</td>
+                    <td>addidas</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Bags</td>
+                    <td>backpack</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Clothing</td>
+                    <td>Jacket</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>shoes</td>
+                    <td>bonie</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Clothing</td>
+                    <td>Jacket</td>
+                </tr>
+                </tbody>
+
+            </table>
             <!-- // grid Semple 영역 -->
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">

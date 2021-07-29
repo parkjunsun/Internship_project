@@ -10,6 +10,7 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
+
         var params ='<c:out value="${result}"/>';
 
         $(document).ready(function() {
@@ -21,6 +22,8 @@
                 console.log(params);
             };
         })(jQuery);
+
+
 
         $(function() {
             //input을 datepicker로 선언
@@ -84,6 +87,40 @@
             $('#enddate').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
             $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
 
+            function searchWithFilter(){
+                alert("검색!");
+            }
+
+
+            function sendData() {
+                var dspStDt = $('#startdate').val();
+                var dspEndDt = $('#enddate').val();
+                var dspYn = $(':radio[name="dspYn"]:checked').val();
+                var ctnNm = $('#ctnNm').val();
+                var srcCd = $('#srcCd').val();
+                var tplCd = $(':radio[name="tplCd"]:checked').val();
+                var ctnDiv = $(':radio[name="ctnDiv"]:checked').val();
+                var queryJson = {"dspStDt":dspStDt
+                                ,"&dspEndDt":dspEndDt
+                                ,"&dspYn":dspYn
+                                ,"&ctnNm":ctnNm
+                                ,"&srcCd":srcCd
+                                ,"&tplCd":tplCd
+                                ,"&ctnDiv":ctnDiv}
+                $.ajax({
+                    url:'/content/search'
+                    , method : 'POST'
+                    , data : queryJson
+                    , success :  function(resp){
+                        alert( JSON.stringify(queryJson))
+                    }
+                })
+            }
+
+            $(function(){
+                $('#btn_submit').on('click',sendData);
+            })
+
         });
 
     </script>
@@ -99,118 +136,124 @@
         <%@ include file="/WEB-INF/jsp/include/common_left.jsp" %>
         <!-- //Left(Sidebar) 영역 -->
         <!-- Content Body 영역 // -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="no_border_head">
-                <span class="tab_span flSpan">콘텐츠조회</span>
-                <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
-                    <div class="btn-toolbar">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onClick="location.href='./register'">등록</button>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="no_border_head">
+                    <span class="tab_span flSpan">콘텐츠조회</span>
+                    <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
+                        <div class="btn-toolbar">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary" onClick="location.href='./register'">등록</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Form Table 영역 // -->
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
-                <table class="table table-sm seaerch-table" >
-                    <tbody>
-                    <colgroup>
-                        <col width="130px">
-                        <col width="38%">
-                        <col width="130px">
-                        <col width="*">
-                    </colgroup>
-                    <tr height="50">
-                        <th>전시기간</th>
-                        <td>
-                            <input type="text" class="datepicker" id="startdate" style="margin-left:6px; width:110px; height:40px;">
-                            ~
-                            <input type="text" class="datepicker" id="enddate" style="margin-left:6px; width:110px; height:40px;">
-                        </td>
-                        <th>전시상태</th>
-                        <td>
-                            <div>
-                                <input class="form-check-input" type="radio" name="displayStateRadio" id="flexRadio1" checked style="margin-left:6px; margin-right:6px;">
-                                <label class="display-state-label" for="flexRadio1">
-                                    전체
-                                </label>
-                                <input class="form-check-input" type="radio" name="displayStateRadio" id="flexRadio2" style="margin-left:6px; margin-right:6px;">
-                                <label class="display-state-label" for="flexRadio2">
-                                    전시
-                                </label>
-                                <input class="form-check-input" type="radio" name="displayStateRadio" id="flexRadio3" style="margin-left:6px; margin-right:6px;">
-                                <label class="display-state-label" for="flexRadio3">
-                                    미전시
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr  height="50">
-                        <th>검색</th>
-                        <td>
-                            <select class="form-select w130" style="margin-left:6px; margin-right:3px; display: inline-block;">
-                                <option selected>전체</option>
-                                <option value="1">콘텐츠명</option>
-                                <option value="2">본문내용</option>
-                            </select>
-                            <input type="text" class="form-control" id="searchBox"; style="width:400px;height:40px; margin-right:3px; display: inline-block;">
-                        </td>
-                        <th>출처</th>
-                        <td>
-                            <select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
-                                <option selected>전체</option>
-                                <c:forEach var="item" items="${srcList}">
-                                    <option value="${item.cd}">${item.cd_nm}</option>
-                                </c:forEach>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr height="50">
-                        <th>템플릿유형</th>
-                        <td>
-                            <div>
-                                <input class="form-check-input" type="radio" name="templateTypeRadio" id="flexRadio4" checked style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio4"> 전체 </label>
-                                <c:forEach var="temp" items="${tempList}">
-                                    <input class="form-check-input" type="radio" name="templateTypeRadio" id="flexRadio5" style="margin-left:6px; margin-right:6px;">
-                                    <label class="form-check-label" for="flexRadio5">${temp.cd_nm}</label>
-                                </c:forEach>
-                            </div>
-                        </td>
-                        <th>콘텐츠 구분</th>
-                        <td>
-                            <div>
-                                <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio6" checked style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio6">
-                                    전체
-                                </label>
-                                <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio7" style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio7">
-                                    내부
-                                </label>
-                                <input class="form-check-input" type="radio" name="contentsDivRadio" id="flexRadio8" style="margin-left:6px; margin-right:6px;">
-                                <label class="form-check-label" for="flexRadio8">
-                                    외부
-                                </label>
-                            </div>
-                        </td>
-                    </tbody>
-                </table>
-            </div>
+                <!-- Form Table 영역 // -->
 
-            <!-- Button Set (middle 정렬) // -->
-            <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
-                <div class="btn-toolbar mb-2">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:80px; height:40px ">초기화</button>
-                        <button type="button" class="btn btn-primary" style="margin-right:6px; width:80px; height:40px ">검색</button>
-                    </div>
-                </div>
-            </div>
-            <div class="frameLine mb-3"></div>
-            <!-- // Button Set (middle 정렬) -->
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
+<%--                            <form action="/content/search" method="post" id="searchForm">--%>
+                            <table class="table table-sm seaerch-table" >
+                                <tbody>
+                                    <colgroup>
+                                        <col width="130px">
+                                        <col width="38%">
+                                        <col width="130px">
+                                        <col width="*">
+                                    </colgroup>
+                                <tr height="50">
+                                    <th>전시기간</th>
+                                    <td>
+                                        <label for="startdate"></label><input type="text" class="datepicker" name="dspStDt" id="startdate" style="margin-left:6px; width:110px; height:40px;">
+                                        ~
+                                        <label for="enddate"></label><input type="text" class="datepicker" name="dspEndDt" id="enddate" style="margin-left:6px; width:110px; height:40px;">
+                                    </td>
+                                    <th>전시상태</th>
+                                    <td>
+                                        <div>
+                                            <input class="form-check-input" type="radio" name="dspYn" value="all" id="flexRadio1" checked style="margin-left:6px; margin-right:6px;">
+                                            <label class="display-state-label" for="flexRadio1">
+                                                전체
+                                            </label>
+                                            <input class="form-check-input" type="radio" name="dspYn" value="y" id="flexRadio2" style="margin-left:6px; margin-right:6px;">
+                                            <label class="display-state-label" for="flexRadio2">
+                                                전시
+                                            </label>
+                                            <input class="form-check-input" type="radio" name="dspYn" value="n" id="flexRadio3" style="margin-left:6px; margin-right:6px;">
+                                            <label class="display-state-label" for="flexRadio3">
+                                                미전시
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr  height="50">
+                                    <th>검색</th>
+                                    <td>
+                                        <label>
+                                            <select name="searchType" class="form-select w130" style="margin-left:6px; margin-right:3px; display: inline-block;">
+                                                <option value="all" selected>전체</option>
+                                                <option value="ctnNm">콘텐츠명</option>
+                                                <option value="content">본문내용</option>
+                                            </select>
+                                        </label>
+                                        <input type="text" name="ctnNm" class="form-control" id="ctnNm" style="width:400px;height:40px; margin-right:3px; display: inline-block;">
+                                    </td>
+                                    <th>출처</th>
+                                    <td>
+                                        <label for="srcCd"></label><select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
+                                            <option value="all" selected>전체</option>
+                                            <c:forEach var="item" items="${srcList}">
+                                                <option value="${item.cd}">${item.cd_nm}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr height="50">
+                                    <th>템플릿유형</th>
+                                    <td>
+                                        <div>
+                                            <input class="form-check-input" type="radio" name="tplCd" value="all" id="flexRadio4" checked style="margin-left:6px; margin-right:6px;">
+                                            <label class="form-check-label" for="flexRadio4"> 전체 </label>
+                                            <c:forEach var="temp" items="${tempList}">
+                                                <input class="form-check-input" type="radio" name="tplCd" value="${temp.cd}" id="flexRadio5" style="margin-left:6px; margin-right:6px;">
+                                                <label class="form-check-label" for="flexRadio5">${temp.cd_nm}</label>
+                                            </c:forEach>
+                                        </div>
+                                    </td>
+                                    <th>콘텐츠 구분</th>
+                                    <td>
+                                        <div>
+                                            <input class="form-check-input" type="radio" name="ctnDiv" value="all" id="flexRadio6" checked style="margin-left:6px; margin-right:6px;">
+                                            <label class="form-check-label" for="flexRadio6">
+                                                전체
+                                            </label>
+                                            <input class="form-check-input" type="radio" name="ctnDiv" value="in" id="flexRadio7" style="margin-left:6px; margin-right:6px;">
+                                            <label class="form-check-label" for="flexRadio7">
+                                                내부
+                                            </label>
+                                            <input class="form-check-input" type="radio" name="ctnDiv" value="out" id="flexRadio8" style="margin-left:6px; margin-right:6px;">
+                                            <label class="form-check-label" for="flexRadio8">
+                                                외부
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tbody>
+                            </table>
+<%--                            </form>--%>
+                        </div>
 
-        </main>
+                        <!-- Button Set (middle 정렬) // -->
+                        <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
+                            <div class="btn-toolbar mb-2">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:80px; height:40px " onclick="location.href='/content/search'">초기화</button>
+                                    <button type="button" class="btn btn-primary" style="margin-right:6px; width:80px; height:40px " id="btn_submit" >검색</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="frameLine mb-3"></div>
+                        <!-- // Button Set (middle 정렬) -->
+
+            </main>
         <!-- //Content Body 영역 -->
     </div>
 </div>

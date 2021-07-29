@@ -1,10 +1,13 @@
 package sptek.spdevteam.intern.content.service;
 
+import sptek.spdevteam.intern.content.domain.ContentExcel;
 import sptek.spdevteam.intern.content.domain.ListDomain;
 import sptek.spdevteam.intern.content.domain.TempType;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ListService {
     public List<TempType> getTempList() throws Exception;
+    public List<ContentExcel> getList(ContentExcel contentExcel) throws Exception;
 }
