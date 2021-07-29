@@ -1,54 +1,41 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE HTML>
 <html lang="ko">
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<%--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>--%>
+    <%@ include file="/WEB-INF/jsp/include/common_plugin.jsp" %>
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <%@ include file="/WEB-INF/jsp/include/common_plugin.jsp" %>
-<%--    <script type="text/javascript">--%>
-<%--        var params ='<c:out value="${result}"/>';--%>
-
-<%--        $(document).ready(function() {--%>
-<%--            $.initPage();--%>
-<%--        });--%>
-
-<%--        ;(function($){--%>
-<%--            $.initPage = function() {--%>
-<%--                console.log(params);--%>
-<%--            };--%>
-<%--        })(jQuery);--%>
-<%--    </script>--%>
-    <script>
-        function loadFile(input) {
-            var file = input.files[0];	//선택된 파일 가져오기
-
-            //미리 만들어 놓은 div에 text(파일 이름) 추가
-            var name = document.getElementById('fileName');
-            name.textContent = file.name;
-
-            //새로운 이미지 div 추가
-            var newImage = document.createElement("img");
-            newImage.setAttribute("class", 'img');
-
-            //이미지 source 가져오기
-            newImage.src = URL.createObjectURL(file);
-
-            newImage.style.width = "30%";
-            newImage.style.height = "30%";
-            newImage.style.visibility = "visible";
-            newImage.style.objectFit = "contain";
-
-            var container = document.getElementById('image-show');
-            container.appendChild(newImage);
+    <style>
+        .bottom_td {
+            text-align: center;
+            height: 100px;
         }
+    </style>
+    <script type="text/javascript">
+        var params ='<c:out value="${result}"/>';
+
+        $(document).ready(function() {
+            $.initPage();
+        });
+
+        ;(function($){
+            $.initPage = function() {
+                console.log(params);
+            };
+        })(jQuery);
+
+        window.onload = function(){
+            document.getElementById('tplCd0').checked = true;
+        };
 
         $(function() {
             //input을 datepicker로 선언
-            $("#datepicker1,#datepicker2").datepicker({
+            $("#dspStDt").datepicker({
                 dateFormat: 'yy-mm-dd' //달력 날짜 형태
                 ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
                 ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
@@ -65,16 +52,217 @@
                 ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
                 ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
                 ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+                ,onSelect:function(d){
+                    var start = new Date($("#dspStDt").datepicker("getDate"));
+                    var end = new Date($("#dspEndDt").datepicker("getDate"));
+                    if (end - start < 0){
+                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+                        $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+                    }
+
+                }
+            });
+            $("#dspEndDt").datepicker({
+                dateFormat: 'yy-mm-dd' //달력 날짜 형태
+                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+                ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+                ,changeYear: true //option값 년 선택 가능
+                ,changeMonth: true //option값  월 선택 가능
+                ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+                ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
+                ,buttonText: "선택" //버튼 호버 텍스트
+                ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+                ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
+                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
+                ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
+                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+                ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+                ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+                ,onSelect:function(d){
+                    var start = new Date($("#dspStDt").datepicker("getDate"));
+                    var end = new Date($("#dspEndDt").datepicker("getDate"));
+                    if (end - start < 0){
+                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+                        $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+                    }
+                }
             });
 
+
             //초기값을 오늘 날짜로 설정해줘야 합니다.
-            $('#datepicker1').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-            $('#datepicker2').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+            $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+            $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
             $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
 
-
         });
+
+        function loadFile(input) {
+            var file = input.files[0];	//선택된 파일 가져오기
+
+            //미리 만들어 놓은 div에 text(파일 이름) 추가
+            var name = document.getElementById('fileName');
+            name.textContent = file.name;
+
+            //새로운 이미지 div 추가
+            var newImage = document.createElement("img");
+            newImage.setAttribute("class", 'img');
+
+            //이미지 source 가져오기
+            newImage.src = URL.createObjectURL(file);
+
+            newImage.style.width = "20%";
+            newImage.style.height = "20%";
+            newImage.style.visibility = "visible";
+            newImage.style.objectFit = "contain";
+
+            var container = document.getElementById('image-show');
+            container.appendChild(newImage);
+        }
+
+        function ctn_loadFile(input) {
+            const cur = input.id[input.id.length-1];
+
+            var file = input.files[0];
+            var name = document.getElementById('ctn_fileName' + cur);
+            name.textContent = file.name;
+
+            var newImage = document.createElement("img");
+            newImage.setAttribute("class", "img");
+
+            newImage.src = URL.createObjectURL(file);
+
+            newImage.style.width = "10%";
+            newImage.style.height = "10%";
+            newImage.style.visibility = "visible";
+            newImage.style.objectFit = "contain";
+
+            var container = document.getElementById('ctn_image-show' + cur);
+            container.appendChild(newImage);
+        }
+
+        var idx_list = [];
+
+        function removeRow(e) {
+            const cur = Number(e.id[e.id.length-1]);
+            const table = document.getElementById('extraContent');
+            table.deleteRow(cur);
+            for (var i = cur+1 ; i <= idx_list.length; i++){
+                var findTr = document.getElementById('tr' + String(i));
+                findTr.id = 'tr' + String(i - 1);
+
+                var seqBlock = document.getElementById('seq' + String(i));
+                seqBlock.id = 'seq' + String(i - 1);
+                seqBlock.innerText = i - 1;
+
+                var i_up = document.getElementById('up_arrow' + String(i));
+                i_up.id = 'up_arrow' + String(i - 1);
+
+                var i_down = document.getElementById('down_arrow' + String(i));
+                i_down.id = 'down_arrow' + String(i - 1);
+
+                var img_show = document.getElementById('ctn_image-show' + String(i));
+                img_show.id = 'ctn_image-show' + String(i - 1);
+
+                var fNm = document.getElementById('ctn_fileName' + String(i));
+                fNm.id = 'ctn_fileName' + String(i - 1);
+
+                var inputFile = document.getElementById('ctn_img' + String(i));
+                inputFile.id = 'ctn_img' + String(i - 1);
+                inputFile.name = 'ctn_img' + String(i - 1);
+                inputFile.addEventListener('change', function () {ctn_loadFile(this, String(i - 1))});
+
+                var removeBtn = document.getElementById('remove_btn' + String(i));
+                removeBtn.id = 'remove_btn' + String(i - 1)
+            }
+        }
+
+        var ctn_index = 0;
+        var ctn_list = [];
+
+        function addRow() {
+            ctn_index += 1;
+            idx_list.push(ctn_index)
+            var my_index = ctn_index;
+
+            if (ctn_index === 6) {
+                alert("콘텐츠 본문내용은 최대 5개 까지 등록할 수 있습니다.");
+                ctn_index -= 1;
+                return;
+            }
+
+            const table = document.getElementById('extraContent');
+
+            const newRow = table.insertRow();
+            newRow.id = 'tr' + String(my_index);
+
+            const newCell1 = newRow.insertCell(0);
+            const newCell2 = newRow.insertCell(1);
+            const newCell3 = newRow.insertCell(2);
+            const newCell4 = newRow.insertCell(3);
+
+            newCell1.innerText = ctn_index;
+            newCell1.classList.add("bottom_td");
+            newCell1.id = 'seq' + String(my_index);
+
+            newCell2.classList.add("bottom_td", "ctr_td");
+
+            const i_up = document.createElement('i');
+            i_up.classList.add('bi', 'hoverBtn', 'bi-file-arrow-up');
+            i_up.id = 'up_arrow' + String(my_index);
+
+            const i_down = document.createElement('i');
+            i_down.classList.add('bi', 'hoverBtn', 'bi-file-arrow-down');
+            i_down.id = 'down_arrow' + String(my_index);
+
+            if (my_index === 1) {
+                i_up.classList.add('disabled');
+            } else {
+                if (ctn_index === my_index) {
+                    i_down.classList.add('disabled');
+                    document.getElementById('down_arrow' + String(my_index - 1)).classList.remove('disabled');
+                }
+            }
+
+            newCell2.append(i_up, i_down);
+
+            newCell3.classList.add('bottom_td');
+            const feDiv = document.createElement('div');
+            feDiv.classList.add('fileInput');
+
+            const imgDiv = document.createElement('div');
+            imgDiv.id = 'ctn_image-show' + String(my_index);
+
+            const feNmP = document.createElement('p');
+            feNmP.id = 'ctn_fileName' + String(my_index);
+
+            feDiv.append(imgDiv, feNmP);
+
+            const div = document.createElement('div');
+            const inputFile = document.createElement('input');
+            inputFile.setAttribute('type', 'file');
+            inputFile.setAttribute('name', 'ctn_img' + String(my_index));
+            inputFile.setAttribute('id', 'ctn_img' + String(my_index));
+            inputFile.setAttribute('accept', 'image/png, image/jpeg');
+            inputFile.addEventListener('change', function () {ctn_loadFile(this)});
+
+            div.append(inputFile);
+            newCell3.append(feDiv, div);
+
+
+            newCell4.classList.add("bottom_td");
+            const remove_btn = document.createElement('button')
+            remove_btn.innerText = "삭제"
+            remove_btn.classList.add("remove_btn");
+            remove_btn.id = 'remove_btn' + String(my_index);
+            remove_btn.setAttribute('type', 'button');
+            remove_btn.addEventListener('click', function () {removeRow(this)});
+            newCell4.append(remove_btn)
+        }
+
+
     </script>
+
 </head>
 <body>
 <!-- Top(header) 영역// -->
@@ -101,7 +289,7 @@
             <!-- Form Table 영역 // -->
             <form action="/content/register" method="post" id="registerForm" enctype="multipart/form-data">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
-                    <table class="table table-sm seaerch-table">
+                    <table class="table table-sm search-table">
                         <tbody>
                         <colgroup>
                             <col width="130px">
@@ -133,9 +321,9 @@
                             <th>템플릿 유형</th>
                             <td>
                                 <div>
-                                    <c:forEach var="item" items="${tplList}">
-                                        <input class="form-check-input" type="radio" name="tplCd" id="tplCd" value=${item.cd_nm} checked>
-                                        <label class="form-check-label" for="tplCd">
+                                    <c:forEach var="item" items="${tplList}" varStatus="status">
+                                        <input class="form-check-input" type="radio" name="tplCd" id="tplCd${status.index}" value=${item.cd}>
+                                        <label class="form-check-label" for="tplCd${status.index}">
                                             ${item.cd_nm}
                                         </label>
                                     </c:forEach>
@@ -194,11 +382,9 @@
                         <tr>
                             <th rowspan="2">대표이미지</th>
                             <td rowspan="2">
-                                <div class="fileContainer">
-                                    <div class="fileInput">
-                                        <div class="image-show" id="image-show"></div>
-                                        <p id="fileName"></p>
-                                    </div>
+                                <div class="fileInput">
+                                    <div class="image-show" id="image-show"></div>
+                                    <p id="fileName"></p>
                                 </div>
                                 <div>
                                     <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg"  onchange="loadFile(this)">
@@ -228,10 +414,62 @@
                         </tr>
                         </tbody>
                     </table>
+                </div><br><br><br>
+                <div class="table-responsive">
+                    <div style="border: 1px solid black; height: 30px;">
+                        <span style="float:left;">콘텐츠 본문내용</span>
+                        <button type="button" style="float: right" id="add_btn" onclick="addRow()">콘텐츠 추가</button>
+                    </div>
+                    <table class="table table-striped table-sm" id="extraContent">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="text-align: center;">본문</th>
+                            <th scope="col" style="text-align: center;">전시순서</th>
+                            <th scope="col" style="text-align: center;">본문 이미지</th>
+                            <th scope="col" style="text-align: center;">영역 삭제</th>
+                        </tr>
+                        </thead>
+                    <tbody>
+                    <colgroup>
+                        <col width="150px">
+                        <col width="150px">
+                        <col width="*">
+                        <col width="150px">
+                    </colgroup>
+<%--                    <tr id="tr1" style="display: none">--%>
+<%--                        <td class="bottom_td" id="seq1">--%>
+<%--                            1--%>
+<%--                        </td>--%>
+<%--                        <td class="ctr_td bottom_td">--%>
+<%--                            <i class="bi hoverBtn bi-file-arrow-up disabled" id="up_arrow1"></i>--%>
+<%--                            <i class="bi hoverBtn bi-file-arrow-down disabled" id="down_arrow1"></i>--%>
+<%--                        </td>--%>
+<%--                        <td class="bottom_td">--%>
+<%--                            <div class="fileInput">--%>
+<%--                                <div name="ctn_image-show" id="ctn_image-show1"></div>--%>
+<%--                                <p id="ctn_fileName1"></p>--%>
+<%--                            </div>--%>
+<%--                            <div>--%>
+<%--                                <input type="file" name="ctn_img1" id="ctn_img1" accept="image/png, image/jpeg"  onchange="ctn_loadFile(this, '1')">--%>
+<%--                            </div>--%>
+<%--                        </td>--%>
+<%--                        <td class="bottom_td">--%>
+<%--                            <button type="button" class="remove_btn" id="remove_btn1" onclick="removeRow(this)">삭제</button>--%>
+<%--                        </td>--%>
+<%--                    </tr>--%>
+                    </tbody>
+                </table>
                 </div>
             </form>
-            <button class="btn btn-lg btn-primary btn-block" onclick="location.href='/' ">취소</button><br><br><br>
-            <button type="submit" class="btn btn-lg btn-primary btn-block" id="btn_submit" form="registerForm">저장</button><br>
+            <br><br><br><br>
+            <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
+                <div class="btn-toolbar mb-2">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="location.href='/' " style="margin-right: 20px;">취소</button>
+                        <button type="submit" class="btn btn-primary" id="btn_submit" form="registerForm" style="margin-right: 100px;">저장</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>

@@ -36,7 +36,7 @@
             </div>
             <!-- Form Table 영역 // -->
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
-                <table class="table table-sm seaerch-table">
+                <table class="table table-sm search-table">
                     <tbody>
                     <colgroup>
                         <col width="130px">
