@@ -47,6 +47,23 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- 3rd party Lib -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.28</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bgee.log4jdbc-log4j2</groupId>
+            <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
+            <version>1.16</version>
+        </dependency>
+
         <!-- jsp servlet lib -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>

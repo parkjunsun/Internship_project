@@ -1,10 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sptek.spdevteam.intern.temp.mybatis.TempMapper">
-    <select id="getTemplist" resultType="sptek.spdevteam.intern.temp.domain.TempDomain">
-        SELECT 1 AS i
+    <select id="selectTemp" resultType="sptek.spdevteam.intern.temp.domain.TempDomain" parameterType="sptek.spdevteam.intern.temp.domain.TempDomain">
+        SELECT STRING_VALUE1 AS STRINGVALUE1
+             , STRING_VALUE2 AS STRINGVALUE2
+             , STRING_VALUE3 AS STRINGVALUE3
+             , INT_VALUE1 AS INTVALUE1
+             , INT_VALUE2 AS INTVALUE2
+             , INT_VALUE3 AS INTVALUE3
+        FROM INTERNSC.TB_TEMP
+        WHERE 1=1
+        <if test = "findWord!=null and findWord!=''">
+          AND STRING_VALUE1 LIKE '%' || #{findWord} || '%'
+        </if>
     </select>
-<!--    <select id="getList" resultType="sptek.spdevteam.intern.temp.domain.commonDomain">-->
-<!--        SELECT cd_nm FROM internsc.tb_cd-->
-<!--    </select>-->
+
+    <insert id="insertTemp" parameterType="sptek.spdevteam.intern.temp.domain.TempDomain">
+        INSERT INTO INTERNSC.TB_TEMP(
+              STRING_VALUE1
+            , STRING_VALUE2
+            , STRING_VALUE3
+            , INT_VALUE1
+            , INT_VALUE2
+            , INT_VALUE3
+        ) VALUES (
+            TO_CHAR(CLOCK_TIMESTAMP(),'YYYY-MM-DD HH24:MI:SS')
+            ,#{stringValue2}
+            ,#{stringValue3}
+            ,${intValue1}
+            ,${intValue2}
+            ,${intValue3}
+        )
+    </insert>
+
+    <update id="updateTemp" parameterType="sptek.spdevteam.intern.temp.domain.TempDomain">
+        UPDATE INTERNSC.TB_TEMP
+        SET INT_VALUE1 = (INT_VALUE1+1)
+          , INT_VALUE2 = (INT_VALUE2+1)
+          , INT_VALUE3 = (INT_VALUE3+1)
+        WHERE STRING_VALUE1 LIKE '%' || #{findWord} || '%'
+    </update>
+
+    <delete id="deleteTemp" parameterType="sptek.spdevteam.intern.temp.domain.TempDomain">
+        DELETE FROM INTERNSC.TB_TEMP
+        WHERE STRING_VALUE1 = #{findWord}
+    </delete>
 </mapper>
