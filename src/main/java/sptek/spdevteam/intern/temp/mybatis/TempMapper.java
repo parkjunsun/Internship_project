@@ -8,6 +8,11 @@ import java.util.List;
 @Repository
 public interface TempMapper {
 
-    public List<TempDomain> getTemplist() throws Exception;
+    List<TempDomain> selectTemp(TempDomain tempDomain) throws Exception;
 
+    int insertTemp(TempDomain tempDomain) throws Exception;
+
+    int updateTemp(TempDomain tempDomain) throws Exception;
+
+    int deleteTemp(TempDomain tempDomain) throws Exception;
 }
