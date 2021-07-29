@@ -51,9 +51,9 @@ public class LogUtil {
         }
     }
 
-    public void err(String msg, Throwable e) {
+    public void err(String url, Throwable e) {
 
-        this.log.error("\t## [ERROR] - " + msg + " ##");
+        this.log.error("\t## [ERROR] - " + url + " ##");
         this.log.error("\t######### ERROR START ##########");
 
         if (this.log.isErrorEnabled()) {

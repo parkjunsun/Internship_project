@@ -27,7 +27,10 @@ public class TempController {
         ModelAndView mv = new ModelAndView("temp/temp_list");
 
         TempDomain temp = new TempDomain();
-        TempDomain temp2 = tempService.testMethod(temp);
+        TempDomain temp2 = tempService.selectMethod(temp);
+        tempService.insertMethod(temp);
+        tempService.updateMethod(temp);
+        tempService.deleteMethod(temp);
 
         mv.addObject("result",temp2);
 
@@ -38,8 +41,6 @@ public class TempController {
     public ModelAndView detailPage(TempDomain tempDomain, HttpServletRequest request, HttpServletResponse response) throws Exception {
         log.page("/temp/detail","detailPage()");
         ModelAndView mv = new ModelAndView("temp/temp_detail");
-
-        //TempDomain temp2 = tempService.testMethod(tempDomain);
 
         return mv;
     }
