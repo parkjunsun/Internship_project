@@ -11,10 +11,20 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <style>
+
         .bottom_td {
             text-align: center;
             height: 100px;
         }
+
+        .file-input {
+            padding: 6px 25px;
+            background-color: black;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+
     </style>
     <script type="text/javascript">
         var params ='<c:out value="${result}"/>';
@@ -98,25 +108,29 @@
         });
 
         function loadFile(input) {
-            var file = input.files[0];	//선택된 파일 가져오기
+            const file = input.files[0];	//선택된 파일 가져오기
 
             //미리 만들어 놓은 div에 text(파일 이름) 추가
-            var name = document.getElementById('fileName');
+            const name = document.getElementById('fileName');
             name.textContent = file.name;
 
             //새로운 이미지 div 추가
-            var newImage = document.createElement("img");
+            const newImage = document.createElement("img");
             newImage.setAttribute("class", 'img');
 
             //이미지 source 가져오기
             newImage.src = URL.createObjectURL(file);
 
-            newImage.style.width = "20%";
-            newImage.style.height = "20%";
+            newImage.style.width = "750px;";
+            newImage.style.height = "1500px;";
             newImage.style.visibility = "visible";
             newImage.style.objectFit = "contain";
 
-            var container = document.getElementById('image-show');
+            const container = document.getElementById('image-show');
+            if (container.querySelector('.img') != null) {
+                const oldImage = container.querySelector('.img');
+                container.removeChild(oldImage);
+            }
             container.appendChild(newImage);
         }
 
@@ -124,21 +138,58 @@
             const cur = input.id[input.id.length-1];
 
             var file = input.files[0];
-            var name = document.getElementById('ctn_fileName' + cur);
-            name.textContent = file.name;
+            // var name = document.getElementById('ctn_fileName' + cur);
+            // name.textContent = file.name;
 
             var newImage = document.createElement("img");
             newImage.setAttribute("class", "img");
 
             newImage.src = URL.createObjectURL(file);
 
-            newImage.style.width = "10%";
-            newImage.style.height = "10%";
+            newImage.style.width = "150px";
+            newImage.style.height = "150px";
             newImage.style.visibility = "visible";
             newImage.style.objectFit = "contain";
 
             var container = document.getElementById('ctn_image-show' + cur);
+            if (container.querySelector('.img') != null) {
+                const oldImage = container.querySelector('.img');
+                container.removeChild(oldImage);
+            }
             container.appendChild(newImage);
+        }
+
+
+
+        function checkArrowAble() {
+
+            if (ctn_index === 1) {
+                document.getElementById('up_arrow1').classList.add('disabled');
+                document.getElementById('up_arrow1').style.cursor = 'default';
+                document.getElementById('down_arrow1').classList.add('disabled');
+                document.getElementById('down_arrow1').style.cursor = 'default';
+            } else if (ctn_index === 2) {
+                document.getElementById('up_arrow1').classList.add('disabled');
+                document.getElementById('up_arrow1').style.cursor = 'default';
+                document.getElementById('down_arrow1').classList.remove('disabled');
+                document.getElementById('down_arrow1').style.cursor = 'pointer';
+                document.getElementById('up_arrow2').classList.remove('disabled');
+                document.getElementById('up_arrow2').style.cursor = 'pointer';
+                document.getElementById('down_arrow2').classList.add('disabled');
+                document.getElementById('down_arrow2').style.cursor = 'default';
+            } else {
+                for (var i = 2; i < ctn_index; i++) {
+                    document.getElementById('down_arrow' + String(i)).classList.remove('disabled');
+                    document.getElementById('down_arrow' + String(i)).style.cursor = 'pointer';
+                    document.getElementById('up_arrow' + String(i)).classList.remove('disabled');
+                    document.getElementById('up_arrow' + String(i)).style.cursor = 'pointer';
+                }
+
+                document.getElementById('up_arrow1').classList.add('disabled');
+                document.getElementById('up_arrow1').style.cursor = 'default';
+                document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
+                document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'pointer';
+            }
         }
 
         var idx_list = [];
@@ -147,8 +198,11 @@
             const cur = Number(e.id[e.id.length-1]);
             const table = document.getElementById('extraContent');
             table.deleteRow(cur);
-            ctn_index -= 1;
+            idx_list.pop();
             for (var i = cur+1 ; i <= 5; i++){
+                if (i > ctn_index) {
+                    break;
+                }
                 var findTr = document.getElementById('tr' + String(i));
                 findTr.id = 'tr' + String(i - 1);
 
@@ -158,6 +212,10 @@
 
                 var i_up = document.getElementById('up_arrow' + String(i));
                 i_up.id = 'up_arrow' + String(i - 1);
+                if (i - 1 === 1) {
+                    i_up.classList.add('disabled');
+                    i_up.style.cursor = 'default';
+                }
 
                 var i_down = document.getElementById('down_arrow' + String(i));
                 i_down.id = 'down_arrow' + String(i - 1);
@@ -175,10 +233,131 @@
                 var removeBtn = document.getElementById('remove_btn' + String(i));
                 removeBtn.id = 'remove_btn' + String(i - 1)
             }
+
+            ctn_index -= 1;
+
+            document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
+            document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
+
+            // if (idx_list.length === 1) {
+            //     document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
+            //     document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
+            // }
         }
 
+        function moveUpTr(node) {
+            const table = document.getElementById('tbody');
+
+            const curTr = node.parentElement.parentElement;
+            const preTr = curTr.previousElementSibling;
+
+            const curIdx = curTr.id[curTr.id.length-1];
+            const preIdx = preTr.id[preTr.id.length-1];
+            curTr.id = 'tr' + preIdx;
+            preTr.id = 'tr' + curIdx;
+
+            const curSeqBlock = document.getElementById('seq' + curIdx);
+            const preSeqBlock = document.getElementById('seq' + preIdx);
+            curSeqBlock.id = 'seq' + preIdx;
+            curSeqBlock.innerText = preIdx;
+            preSeqBlock.id = 'seq' + curIdx;
+            preSeqBlock.innerText = curIdx;
+
+            const curUpArrowBlock = document.getElementById('up_arrow' + curIdx);
+            const preUpArrowBlock = document.getElementById('up_arrow' + preIdx);
+            curUpArrowBlock.id = 'up_arrow' + preIdx;
+            preUpArrowBlock.id = 'up_arrow' + curIdx;
+            const curDownArrowBlock = document.getElementById('down_arrow' + curIdx);
+            const preDownArrowBlock = document.getElementById('down_arrow' + preIdx);
+            curDownArrowBlock.id = 'down_arrow' + preIdx;
+            preDownArrowBlock.id = 'down_arrow' + curIdx;
+
+            const curCtnImgShowBlock = document.getElementById('ctn_image-show' + curIdx);
+            const preCtnImgShowBlock = document.getElementById('ctn_image-show' + preIdx);
+            curCtnImgShowBlock.id = 'ctn_image-show' + preIdx;
+            preCtnImgShowBlock.id = 'ctn_image-show' + curIdx;
+
+            const curCtnFeNmBlock = document.getElementById('ctn_fileName' + curIdx);
+            const preCtnFeNmBlock = document.getElementById('ctn_fileName' + preIdx);
+            curCtnFeNmBlock.id = 'ctn_fileName' + preIdx;
+            preCtnFeNmBlock.id = 'ctn_fileName' + curIdx;
+
+            const curInputFileBlock = document.getElementById('ctn_img' + curIdx);
+            const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
+            curInputFileBlock.id = 'ctn_img' + preIdx;
+            preInputFileBlock.id = 'ctn_img' + curIdx;
+            curInputFileBlock.name = 'ctn_img' + preIdx;
+            preInputFileBlock.name = 'ctn_img' + curIdx;
+
+            const curRmBtnBlock = document.getElementById('remove_btn' + curIdx);
+            const preRmBtnBlock = document.getElementById('remove_btn'+ preIdx);
+            curRmBtnBlock.id = 'remove_btn' + preIdx;
+            preRmBtnBlock.id = 'remove_btn' + curIdx;
+
+            table.insertBefore(curTr, preTr);
+
+            checkArrowAble();
+
+        }
+
+        function moveDownTr(node) {
+            const table = document.getElementById('tbody');
+
+            const currentTr = node.parentElement.parentElement;
+            const nextTr = currentTr.nextElementSibling;
+
+            const currentIdx = currentTr.id[currentTr.id.length-1];
+            const nextIdx = nextTr.id[nextTr.id.length-1];
+            currentTr.id = 'tr' + String(nextIdx);
+            nextTr.id = 'tr' + String(currentIdx);
+
+            const currentSeqBlock = document.getElementById('seq' + String(currentIdx));
+            const nextSeqBlock = document.getElementById('seq' + String(nextIdx));
+            currentSeqBlock.id = 'seq' + String(nextIdx);
+            currentSeqBlock.innerText = nextIdx;
+            nextSeqBlock.id = 'seq' + String(currentIdx);
+            nextSeqBlock.innerText = currentIdx;
+
+            const currentUpArrowBlock = document.getElementById('up_arrow' + String(currentIdx));
+            const nextUpArrowBlock = document.getElementById('up_arrow' + String(nextIdx));
+            currentUpArrowBlock.id = 'up_arrow' + String(nextIdx);
+            nextUpArrowBlock.id = 'up_arrow' + String(currentIdx);
+            const currentDownArrowBlock = document.getElementById('down_arrow' + String(currentIdx));
+            const nextDownArrowBlock = document.getElementById('down_arrow' + String(nextIdx));
+            currentDownArrowBlock.id = 'down_arrow' + String(nextIdx);
+            nextDownArrowBlock.id = 'down_arrow' + String(currentIdx);
+
+            const currentCtnImgShowBlock = document.getElementById('ctn_image-show' + String(currentIdx));
+            const nextCtnImgShowBlock = document.getElementById('ctn_image-show' + String(nextIdx));
+            currentCtnImgShowBlock.id = 'ctn_image-show' + String(nextIdx);
+            nextCtnImgShowBlock.id = 'ctn_image-show' + String(currentIdx);
+
+            const currentCtnFeNmBlock = document.getElementById('ctn_fileName' + String(currentIdx));
+            const nextCtnFeNmBlock = document.getElementById('ctn_fileName' + String(nextIdx));
+            currentCtnFeNmBlock.id = 'ctn_fileName' + String(nextIdx);
+            nextCtnFeNmBlock.id = 'ctn_fileName' + String(currentIdx);
+
+            const currentInputFileBlock = document.getElementById('ctn_img' + String(currentIdx));
+            const nextInputFileBlock = document.getElementById('ctn_img' + String(nextIdx));
+            currentInputFileBlock.id = 'ctn_img' + String(nextIdx);
+            nextInputFileBlock.id = 'ctn_img' + String(currentIdx);
+            currentInputFileBlock.name = 'ctn_img' + String(nextIdx);
+            nextInputFileBlock.name = 'ctn_img' + String(currentIdx);
+
+            const currentRmBtnBlock = document.getElementById('remove_btn' + String(currentIdx));
+            const nextRmBtnBlock = document.getElementById('remove_btn' + String(nextIdx));
+            currentRmBtnBlock.id = 'remove_btn' + String(nextIdx);
+            nextRmBtnBlock.id = 'remove_btn' + String(currentIdx);
+
+
+            table.insertBefore(nextTr, currentTr);
+
+            checkArrowAble();
+
+        }
+
+
         var ctn_index = 0;
-        var ctn_list = [];
 
         function addRow() {
             ctn_index += 1;
@@ -191,7 +370,7 @@
                 return;
             }
 
-            const table = document.getElementById('extraContent');
+            const table = document.getElementById('tbody');
 
             const newRow = table.insertRow();
             newRow.id = 'tr' + String(my_index);
@@ -210,45 +389,63 @@
             const i_up = document.createElement('i');
             i_up.classList.add('bi', 'hoverBtn', 'bi-file-arrow-up');
             i_up.id = 'up_arrow' + String(my_index);
+            i_up.style.cursor = 'pointer';
+            i_up.addEventListener('click', function () {moveUpTr(this)});
+
 
             const i_down = document.createElement('i');
             i_down.classList.add('bi', 'hoverBtn', 'bi-file-arrow-down');
             i_down.id = 'down_arrow' + String(my_index);
+            i_down.style.cursor = 'pointer';
+            i_down.addEventListener('click', function () {moveDownTr(this)});
 
             if (my_index === 1) {
                 i_up.classList.add('disabled');
+                i_up.style.cursor = 'default';
+                i_down.classList.add('disabled');
+                i_down.style.cursor = 'default';
             } else {
                 if (ctn_index === my_index) {
                     i_down.classList.add('disabled');
+                    i_down.style.cursor = 'default';
                     document.getElementById('down_arrow' + String(my_index - 1)).classList.remove('disabled');
+                    document.getElementById('down_arrow' + String(my_index - 1)).style.cursor = 'pointer';
                 }
             }
 
             newCell2.append(i_up, i_down);
 
-            newCell3.classList.add('bottom_td');
+            // newCell3.classList.add('bottom_td');
             const feDiv = document.createElement('div');
             feDiv.classList.add('fileInput');
 
             const imgDiv = document.createElement('div');
             imgDiv.id = 'ctn_image-show' + String(my_index);
 
-            const feNmP = document.createElement('p');
-            feNmP.id = 'ctn_fileName' + String(my_index);
+            // const feNmP = document.createElement('p');
+            // feNmP.id = 'ctn_fileName' + String(my_index);
+            // feNmP.style.float = 'left';
 
-            feDiv.append(imgDiv, feNmP);
+            feDiv.append(imgDiv);
 
             const div = document.createElement('div');
+
+            const label = document.createElement('label');
+            label.classList.add('file-input');
+            label.for = 'ctn_img' + String(my_index);
+            label.innerText = "찾기";
+
             const inputFile = document.createElement('input');
+            inputFile.style.display = 'none';
             inputFile.setAttribute('type', 'file');
             inputFile.setAttribute('name', 'ctn_img' + String(my_index));
             inputFile.setAttribute('id', 'ctn_img' + String(my_index));
             inputFile.setAttribute('accept', 'image/png, image/jpeg');
             inputFile.addEventListener('change', function () {ctn_loadFile(this)});
 
-            div.append(inputFile);
+            label.append(inputFile)
+            div.append(label);
             newCell3.append(feDiv, div);
-
 
             newCell4.classList.add("bottom_td");
             const remove_btn = document.createElement('button')
@@ -425,11 +622,11 @@
                         <tr>
                             <th scope="col" style="text-align: center;">본문</th>
                             <th scope="col" style="text-align: center;">전시순서</th>
-                            <th scope="col" style="text-align: center;">본문 이미지</th>
+                            <th scope="col" style="text-align: center">본문 이미지</th>
                             <th scope="col" style="text-align: center;">영역 삭제</th>
                         </tr>
                         </thead>
-                    <tbody>
+                    <tbody id="tbody">
                     <colgroup>
                         <col width="150px">
                         <col width="150px">
