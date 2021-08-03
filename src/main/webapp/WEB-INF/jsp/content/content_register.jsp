@@ -228,7 +228,7 @@
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
-                inputFile.name = 'ctn_img' + String(i - 1);
+                // inputFile.name = 'ctn_img' + String(i - 1);
 
                 var removeBtn = document.getElementById('remove_btn' + String(i));
                 removeBtn.id = 'remove_btn' + String(i - 1)
@@ -286,8 +286,8 @@
             const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
             curInputFileBlock.id = 'ctn_img' + preIdx;
             preInputFileBlock.id = 'ctn_img' + curIdx;
-            curInputFileBlock.name = 'ctn_img' + preIdx;
-            preInputFileBlock.name = 'ctn_img' + curIdx;
+            // curInputFileBlock.name = 'ctn_img' + preIdx;
+            // preInputFileBlock.name = 'ctn_img' + curIdx;
 
             const curRmBtnBlock = document.getElementById('remove_btn' + curIdx);
             const preRmBtnBlock = document.getElementById('remove_btn'+ preIdx);
@@ -345,8 +345,8 @@
             const nextInputFileBlock = document.getElementById('ctn_img' + String(nextIdx));
             currentInputFileBlock.id = 'ctn_img' + String(nextIdx);
             nextInputFileBlock.id = 'ctn_img' + String(currentIdx);
-            currentInputFileBlock.name = 'ctn_img' + String(nextIdx);
-            nextInputFileBlock.name = 'ctn_img' + String(currentIdx);
+            // currentInputFileBlock.name = 'ctn_img' + String(nextIdx);
+            // nextInputFileBlock.name = 'ctn_img' + String(currentIdx);
 
             const currentRmBtnBlock = document.getElementById('remove_btn' + String(currentIdx));
             const nextRmBtnBlock = document.getElementById('remove_btn' + String(nextIdx));
@@ -442,7 +442,7 @@
             const inputFile = document.createElement('input');
             inputFile.style.display = 'none';
             inputFile.setAttribute('type', 'file');
-            inputFile.setAttribute('name', 'ctn_img' + String(my_index));
+            inputFile.setAttribute('name', 'ctn_img');
             inputFile.setAttribute('id', 'ctn_img' + String(my_index));
             inputFile.setAttribute('accept', 'image/png, image/jpeg');
             inputFile.addEventListener('change', function () {ctn_loadFile(this)});
@@ -461,6 +461,18 @@
             newCell4.append(remove_btn)
         }
 
+
+         function changeMenu(e) {
+            const cardDiv = document.getElementById('cardDiv');
+            const urlDiv = document.getElementById('urlDiv');
+            if (e.id == "tplCd1") {
+                cardDiv.style.display = 'none';
+                urlDiv.style.display = '';
+            } else {
+                cardDiv.style.display = '';
+                urlDiv.style.display = 'none';
+            }
+         }
 
     </script>
 
@@ -523,7 +535,7 @@
                             <td>
                                 <div>
                                     <c:forEach var="item" items="${tplList}" varStatus="status">
-                                        <input class="form-check-input" type="radio" name="tplCd" id="tplCd${status.index}" value=${item.cd}>
+                                        <input class="form-check-input" type="radio" name="tplCd" id="tplCd${status.index}" value="${item.cd}" onclick="changeMenu(this)">
                                         <label class="form-check-label" for="tplCd${status.index}">
                                             ${item.cd_nm}
                                         </label>
@@ -616,50 +628,47 @@
                         </tbody>
                     </table>
                 </div><br><br><br>
-                <div class="table-responsive">
+                <div class="table-responsive" id="cardDiv">
                     <div style="border: 1px solid black; height: 30px;">
                         <span style="float:left;">콘텐츠 본문내용</span>
                         <button type="button" style="float: right" id="add_btn" onclick="addRow()">콘텐츠 추가</button>
                     </div>
                     <table class="table table-striped table-sm" id="extraContent">
-                        <thead>
-                        <tr>
-                            <th scope="col" style="text-align: center;">본문</th>
-                            <th scope="col" style="text-align: center;">전시순서</th>
-                            <th scope="col" style="text-align: center">본문 이미지</th>
-                            <th scope="col" style="text-align: center;">영역 삭제</th>
-                        </tr>
-                        </thead>
-                    <tbody id="tbody">
-                    <colgroup>
-                        <col width="150px">
-                        <col width="150px">
-                        <col width="*">
-                        <col width="150px">
-                    </colgroup>
-<%--                    <tr id="tr1" style="display: none">--%>
-<%--                        <td class="bottom_td" id="seq1">--%>
-<%--                            1--%>
-<%--                        </td>--%>
-<%--                        <td class="ctr_td bottom_td">--%>
-<%--                            <i class="bi hoverBtn bi-file-arrow-up disabled" id="up_arrow1"></i>--%>
-<%--                            <i class="bi hoverBtn bi-file-arrow-down disabled" id="down_arrow1"></i>--%>
-<%--                        </td>--%>
-<%--                        <td class="bottom_td">--%>
-<%--                            <div class="fileInput">--%>
-<%--                                <div name="ctn_image-show" id="ctn_image-show1"></div>--%>
-<%--                                <p id="ctn_fileName1"></p>--%>
-<%--                            </div>--%>
-<%--                            <div>--%>
-<%--                                <input type="file" name="ctn_img1" id="ctn_img1" accept="image/png, image/jpeg"  onchange="ctn_loadFile(this, '1')">--%>
-<%--                            </div>--%>
-<%--                        </td>--%>
-<%--                        <td class="bottom_td">--%>
-<%--                            <button type="button" class="remove_btn" id="remove_btn1" onclick="removeRow(this)">삭제</button>--%>
-<%--                        </td>--%>
-<%--                    </tr>--%>
-                    </tbody>
-                </table>
+                        <colgroup id="colgroup">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="*">
+                            <col width="150px">
+                        </colgroup>
+                            <thead id="thead">
+                                <tr>
+                                    <th scope="col" style="text-align: center;">본문</th>
+                                    <th scope="col" style="text-align: center;">전시순서</th>
+                                    <th scope="col" style="text-align: center">본문 이미지</th>
+                                    <th scope="col" style="text-align: center;">영역 삭제</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                            </tbody>
+                    </table>
+                </div>
+<!-- -------------------------------------------------------------------------------------- -->
+                <div class="table-responsive" id="urlDiv" style="display: none">
+                    <div style="border: 1px solid black; height: 30px;">
+                        <span style="float:left;">콘텐츠 본문내용</span>
+                    </div>
+                    <table class="table table-striped table-sm">
+                        <colgroup>
+                            <col width="150px">
+                            <col width="*">
+                        </colgroup>
+                        <tbody>
+                            <th>URL 주소</th>
+                            <td>
+                                <input type="text" style="width: 1100px;" name="inputUrl">
+                            </td>
+                        </tbody>
+                    </table>
                 </div>
             </form>
             <br><br><br><br>
@@ -676,3 +685,4 @@
 </div>
 </body>
 </html>
+

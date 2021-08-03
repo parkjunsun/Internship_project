@@ -9,19 +9,13 @@ import org.springframework.web.servlet.ModelAndView;
 import sptek.spdevteam.intern.common.CommonService;
 import sptek.spdevteam.intern.common.FileUploadUtil;
 import sptek.spdevteam.intern.common.RandomOutUtil;
-import sptek.spdevteam.intern.content.domain.Content;
-import sptek.spdevteam.intern.content.domain.Image;
-import sptek.spdevteam.intern.content.domain.SrcDto;
-import sptek.spdevteam.intern.content.domain.TplDto;
+import sptek.spdevteam.intern.content.domain.*;
 import sptek.spdevteam.intern.content.service.RegisterService;
-
-import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +23,7 @@ import java.util.UUID;
 public class RegisterController {
 
     private static final String COMMON_REPR_IMG = "I0001";
+    private static final String CARD_DET_IMG = "I0004";
 
     private final RegisterService registerService;
     private final CommonService commonService;
@@ -54,17 +49,20 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam("repr_img") MultipartFile multipartFile, @ModelAttribute Content content) throws IOException {
+    public String register(@RequestParam(value = "repr_img") MultipartFile multipartFile, @RequestParam String tplCd, @RequestParam String srcCd,
+                           @RequestParam String ctnNm, @RequestParam String dspStDt, @RequestParam String dspEndDt, @RequestParam String ctnDiv,
+                           @RequestParam String dspYn, @RequestParam String cmtYn, @RequestParam String cstYn, @RequestParam String popMsg,
+                           @RequestParam(value = "ctn_img", required = false) List<MultipartFile> multipartFiles,
+                           @RequestParam(value = "inputUrl", required = false) String inputUrl) throws IOException {
 
 
         FileUploadUtil fileUploadUtil = new FileUploadUtil(multipartFile, uploadFilePath);
         fileUploadUtil.UploadImage();
 
-        String randomStr = randomOutUtil.getRandomStr();
-
+        String imgGrpId = randomOutUtil.getRandomStr();
 
         Image image = new Image();
-        image.setImgGrpId(randomStr);
+        image.setImgGrpId(imgGrpId);
         image.setImgTyCd(COMMON_REPR_IMG);
         image.setPath(fileUploadUtil.getPath());
         image.setFeNm(fileUploadUtil.getFileName());
@@ -72,16 +70,64 @@ public class RegisterController {
         image.setFeExt(fileUploadUtil.getExtension());
         image.setFeSz(fileUploadUtil.getSize());
         image.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
-
+        image.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+        image.setUseYn("y");
 
         registerService.imgSave(image);
 
+        if (multipartFiles != null) {
+            for (MultipartFile file : multipartFiles) {
+                if (!file.isEmpty()) {
 
-        content.setImgGrpId(randomStr);
+                    FileUploadUtil ctnDetUploadUtil = new FileUploadUtil(file, uploadFilePath);
 
+                    Image ctnDetImage = new Image();
+                    ctnDetImage.setImgGrpId(imgGrpId);
+                    ctnDetImage.setImgTyCd(CARD_DET_IMG);
+                    ctnDetImage.setPath(ctnDetUploadUtil.getPath());
+                    ctnDetImage.setFeNm(ctnDetUploadUtil.getFileName());
+                    ctnDetImage.setEncFeNm(ctnDetUploadUtil.getEncFileName());
+                    ctnDetImage.setFeExt(ctnDetUploadUtil.getExtension());
+                    ctnDetImage.setFeSz(ctnDetUploadUtil.getSize());
+                    ctnDetImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
+                    ctnDetImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+                    ctnDetImage.setUseYn("y");
 
+                    ctnDetUploadUtil.UploadImage();
+                    registerService.imgSave(ctnDetImage);
+                }
+            }
+        }
 
+        Content content = new Content();
+
+        content.setTplCd(tplCd);
+        content.setSrcCd(srcCd);
+        content.setImgGrpId(imgGrpId);
+        content.setCtnNm(ctnNm);
+        content.setDspStDt(dspStDt);
+        content.setDspEndDt(dspEndDt);
+        content.setCtnDiv(ctnDiv);
+        content.setDspYn(dspYn);
+        content.setCmtYn(cmtYn);
+        content.setCstYn(cstYn);
+        content.setPopMsg(popMsg);
+        content.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
+        content.setModDt(Timestamp.valueOf(LocalDateTime.now()));
         registerService.ctnSave(content);
+
+
+        ContentDet contentDet = new ContentDet();
+        contentDet.setCtnSeq(registerService.getCtnSeq(imgGrpId));
+        contentDet.setImgGrpId(content.getImgGrpId());
+        contentDet.setTplCd(content.getTplCd());
+        contentDet.setUrlAddr(inputUrl);
+        contentDet.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
+        contentDet.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+        contentDet.setUseYn("y");
+
+        registerService.ctnDetSave(contentDet);
+
         return "redirect:/content/register";
     }
 

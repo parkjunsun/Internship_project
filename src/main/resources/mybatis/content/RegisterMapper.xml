@@ -26,17 +26,17 @@
              #{srcCd},
              #{imgGrpId},
              #{ctnNm},
-             CURRENT_TIMESTAMP,
-             CURRENT_TIMESTAMP,
+             to_timestamp(#{dspStDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS'),
+             to_timestamp(#{dspEndDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS'),
              #{ctnDiv},
              #{dspYn},
              #{cmtYn},
              #{cstYn},
              #{popMsg},
              0,
-             CURRENT_TIMESTAMP,
-             CURRENT_TIMESTAMP,
-             'Y'
+             #{regDt},
+             #{modDt},
+             'y'
         )
     </insert>
 
@@ -70,4 +70,34 @@
             #{imgOdr}
         )
     </insert>
+
+    <insert id="ctnDetSave" parameterType="sptek.spdevteam.intern.content.domain.ContentDet">
+        INSERT INTO internsc.tb_ctn_det
+        (
+            ctn_seq,
+            img_grp_id,
+            tpl_cd,
+            url_addr,
+            reg_dt,
+            mod_dt,
+            use_yn
+        )
+        VALUES
+        (
+            #{ctnSeq},
+            #{imgGrpId},
+            #{tplCd},
+            #{urlAddr},
+            #{regDt},
+            #{modDt},
+            #{useYn}
+        )
+    </insert>
+
+    <select id="getCtnSeq" parameterType="String" resultType="int">
+        SELECT
+            ctn_seq
+        FROM internsc.tb_ctn
+        WHERE img_grp_id = #{imgGrpId}
+    </select>
 </mapper>

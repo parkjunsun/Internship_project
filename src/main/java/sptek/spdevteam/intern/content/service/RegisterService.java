@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sptek.spdevteam.intern.content.domain.Content;
+import sptek.spdevteam.intern.content.domain.ContentDet;
 import sptek.spdevteam.intern.content.domain.Image;
 import sptek.spdevteam.intern.content.domain.SrcDto;
 
@@ -16,5 +17,9 @@ public interface RegisterService {
     void ctnSave(Content content);
 
     void imgSave(Image image);
+
+    void ctnDetSave(ContentDet contentDet);
+
+    int getCtnSeq(String imgGrpId);
 
 }

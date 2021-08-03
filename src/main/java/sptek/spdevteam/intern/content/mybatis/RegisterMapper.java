@@ -2,6 +2,7 @@ package sptek.spdevteam.intern.content.mybatis;
 
 import org.springframework.stereotype.Repository;
 import sptek.spdevteam.intern.content.domain.Content;
+import sptek.spdevteam.intern.content.domain.ContentDet;
 import sptek.spdevteam.intern.content.domain.Image;
 import sptek.spdevteam.intern.content.domain.SrcDto;
 
@@ -14,4 +15,8 @@ public interface RegisterMapper {
     void ctnSave(Content content);
 
     void imgSave(Image image);
+
+    void ctnDetSave(ContentDet contentDet);
+
+    int getCtnSeq(String imgGrpId);
 }

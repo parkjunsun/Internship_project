@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class Content {
 
-    private int cntSeq;
+    private int ctnSeq;
     private String tplCd;
     private String srcCd;
     private String imgGrpId;
@@ -24,8 +24,8 @@ public class Content {
     private String popMsg;
     private Long viewCnt;
 
-    private LocalDateTime regDt;
-    private LocalDateTime modDt;
+    private Timestamp regDt;
+    private Timestamp modDt;
     private String useYn;
 
 }
