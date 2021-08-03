@@ -110,9 +110,9 @@
         function loadFile(input) {
             const file = input.files[0];	//선택된 파일 가져오기
 
-            //미리 만들어 놓은 div에 text(파일 이름) 추가
-            const name = document.getElementById('fileName');
-            name.textContent = file.name;
+            // //미리 만들어 놓은 div에 text(파일 이름) 추가
+            // const name = document.getElementById('fileName');
+            // name.textContent = file.name;
 
             //새로운 이미지 div 추가
             const newImage = document.createElement("img");
@@ -121,8 +121,8 @@
             //이미지 source 가져오기
             newImage.src = URL.createObjectURL(file);
 
-            newImage.style.width = "750px;";
-            newImage.style.height = "1500px;";
+            newImage.style.width = "150px;";
+            newImage.style.height = "150px;";
             newImage.style.visibility = "visible";
             newImage.style.objectFit = "contain";
 
@@ -581,10 +581,12 @@
                             <td rowspan="2">
                                 <div class="fileInput">
                                     <div class="image-show" id="image-show"></div>
-                                    <p id="fileName"></p>
                                 </div>
                                 <div>
-                                    <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg"  onchange="loadFile(this)">
+                                    <label class="file-input" for="repr_img">
+                                        찾기
+                                        <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg"  onchange="loadFile(this)" style="display: none;">
+                                    </label>
                                 </div>
                             </td>
                             <th>상담하기</th>

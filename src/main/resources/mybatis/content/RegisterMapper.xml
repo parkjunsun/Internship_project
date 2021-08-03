@@ -1,42 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sptek.spdevteam.intern.content.mybatis.RegisterMapper">
-    <insert id="save" parameterType="sptek.spdevteam.intern.content.domain.Content">
+    <insert id="ctnSave" parameterType="sptek.spdevteam.intern.content.domain.Content">
         INSERT INTO internsc.tb_ctn
         (
-         tpl_cd,
-         src_cd,
-         img_grp_id,
-         ctn_nm,
-         dsp_st_dt,
-         dsp_end_dt,
-         ctn_div,
-         dsp_yn,
-         cmt_yn,
-         cst_yn,
-         pop_msg,
-         view_cnt,
-         reg_dt,
-         mod_dt,
-         use_yn
+             tpl_cd,
+             src_cd,
+             img_grp_id,
+             ctn_nm,
+             dsp_st_dt,
+             dsp_end_dt,
+             ctn_div,
+             dsp_yn,
+             cmt_yn,
+             cst_yn,
+             pop_msg,
+             view_cnt,
+             reg_dt,
+             mod_dt,
+             use_yn
         )
         VALUES
         (
-         #{tplCd},
-         #{srcCd},
-         #{imgGrpId},
-         #{ctnNm},
-         #{dspStDt},
-         #{dspEndDt},
-         #{ctnDiv},
-         #{dspYn},
-         #{cmtYn},
-         #{cstYn},
-         #{popMsg},
-         0,
-         CURRENT_TIMESTAMP,
-         CURRENT_TIMESTAMP,
-         'Y'
+             #{tplCd},
+             #{srcCd},
+             #{imgGrpId},
+             #{ctnNm},
+             CURRENT_TIMESTAMP,
+             CURRENT_TIMESTAMP,
+             #{ctnDiv},
+             #{dspYn},
+             #{cmtYn},
+             #{cstYn},
+             #{popMsg},
+             0,
+             CURRENT_TIMESTAMP,
+             CURRENT_TIMESTAMP,
+             'Y'
+        )
+    </insert>
+
+    <insert id="imgSave" parameterType="sptek.spdevteam.intern.content.domain.Image">
+        INSERT INTO internsc.tb_img
+        (
+            img_grp_id,
+            img_ty_cd,
+            path,
+            fe_nm,
+            enc_fe_nm,
+            fe_ext,
+            fe_sz,
+            reg_dt,
+            mod_dt,
+            use_yn,
+            img_odr
+        )
+        VALUES
+        (
+            #{imgGrpId},
+            #{imgTyCd},
+            #{path},
+            #{feNm},
+            #{encFeNm},
+            #{feExt},
+            #{feSz},
+            #{regDt},
+            #{modDt},
+            #{useYn},
+            #{imgOdr}
         )
     </insert>
 </mapper>

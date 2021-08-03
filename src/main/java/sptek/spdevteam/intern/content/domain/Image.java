@@ -2,6 +2,7 @@ package sptek.spdevteam.intern.content.domain;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,11 +13,11 @@ public class Image {
     private String imgTyCd;
     private String path;
     private String feNm;
-    private String encFrNm;
+    private String encFeNm;
     private String feExt;
-    private int feSz;
-    private LocalDateTime regDt;
-    private LocalDateTime modDt;
+    private long feSz;
+    private Timestamp regDt;
+    private Timestamp modDt;
     private String useYn;
     private int imgOdr;
 

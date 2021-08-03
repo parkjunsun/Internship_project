@@ -2,6 +2,8 @@ package sptek.spdevteam.intern.content.domain;
 
 import lombok.Data;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,8 +15,8 @@ public class Content {
     private String imgGrpId;
 
     private String ctnNm;
-    private LocalDateTime dspStDt;
-    private LocalDateTime dspEndDt;
+    private String dspStDt;
+    private String dspEndDt;
     private String ctnDiv;
     private String dspYn;
     private String cmtYn;
