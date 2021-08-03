@@ -12,6 +12,8 @@ public class ContentExcel {
     private String tplCd;
     private String srcCd;
 
+    private String tplNm;
+    private String srcNm;
     private String ctnNm;
     private String dspStDt;
     private String dspEndDt;

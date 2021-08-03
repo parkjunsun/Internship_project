@@ -12,6 +12,7 @@ import sptek.spdevteam.intern.content.mybatis.FilterMapper;
 import sptek.spdevteam.intern.content.mybatis.ListMapper;
 import sptek.spdevteam.intern.content.service.ListService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,17 @@ public class ListServiceImpl implements ListService {
     public List<ContentExcel> getList(ContentExcel contentExcel) throws Exception {
         return listMapper.getList(contentExcel);
     }
+
+    @Override
+    public List<ContentExcel> getBoardList(HashMap<String, Object> map) throws Exception {
+        return listMapper.getBoardList(map);
+    }
+
+    @Override
+    public int getBoardListCnt(HashMap<String, Object> map) throws Exception {
+        return listMapper.getBoardListCnt(map);
+    }
+
 
 
 }

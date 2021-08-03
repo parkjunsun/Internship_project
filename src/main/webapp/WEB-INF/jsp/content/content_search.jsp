@@ -14,6 +14,7 @@
 
     var params ='<c:out value="${result}"/>';
 
+
     $(document).ready(function() {
         $.initPage();
     });
@@ -88,10 +89,6 @@
         $('#enddate').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
         $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
 
-        function searchWithFilter(){
-            alert("검색!");
-        }
-
 
         function sendData() {
             var dspStDt = $('#startdate').val();
@@ -101,21 +98,32 @@
             var srcCd = $('#srcCd').val();
             var tplCd = $(':radio[name="tplCd"]:checked').val();
             var ctnDiv = $(':radio[name="ctnDiv"]:checked').val();
+            var orderBy = $('#orderBy').val();
+            var dspCnt = $('#dspCnt').val();
+            var page = $('#dspPage').val();
+            var range = 1;
             var params = "dspStDt=" + dspStDt
                 +"&dspEndDt=" + dspEndDt
                 +"&dspYn=" + dspYn
                 +"&ctnNm=" + ctnNm
                 +"&srcCd=" + srcCd
                 +"&tplCd=" + tplCd
-                +"&ctnDiv=" + ctnDiv;
+                +"&orderBy=" + orderBy
+                +"&ctnDiv=" + ctnDiv
+                +"&page=" + page
+                +"&range=" + range
+                +"&listSize=" + dspCnt;
             $.ajax({
                 url:"/content/search"
                 , method : "post"
                 , data : params
-                , success :  function(){
+                , success :  function(data){
+                    console.log(data);
+                    $('#chart').show();
                 }
             })
         }
+
         function resetPage(){
             $('#startdate').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
             $('#enddate').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
@@ -139,6 +147,52 @@
         $(function(){
             $('#btn_reset').on('click',resetPage);
         })
+
+        <%--function pageCheck(page){--%>
+        <%--    if(page>${maxPage}){--%>
+        <%--        alert("최종 페이지를 초과했습니다");--%>
+        <%--        $('dspPage').val(${page})--%>
+        <%--    }--%>
+        <%--}--%>
+
+        <%--//이전 버튼 이벤트--%>
+        <%--function fn_prev(page, range, rangeSize) {--%>
+        <%--    var page = ((range - 2) * rangeSize) + 1;--%>
+        <%--    var range = range - 1;--%>
+        <%--    var url = "/content/search";--%>
+        <%--    url = url + "?page=" + page;--%>
+        <%--    url = url + "&range=" + range;--%>
+        <%--    location.href = url;--%>
+        <%--}--%>
+
+        <%--//페이지 번호 클릭--%>
+        <%--function fn_pagination(page, range, rangeSize, searchType, keyword) {--%>
+        <%--    var url = "/content/search";--%>
+        <%--    url = url + "?page=" + page;--%>
+        <%--    url = url + "&range=" + range;--%>
+        <%--    location.href = url;--%>
+        <%--}--%>
+        <%--//다음 버튼 이벤트--%>
+        <%--function fn_next(page, range, rangeSize) {--%>
+        <%--    var page = parseInt((range * rangeSize)) + 1;--%>
+        <%--    var range = parseInt(range) + 1;--%>
+        <%--    var url = "/content/search";--%>
+        <%--    url = url + "?page=" + page;--%>
+        <%--    url = url + "&range=" + range;--%>
+        <%--    location.href = url;--%>
+        <%--}--%>
+
+        <%--$(function(){--%>
+        <%--    $('#prev').on('click',fn_prev());--%>
+        <%--})--%>
+
+        <%--$(function(){--%>
+        <%--    $('#next').on('click',fn_next());--%>
+        <%--})--%>
+
+        <%--$(function(){--%>
+        <%--    $('#dspPage').change(pageCheck(${page}));--%>
+        <%--})--%>
     });
 
 </script>
@@ -269,6 +323,118 @@
                         </div>
                         <div class="frameLine mb-3"></div>
                         <!-- // Button Set (middle 정렬) -->
+
+                <div id="chart" style="display:none"  class="table-responsive" >
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <td colspan="9">
+                                <div style="float: left;">
+                                    <button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button>
+                                    <button type="button" class="btn btn-outline-secondary">전시 설정</button>
+                                </div>
+                                <div style="float: right;">
+                                    정렬 순서
+                                    <label>
+                                        <select name="searchType" class="form-select w120" id="orderBy" style="margin-left:6px; margin-right:3px; display: inline-block;">
+                                            <option value="all" selected>전체</option>
+                                            <option value="ctnNm">콘텐츠명</option>
+                                            <option value="dspDt">전시기간</option>
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <select name="searchType" class="form-select w100" id="dspCnt" style="margin-left:6px; margin-right:3px; display: inline-block;">
+                                            <option value="20" selected>20개</option>
+                                            <option value="30">30개</option>
+                                            <option value="40">40개</option>
+                                            <option value="50">50개</option>
+                                        </select>
+                                    </label>
+                                    <input type="number" name="dspPage" class="form-control" id="dspPage" max="99999" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
+                                    / ${pagination.page} / ${pagination.startPage} / ${pagination.pageCnt} / ${pagination.listCnt} / ${pagination.startList} /
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; width:40px; height: 40px" scope="col">
+                                <input type="checkbox" name="xxx" value="yyy">
+                            </th>
+                            <th style="text-align: center; width:40px;" scope="col">번호</th>
+                            <th style="text-align: center; width:300px;" scope="col">콘텐츠명</th>
+                            <th style="text-align: center; width:60px;" scope="col">화면코드</th>
+                            <th style="text-align: center; width:60px;" scope="col">콘텐츠형태</th>
+                            <th style="text-align: center; width:60px;" scope="col">템플릿유형</th>
+                            <th style="text-align: center; width:60px;" scope="col">전시여부</th>
+                            <th style="text-align: center; width:300px;" scope="col">전시기간</th>
+                            <th style="text-align: center; width:60px;" scope="col">출처</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="list" items="${contentExcelList}" varStatus="status">
+                            <tr>
+                                <td><input type="checkbox" name="xxx" value="yyy"></td>
+                                <td>${status.count}</td>
+                                <td>${list.ctnNm}</td>
+                                <td>${list.ctnSeq}</td>
+                                <td>${list.ctnDiv}</td>
+                                <td>${list.tplNm}</td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${list.dspYn}=='Y'">
+                                            <td>전시</td>
+                                        </c:when>
+                                        <c:when test="${list.dspYn}=='N'">
+                                            <td>미전시</td>
+                                        </c:when>
+                                    </c:choose>
+                                </td>
+                                <td>${list.dspStDt} ~ ${list.dspEndDt}</td>
+                                <td>${list.srcNm}</td>
+                            </tr>
+                        </c:forEach>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- pagination{s} -->
+
+                <div id="paginationBox">
+                    <ul class="pagination">
+                        <c:if test="${pagination.prev}">
+                            <li class="page-item"><a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>
+                        </c:if>
+                        <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">
+                            <li class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')"> ${idx} </a></li>
+                        </c:forEach>
+                        <c:if test="${pagination.next}">
+                            <li class="page-item"><a class="page-link" href="#" onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')" >Next</a></li>
+                        </c:if>
+                    </ul>
+                </div>
+
+                <!-- pagination{e} -->
+
+
+<%--                <nav aria-label="Page navigation example">--%>
+<%--                    <ul class="pagination justify-content-center">--%>
+<%--                        <li class="page-item disabled">--%>
+<%--                            <a class="page-link" href="#" tabindex="-1"> << </a>--%>
+<%--                        </li>--%>
+<%--                        <li class="page-item disabled">--%>
+<%--                            <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>--%>
+<%--                        </li>--%>
+<%--                        <li class="page-item"><a class="page-link" href="#">1</a></li>--%>
+<%--                        <li class="page-item"><a class="page-link" href="#">2</a></li>--%>
+<%--                        <li class="page-item"><a class="page-link" href="#">3</a></li>--%>
+<%--                        <li class="page-item">--%>
+<%--                            <a class="page-link" id="next" href="#"> > </a>--%>
+<%--                        </li>--%>
+<%--                        <li class="page-item">--%>
+<%--                            <a class="page-link" href="#"> >> </a>--%>
+<%--                        </li>--%>
+<%--                    </ul>--%>
+<%--                </nav>--%>
 
             </main>
         <!-- //Content Body 영역 -->
