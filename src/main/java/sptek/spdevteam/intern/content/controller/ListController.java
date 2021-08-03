@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import sptek.spdevteam.intern.common.CommonService;
 import sptek.spdevteam.intern.common.LogUtil;
+import sptek.spdevteam.intern.common.domain.Pagination;
 import sptek.spdevteam.intern.content.domain.ContentExcel;
 import sptek.spdevteam.intern.content.domain.ListDomain;
 import sptek.spdevteam.intern.content.domain.SrcDto;
@@ -45,10 +46,16 @@ public class ListController {
 
         ModelAndView mv = new ModelAndView("/content/content_search");
 
+        Pagination pagination = new Pagination();
+        pagination.setRange(1);
+        pagination.setPage(1);
+
         mv.addObject("srcList", srcList);
         mv.addObject("tempList", tempList);
+        mv.addObject("pagination", pagination);
         return mv;
     }
+
 
     @ResponseBody
     @PostMapping("/search")
@@ -59,26 +66,26 @@ public class ListController {
         }
 
         Map<String, String[]> paramMap = request.getParameterMap();
+        HashMap<String, Object> map = new HashMap<>();
+        for (String key  : paramMap.keySet()) {
+            map.put(key,paramMap.get(key)[0]);
+        }
 
+        int listCnt = listService.getBoardListCnt(map);
+        Pagination pagination = new Pagination();
 
-        ContentExcel contentExcel = new ContentExcel();
+        map.replace("listSize", Integer.parseInt(map.get("listSize").toString()));
 
-        contentExcel.setCtnDiv(paramMap.get("ctnDiv")[0]);
-        contentExcel.setCtnSeq(100);
-        contentExcel.setDspEndDt(paramMap.get("dspEndDt")[0]);
-        contentExcel.setDspStDt(paramMap.get("dspStDt")[0]);
-        contentExcel.setCtnNm(paramMap.get("ctnNm")[0]);
-        contentExcel.setSrcCd(paramMap.get("srcCd")[0]);
-        contentExcel.setDspYn(paramMap.get("dspYn")[0]);
-        contentExcel.setTplCd(paramMap.get("tplCd")[0]);
+        pagination.pageInfo(Integer.parseInt(map.get("page").toString()),Integer.parseInt(map.get("range").toString()),listCnt);
+        pagination.setListSize(Integer.parseInt(map.get("listSize").toString()));
+        System.out.println("pagination = " + pagination);
+        map.put("startList", pagination.getStartList());
+        List<ContentExcel> contentExcelList = listService.getBoardList(map);
 
-
-        System.out.println("contentExcel = " + contentExcel);
-
-        List<ContentExcel> contentExcelList = listService.getList(contentExcel);
-
-        ModelAndView mv = new ModelAndView("/content/content_list");
+        ModelAndView mv = new ModelAndView("/content/content_search");
         mv.addObject("contentExcelList", contentExcelList);
+        mv.addObject("pagination", pagination);
+
         return mv;
     }
 
