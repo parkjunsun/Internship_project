@@ -82,7 +82,7 @@ public class ListController {
         map.put("startList", pagination.getStartList());
         List<ContentExcel> contentExcelList = listService.getBoardList(map);
 
-        ModelAndView mv = new ModelAndView("/content/content_search");
+        ModelAndView mv = new ModelAndView("jsonView");
         mv.addObject("contentExcelList", contentExcelList);
         mv.addObject("pagination", pagination);
 

@@ -119,6 +119,80 @@
                 , data : params
                 , success :  function(data){
                     console.log(data);
+                    var content = data["contentExcelList"];
+                    var pagination = data["pagination"];
+                    console.log(pagination["listCnt"]);
+                    document.getElementById("dspPage").setAttribute("value", pagination["page"]);
+                    document.getElementById("maxPage").innerText = "/ " + pagination["pageCnt"];
+                    const conList = document.getElementById("ctnList");
+                    while (conList.hasChildNodes()) {
+                        conList.removeChild(conList.firstChild);
+                    }
+                    for(var c in content) {
+                        var tr = document.createElement('tr');
+                        var checkbox = document.createElement('td');
+                        var input = document.createElement('input');
+                        input.setAttribute('type', 'checkbox');
+                        checkbox.appendChild(input);
+                        tr.appendChild(checkbox);
+
+                        var index = document.createElement('td');
+                        index.innerText = Number(c)+1;
+                        tr.appendChild(index);
+
+                        var ctnNm = document.createElement('td');
+                        ctnNm.innerText = content[c]['ctnNm'];
+                        tr.appendChild(ctnNm);
+
+                        var ctnCd = document.createElement('td');
+                        ctnCd.innerText = content[c]['ctnCd'];
+                        tr.appendChild(ctnCd);
+
+                        var ctnDiv = document.createElement('td');
+                        var ctnDivNm = '';
+                        if (content[c]["ctnDiv"] == "IN") {
+                            ctnDivNm = '내부';
+                        } else {
+                            ctnDivNm = '외부';
+                        }
+                        ctnDiv.innerText = ctnDivNm;
+                        tr.appendChild(ctnDiv);
+
+                        var tplNm = document.createElement('td');
+                        tplNm.innerText = content[c]['tplNm'];
+                        tr.appendChild(tplNm);
+
+                        var dspYnNm = '';
+                        if (content[c]["dspYn"] == "Y") {
+                            dspYnNm = '전시';
+                        } else {
+                            dspYnNm = '미전시';
+                        }
+
+                        var dspYn = document.createElement('td');
+                        dspYn.innerText = dspYnNm;
+                        tr.appendChild(dspYn);
+
+                        var dspDt = document.createElement('td');
+                        dspDt.innerText = content[c]['dspStDt'].split(' ')[0]
+                                        + " "
+                                        + content[c]['dspStDt'].split(' ')[1].split('.')[0]
+                                        +"    ~    "
+                                        + content[c]['dspEndDt'].split(' ')[0]
+                                        + " "
+                                        + content[c]['dspEndDt'].split(' ')[1].split('.')[0];
+                        tr.appendChild(dspDt);
+
+
+                        var srcNm = document.createElement('td');
+                        srcNm.innerText = content[c]["srcNm"];
+                        tr.appendChild(srcNm);
+
+
+                        conList.appendChild(tr);
+
+                    }
+
                     $('#chart').show();
                 }
             })
@@ -351,7 +425,9 @@
                                         </select>
                                     </label>
                                     <input type="number" name="dspPage" class="form-control" id="dspPage" max="99999" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
-                                    / ${pagination.page} / ${pagination.startPage} / ${pagination.pageCnt} / ${pagination.listCnt} / ${pagination.startList} /
+                                    <span id="maxPage">
+                                        / ${pagination.endPage}
+                                    </span>
                                 </div>
                             </td>
                         </tr>
@@ -369,72 +445,49 @@
                             <th style="text-align: center; width:60px;" scope="col">출처</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <c:forEach var="list" items="${contentExcelList}" varStatus="status">
-                            <tr>
-                                <td><input type="checkbox" name="xxx" value="yyy"></td>
-                                <td>${status.count}</td>
-                                <td>${list.ctnNm}</td>
-                                <td>${list.ctnSeq}</td>
-                                <td>${list.ctnDiv}</td>
-                                <td>${list.tplNm}</td>
-                                <td>
-                                    <c:choose>
-                                        <c:when test="${list.dspYn}=='Y'">
-                                            <td>전시</td>
-                                        </c:when>
-                                        <c:when test="${list.dspYn}=='N'">
-                                            <td>미전시</td>
-                                        </c:when>
-                                    </c:choose>
-                                </td>
-                                <td>${list.dspStDt} ~ ${list.dspEndDt}</td>
-                                <td>${list.srcNm}</td>
-                            </tr>
-                        </c:forEach>
-
+                        <tbody id="ctnList">
                         </tbody>
                     </table>
                 </div>
 
                 <!-- pagination{s} -->
 
-                <div id="paginationBox">
-                    <ul class="pagination">
-                        <c:if test="${pagination.prev}">
-                            <li class="page-item"><a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>
-                        </c:if>
-                        <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">
-                            <li class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')"> ${idx} </a></li>
-                        </c:forEach>
-                        <c:if test="${pagination.next}">
-                            <li class="page-item"><a class="page-link" href="#" onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')" >Next</a></li>
-                        </c:if>
-                    </ul>
-                </div>
+<%--                <div id="paginationBox">--%>
+<%--                    <ul class="pagination">--%>
+<%--                        <c:if test="${pagination.prev}">--%>
+<%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>--%>
+<%--                        </c:if>--%>
+<%--                        <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">--%>
+<%--                            <li class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')"> ${idx} </a></li>--%>
+<%--                        </c:forEach>--%>
+<%--                        <c:if test="${pagination.next}">--%>
+<%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')" >Next</a></li>--%>
+<%--                        </c:if>--%>
+<%--                    </ul>--%>
+<%--                </div>--%>
 
                 <!-- pagination{e} -->
 
 
-<%--                <nav aria-label="Page navigation example">--%>
-<%--                    <ul class="pagination justify-content-center">--%>
-<%--                        <li class="page-item disabled">--%>
-<%--                            <a class="page-link" href="#" tabindex="-1"> << </a>--%>
-<%--                        </li>--%>
-<%--                        <li class="page-item disabled">--%>
-<%--                            <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>--%>
-<%--                        </li>--%>
-<%--                        <li class="page-item"><a class="page-link" href="#">1</a></li>--%>
-<%--                        <li class="page-item"><a class="page-link" href="#">2</a></li>--%>
-<%--                        <li class="page-item"><a class="page-link" href="#">3</a></li>--%>
-<%--                        <li class="page-item">--%>
-<%--                            <a class="page-link" id="next" href="#"> > </a>--%>
-<%--                        </li>--%>
-<%--                        <li class="page-item">--%>
-<%--                            <a class="page-link" href="#"> >> </a>--%>
-<%--                        </li>--%>
-<%--                    </ul>--%>
-<%--                </nav>--%>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1"> << </a>
+                        </li>
+                        <li class="page-item disabled">
+                            <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" id="next" href="#"> > </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"> >> </a>
+                        </li>
+                    </ul>
+                </nav>
 
             </main>
         <!-- //Content Body 영역 -->
