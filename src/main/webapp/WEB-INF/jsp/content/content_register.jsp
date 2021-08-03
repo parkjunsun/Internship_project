@@ -223,8 +223,8 @@
                 var img_show = document.getElementById('ctn_image-show' + String(i));
                 img_show.id = 'ctn_image-show' + String(i - 1);
 
-                var fNm = document.getElementById('ctn_fileName' + String(i));
-                fNm.id = 'ctn_fileName' + String(i - 1);
+                // var fNm = document.getElementById('ctn_fileName' + String(i));
+                // fNm.id = 'ctn_fileName' + String(i - 1);
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
@@ -277,10 +277,10 @@
             curCtnImgShowBlock.id = 'ctn_image-show' + preIdx;
             preCtnImgShowBlock.id = 'ctn_image-show' + curIdx;
 
-            const curCtnFeNmBlock = document.getElementById('ctn_fileName' + curIdx);
-            const preCtnFeNmBlock = document.getElementById('ctn_fileName' + preIdx);
-            curCtnFeNmBlock.id = 'ctn_fileName' + preIdx;
-            preCtnFeNmBlock.id = 'ctn_fileName' + curIdx;
+            // const curCtnFeNmBlock = document.getElementById('ctn_fileName' + curIdx);
+            // const preCtnFeNmBlock = document.getElementById('ctn_fileName' + preIdx);
+            // curCtnFeNmBlock.id = 'ctn_fileName' + preIdx;
+            // preCtnFeNmBlock.id = 'ctn_fileName' + curIdx;
 
             const curInputFileBlock = document.getElementById('ctn_img' + curIdx);
             const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
@@ -318,6 +318,7 @@
             nextSeqBlock.id = 'seq' + String(currentIdx);
             nextSeqBlock.innerText = currentIdx;
 
+
             const currentUpArrowBlock = document.getElementById('up_arrow' + String(currentIdx));
             const nextUpArrowBlock = document.getElementById('up_arrow' + String(nextIdx));
             currentUpArrowBlock.id = 'up_arrow' + String(nextIdx);
@@ -327,15 +328,18 @@
             currentDownArrowBlock.id = 'down_arrow' + String(nextIdx);
             nextDownArrowBlock.id = 'down_arrow' + String(currentIdx);
 
+
             const currentCtnImgShowBlock = document.getElementById('ctn_image-show' + String(currentIdx));
             const nextCtnImgShowBlock = document.getElementById('ctn_image-show' + String(nextIdx));
             currentCtnImgShowBlock.id = 'ctn_image-show' + String(nextIdx);
             nextCtnImgShowBlock.id = 'ctn_image-show' + String(currentIdx);
 
-            const currentCtnFeNmBlock = document.getElementById('ctn_fileName' + String(currentIdx));
-            const nextCtnFeNmBlock = document.getElementById('ctn_fileName' + String(nextIdx));
-            currentCtnFeNmBlock.id = 'ctn_fileName' + String(nextIdx);
-            nextCtnFeNmBlock.id = 'ctn_fileName' + String(currentIdx);
+
+            // const currentCtnFeNmBlock = document.getElementById('ctn_fileName' + String(currentIdx));
+            // const nextCtnFeNmBlock = document.getElementById('ctn_fileName' + String(nextIdx));
+            // currentCtnFeNmBlock.id = 'ctn_fileName' + String(nextIdx);
+            // nextCtnFeNmBlock.id = 'ctn_fileName' + String(currentIdx);
+
 
             const currentInputFileBlock = document.getElementById('ctn_img' + String(currentIdx));
             const nextInputFileBlock = document.getElementById('ctn_img' + String(nextIdx));
@@ -570,8 +574,6 @@
                                     <c:forEach var="item" items="${srcList}">
                                         <option value="${item.cd}">${item.cd_nm}</option>
                                     </c:forEach>
-<%--                                    <option value="S0009">서울경제</option>--%>
-<%--                                    <option value="S0014">디미토리</option>--%>
                                 </select>
                             </td>
                             <td></td>
