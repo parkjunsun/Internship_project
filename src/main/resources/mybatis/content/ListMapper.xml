@@ -33,30 +33,19 @@
     </select>
     <select id="getBoardList" parameterType="hashmap" resultType="sptek.spdevteam.intern.content.domain.ContentExcel">
         SELECT
-        ctn_nm as ctnNm,
-        ctn_seq as ctnSeq,
-        ctn_div as ctnDiv,
-        tplnm as tplNm,
-        dsp_yn as dspYn,
-        dsp_st_dt as dspStDt,
-        dsp_end_dt as dspEndDt,
-        cd_nm as srcNm
-        FROM
-        (
-        SELECT
-        ctn_seq,
-        tpl_cd,
-        src_cd,
-        ctn_nm,
-        cd_nm as tplNm,
-        dsp_st_dt,
-        dsp_end_dt,
-        ctn_div,
-        dsp_yn
+            ctn_seq as ctnSeq,
+            tpl_cd as tplCd,
+            src_cd as srcCd,
+            ctn_nm as ctnNm,
+            tplCd.cd_nm as tplNm,
+            srcCd.cd_nm as srcNm,
+            dsp_st_dt as dspStDt,
+            dsp_end_dt as dspEndDt,
+            ctn_div as ctnDiv,
+            dsp_yn as dspYn
         FROM internsc.tb_ctn ctn
-        INNER JOIN internsc.tb_cd cd on ctn.tpl_cd=cd.cd
-        ) a
-        inner join internsc.tb_cd cd on a.src_cd=cd.cd
+        left outer join internsc.tb_cd tplCd on ctn.tpl_cd=tplCd.cd and tplCd.grp_cd = 'TPL_TY'
+        left outer join internsc.tb_cd srcCd on ctn.src_cd=srcCd.cd and srcCd.grp_cd = 'SRC_TY'
         WHERE 1=1
         AND dsp_st_dt <![CDATA[>=]]> to_timestamp(#{dspStDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
         AND dsp_end_dt <![CDATA[<=]]> to_timestamp(#{dspEndDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
@@ -76,7 +65,7 @@
             AND ctn_div = #{ctnDiv}
         </if>
         <if test='!orderBy.equals("all")'>
-            ORDER BY #{orderBy}
+            ORDER BY ${orderBy}
         </if>
         LIMIT #{listSize} OFFSET #{startList}
     </select>

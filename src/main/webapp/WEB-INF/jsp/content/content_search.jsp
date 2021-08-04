@@ -14,6 +14,9 @@
 
     var params ='<c:out value="${result}"/>';
 
+    var glb_pagination;
+    var glb_contentList;
+
 
     $(document).ready(function() {
         $.initPage();
@@ -90,6 +93,7 @@
         $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
 
 
+
         function sendData() {
             var dspStDt = $('#startdate').val();
             var dspEndDt = $('#enddate').val();
@@ -117,10 +121,13 @@
                 url:"/content/search"
                 , method : "post"
                 , data : params
+                , sync : false
                 , success :  function(data){
                     console.log(data);
                     var content = data["contentExcelList"];
                     var pagination = data["pagination"];
+                    glb_contentList = content;
+                    glb_pagination = pagination;
                     console.log(pagination["listCnt"]);
                     document.getElementById("dspPage").setAttribute("value", pagination["page"]);
                     document.getElementById("maxPage").innerText = "/ " + pagination["pageCnt"];
@@ -130,6 +137,7 @@
                     }
                     for(var c in content) {
                         var tr = document.createElement('tr');
+                        tr.setAttribute('style','text-align: center');
                         var checkbox = document.createElement('td');
                         var input = document.createElement('input');
                         input.setAttribute('type', 'checkbox');
@@ -145,7 +153,7 @@
                         tr.appendChild(ctnNm);
 
                         var ctnCd = document.createElement('td');
-                        ctnCd.innerText = content[c]['ctnCd'];
+                        ctnCd.innerText = content[c]['ctnSeq'];
                         tr.appendChild(ctnCd);
 
                         var ctnDiv = document.createElement('td');
@@ -194,6 +202,7 @@
                     }
 
                     $('#chart').show();
+                    $('#navigation').show();
                 }
             })
         }
@@ -222,51 +231,60 @@
             $('#btn_reset').on('click',resetPage);
         })
 
-        <%--function pageCheck(page){--%>
-        <%--    if(page>${maxPage}){--%>
-        <%--        alert("최종 페이지를 초과했습니다");--%>
-        <%--        $('dspPage').val(${page})--%>
-        <%--    }--%>
-        <%--}--%>
+        function pageCheck(page){
+            if(page>$('#maxPage')){
+                alert("최종 페이지를 초과했습니다");
+                $('dspPage').val(glb_pagination['page']);
+            }
+        }
 
-        <%--//이전 버튼 이벤트--%>
-        <%--function fn_prev(page, range, rangeSize) {--%>
-        <%--    var page = ((range - 2) * rangeSize) + 1;--%>
-        <%--    var range = range - 1;--%>
-        <%--    var url = "/content/search";--%>
-        <%--    url = url + "?page=" + page;--%>
-        <%--    url = url + "&range=" + range;--%>
-        <%--    location.href = url;--%>
-        <%--}--%>
+        //이전 버튼 이벤트
+        function fn_prev(page, range, rangeSize) {
+            var page = ((range - 2) * rangeSize) + 1;
+            var range = range - 1;
+            var url = "/content/search";
+            url = url + "?page=" + page;
+            url = url + "&range=" + range;
+            location.href = url;
+        }
 
-        <%--//페이지 번호 클릭--%>
-        <%--function fn_pagination(page, range, rangeSize, searchType, keyword) {--%>
-        <%--    var url = "/content/search";--%>
-        <%--    url = url + "?page=" + page;--%>
-        <%--    url = url + "&range=" + range;--%>
-        <%--    location.href = url;--%>
-        <%--}--%>
-        <%--//다음 버튼 이벤트--%>
-        <%--function fn_next(page, range, rangeSize) {--%>
-        <%--    var page = parseInt((range * rangeSize)) + 1;--%>
-        <%--    var range = parseInt(range) + 1;--%>
-        <%--    var url = "/content/search";--%>
-        <%--    url = url + "?page=" + page;--%>
-        <%--    url = url + "&range=" + range;--%>
-        <%--    location.href = url;--%>
-        <%--}--%>
+        //페이지 번호 클릭
+        function fn_pagination(page, range, rangeSize, searchType, keyword) {
+            var url = "/content/search";
+            url = url + "?page=" + page;
+            url = url + "&range=" + range;
+            location.href = url;
+        }
+        //다음 버튼 이벤트
+        function fn_next(page, range, rangeSize) {
+            var page = parseInt((range * rangeSize)) + 1;
+            var range = parseInt(range) + 1;
+            var url = "/content/search";
+            url = url + "?page=" + page;
+            url = url + "&range=" + range;
+            location.href = url;
+        }
 
-        <%--$(function(){--%>
-        <%--    $('#prev').on('click',fn_prev());--%>
-        <%--})--%>
+        // $(function(){
+        //     $('#prev').on('click',fn_prev());
+        // })
+        //
+        // $(function(){
+        //     $('#next').on('click',fn_next());
+        // })
+        //
+        $('#dspPage').on("change keyup paste", function() {
+            var currentVal = this.val();
+            alert(currentVal);
+            if(currentVal > $('#maxPage').val()){
+                alert("최종 페이지를 초과했습니다");
+                $('#dspPage').val(glb_pagination['page']);
+            }
+        });
 
-        <%--$(function(){--%>
-        <%--    $('#next').on('click',fn_next());--%>
-        <%--})--%>
-
-        <%--$(function(){--%>
-        <%--    $('#dspPage').change(pageCheck(${page}));--%>
-        <%--})--%>
+        $(function(){
+            $('#dspPage').change(pageCheck($('#dspPage').val()));
+        })
     });
 
 </script>
@@ -319,11 +337,11 @@
                                             <label class="display-state-label" for="flexRadio1">
                                                 전체
                                             </label>
-                                            <input class="form-check-input" type="radio" name="dspYn" value="y" id="flexRadio2" style="margin-left:6px; margin-right:6px;">
+                                            <input class="form-check-input" type="radio" name="dspYn" value="Y" id="flexRadio2" style="margin-left:6px; margin-right:6px;">
                                             <label class="display-state-label" for="flexRadio2">
                                                 전시
                                             </label>
-                                            <input class="form-check-input" type="radio" name="dspYn" value="n" id="flexRadio3" style="margin-left:6px; margin-right:6px;">
+                                            <input class="form-check-input" type="radio" name="dspYn" value="N" id="flexRadio3" style="margin-left:6px; margin-right:6px;">
                                             <label class="display-state-label" for="flexRadio3">
                                                 미전시
                                             </label>
@@ -371,11 +389,11 @@
                                             <label class="form-check-label" for="flexRadio6">
                                                 전체
                                             </label>
-                                            <input class="form-check-input" type="radio" name="ctnDiv" value="in" id="flexRadio7" style="margin-left:6px; margin-right:6px;">
+                                            <input class="form-check-input" type="radio" name="ctnDiv" value="IN" id="flexRadio7" style="margin-left:6px; margin-right:6px;">
                                             <label class="form-check-label" for="flexRadio7">
                                                 내부
                                             </label>
-                                            <input class="form-check-input" type="radio" name="ctnDiv" value="out" id="flexRadio8" style="margin-left:6px; margin-right:6px;">
+                                            <input class="form-check-input" type="radio" name="ctnDiv" value="OUT" id="flexRadio8" style="margin-left:6px; margin-right:6px;">
                                             <label class="form-check-label" for="flexRadio8">
                                                 외부
                                             </label>
@@ -412,8 +430,8 @@
                                     <label>
                                         <select name="searchType" class="form-select w120" id="orderBy" style="margin-left:6px; margin-right:3px; display: inline-block;">
                                             <option value="all" selected>전체</option>
-                                            <option value="ctnNm">콘텐츠명</option>
-                                            <option value="dspDt">전시기간</option>
+                                            <option value="ctn_nm">콘텐츠명</option>
+                                            <option value="dsp_st_dt">전시기간</option>
                                         </select>
                                     </label>
                                     <label>
@@ -424,7 +442,7 @@
                                             <option value="50">50개</option>
                                         </select>
                                     </label>
-                                    <input type="number" name="dspPage" class="form-control" id="dspPage" max="99999" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
+                                    <input type="text" name="dspPage" class="form-control" id="dspPage" max="99999" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
                                     <span id="maxPage">
                                         / ${pagination.endPage}
                                     </span>
@@ -468,26 +486,28 @@
 
                 <!-- pagination{e} -->
 
+                <div id = navigation style="display:none">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1"> << </a>
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" id="next" href="#"> > </a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"> >> </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
 
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1"> << </a>
-                        </li>
-                        <li class="page-item disabled">
-                            <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" id="next" href="#"> > </a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"> >> </a>
-                        </li>
-                    </ul>
-                </nav>
 
             </main>
         <!-- //Content Body 영역 -->
