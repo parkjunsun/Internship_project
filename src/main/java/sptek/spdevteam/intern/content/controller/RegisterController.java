@@ -49,9 +49,7 @@ public class RegisterController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam(value = "repr_img") MultipartFile multipartFile, @RequestParam String tplCd, @RequestParam String srcCd,
-                           @RequestParam String ctnNm, @RequestParam String dspStDt, @RequestParam String dspEndDt, @RequestParam String ctnDiv,
-                           @RequestParam String dspYn, @RequestParam String cmtYn, @RequestParam String cstYn, @RequestParam String popMsg,
+    public String register(@ModelAttribute Content content, @RequestParam(value = "repr_img") MultipartFile multipartFile,
                            @RequestParam(value = "ctn_img", required = false) List<MultipartFile> multipartFiles,
                            @RequestParam(value = "inputUrl", required = false) String inputUrl) throws IOException {
 
@@ -99,21 +97,11 @@ public class RegisterController {
             }
         }
 
-        Content content = new Content();
 
-        content.setTplCd(tplCd);
-        content.setSrcCd(srcCd);
         content.setImgGrpId(imgGrpId);
-        content.setCtnNm(ctnNm);
-        content.setDspStDt(dspStDt);
-        content.setDspEndDt(dspEndDt);
-        content.setCtnDiv(ctnDiv);
-        content.setDspYn(dspYn);
-        content.setCmtYn(cmtYn);
-        content.setCstYn(cstYn);
-        content.setPopMsg(popMsg);
         content.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
         content.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+        content.setUseYn("y");
         registerService.ctnSave(content);
 
 

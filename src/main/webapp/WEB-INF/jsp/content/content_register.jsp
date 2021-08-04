@@ -110,53 +110,89 @@
         function loadFile(input) {
             const file = input.files[0];	//선택된 파일 가져오기
 
+            const fileName = file.name;
+            const extension = fileName.substring(fileName.indexOf('.') + 1, fileName.length);
+
+            const fileSize = input.size;
+            const MAX_SIZE = 315000;
+
+            if (fileSize >= MAX_SIZE) {
+                alert("이미지 포맷이 맞지 않습니다.");
+                return false;
+            }
+
+            if (extension === "gif" || extension === "jpg" || extension === "png") {
+                const newImage = document.createElement("img");
+                newImage.setAttribute("class", 'reprImg');
+
+                //이미지 source 가져오기
+                newImage.src = URL.createObjectURL(file);
+
+                newImage.style.width = "150px;";
+                newImage.style.height = "150px;";
+                newImage.style.visibility = "visible";
+                newImage.style.objectFit = "contain";
+
+                const container = document.getElementById('image-show');
+                if (container.querySelector('.img') != null) {
+                    const oldImage = container.querySelector('.img');
+                    container.removeChild(oldImage);
+                }
+                container.appendChild(newImage);
+            } else {
+                alert("이미지 포맷이 맞지 않습니다.");
+                return false;
+            }
+
             // //미리 만들어 놓은 div에 text(파일 이름) 추가
             // const name = document.getElementById('fileName');
             // name.textContent = file.name;
 
             //새로운 이미지 div 추가
-            const newImage = document.createElement("img");
-            newImage.setAttribute("class", 'img');
 
-            //이미지 source 가져오기
-            newImage.src = URL.createObjectURL(file);
-
-            newImage.style.width = "150px;";
-            newImage.style.height = "150px;";
-            newImage.style.visibility = "visible";
-            newImage.style.objectFit = "contain";
-
-            const container = document.getElementById('image-show');
-            if (container.querySelector('.img') != null) {
-                const oldImage = container.querySelector('.img');
-                container.removeChild(oldImage);
-            }
-            container.appendChild(newImage);
         }
 
         function ctn_loadFile(input) {
             const cur = input.id[input.id.length-1];
 
             var file = input.files[0];
+            const fileName = file.name;
+            const extension = fileName.substring(fileName.indexOf('.') + 1, fileName.length)
+
+            const fileSize = input.size;
+            const MAX_SIZE = 1125000
+
+            if (fileSize >= MAX_SIZE) {
+                alert("이미지 포맷이 맞지 않습니다.");
+                return false;
+            }
+
+            if (extension === "gif" || extension === "jpg" || extension === "png") {
+                var newImage = document.createElement("img");
+                newImage.setAttribute("class", "ctnDetImg");
+
+                newImage.src = URL.createObjectURL(file);
+
+                newImage.style.width = "150px";
+                newImage.style.height = "150px";
+                newImage.style.visibility = "visible";
+                newImage.style.objectFit = "contain";
+
+                var container = document.getElementById('ctn_image-show' + cur);
+                if (container.querySelector('.img') != null) {
+                    const oldImage = container.querySelector('.img');
+                    container.removeChild(oldImage);
+                }
+                container.appendChild(newImage);
+            } else {
+                alert("이미지 포맷이 맞지 않습니다.");
+                return false;
+            }
+
+
             // var name = document.getElementById('ctn_fileName' + cur);
             // name.textContent = file.name;
 
-            var newImage = document.createElement("img");
-            newImage.setAttribute("class", "img");
-
-            newImage.src = URL.createObjectURL(file);
-
-            newImage.style.width = "150px";
-            newImage.style.height = "150px";
-            newImage.style.visibility = "visible";
-            newImage.style.objectFit = "contain";
-
-            var container = document.getElementById('ctn_image-show' + cur);
-            if (container.querySelector('.img') != null) {
-                const oldImage = container.querySelector('.img');
-                container.removeChild(oldImage);
-            }
-            container.appendChild(newImage);
         }
 
 
@@ -444,7 +480,7 @@
             inputFile.setAttribute('type', 'file');
             inputFile.setAttribute('name', 'ctn_img');
             inputFile.setAttribute('id', 'ctn_img' + String(my_index));
-            inputFile.setAttribute('accept', 'image/png, image/jpeg');
+            inputFile.setAttribute('accept', 'image/png, image/jpeg, image/gif');
             inputFile.addEventListener('change', function () {ctn_loadFile(this)});
 
             label.append(inputFile)
@@ -465,12 +501,73 @@
          function changeMenu(e) {
             const cardDiv = document.getElementById('cardDiv');
             const urlDiv = document.getElementById('urlDiv');
-            if (e.id == "tplCd1") {
+            if (e.id === "tplCd1") {
                 cardDiv.style.display = 'none';
                 urlDiv.style.display = '';
             } else {
                 cardDiv.style.display = '';
                 urlDiv.style.display = 'none';
+            }
+         }
+
+         function checkSave() {
+            const contentName = document.getElementById("ctnNm");
+            const reprImgLength = document.getElementsByClassName("reprImg").length;
+            const ctnDetImgLength = document.getElementsByClassName("ctnDetImg").length;
+            const inputUrl = document.getElementsByName("inputUrl")[0];
+            const targetOption = document.getElementById("srcCd");
+
+            if (contentName.value === "") {
+                alert("콘텐츠명을 작성해주세요.");
+                return false;
+            }
+
+
+            if (targetOption.options[targetOption.selectedIndex].text === "전체") {
+                alert("콘텐츠 출처가 선택되지 않았습니다.");
+                return false;
+            }
+
+            if (reprImgLength === 0) {
+                alert("대표 이미지가 등록 되어있지 않습니다.");
+                return false;
+            }
+
+            if (document.getElementById('tplCd0').checked === true && document.getElementById('tr1') === null) {
+                alert("콘텐츠 본문내용이 존재하지 않습니다.");
+                return false;
+            }
+
+             if (document.getElementById('tplCd0').checked === true && ctnDetImgLength === 0) {
+                 alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
+                 return false;
+             }
+
+
+             if (document.getElementById('tplCd1').checked === true && inputUrl.value === ''){
+                 alert("콘텐츠 본문내용이 존재하지 않습니다.");
+                 return false;
+             }
+
+
+             if (document.getElementById('tplCd1').checked === true && inputUrl.value !== '') {
+                 if (inputUrl.value.substring(0, 7) !== 'http://' && inputUrl.value.substring(0, 8) !== 'https://') {
+                     alert("URL 주소 형식은 http:// 또는 https://로 시작되야합니다");
+                     return false;
+                 }
+             }
+
+             if (!confirm("저장하시겠습니까?")) {
+                 return false;
+             }
+         }
+
+
+         function checkCancel() {
+            if (!confirm("등록을 취소하시겠습니까?")) {
+                return false;
+            } else {
+                location.href = '/';
             }
          }
 
@@ -513,7 +610,7 @@
                         <tr>
                             <th>콘텐츠명</th>
                             <td>
-                                <input type="text" class="form-control" name="ctnNm" id="ctnNm">
+                                <input type="text" class="form-control" name="ctnNm" id="ctnNm" maxlength="50">
                             </td>
                             <th>콘텐츠 구분</th>
                             <td colspan="2">
@@ -599,7 +696,7 @@
                                 <div>
                                     <label class="file-input" for="repr_img">
                                         찾기
-                                        <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg"  onchange="loadFile(this)" style="display: none;">
+                                        <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg, image/gif"  onchange="loadFile(this)" style="display: none;">
                                     </label>
                                 </div>
                             </td>
@@ -621,7 +718,7 @@
                         <tr>
                             <th>팝업문구</th>
                             <td colspan="2">
-                                <input type="text" class="form-control" name="popMsg" id="popMsg" placeholder="25자 이내로 작성해 주세요">
+                                <input type="text" class="form-control" name="popMsg" id="popMsg" placeholder="25자 이내로 작성해 주세요" maxlength="25">
                             </td>
                             <td></td>
                         </tr>
@@ -675,8 +772,8 @@
             <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
                 <div class="btn-toolbar mb-2">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-secondary" onclick="location.href='/' " style="margin-right: 20px;">취소</button>
-                        <button type="submit" class="btn btn-primary" id="btn_submit" form="registerForm" style="margin-right: 100px;">저장</button>
+                        <button type="button" class="btn btn-secondary" onclick="return checkCancel();" style="margin-right: 20px;">취소</button>
+                        <button type="submit" class="btn btn-primary" id="btn_submit" form="registerForm" style="margin-right: 100px;" onclick="return checkSave();">저장</button>
                     </div>
                 </div>
             </div>
