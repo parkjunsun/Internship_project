@@ -75,14 +75,14 @@ public class ListController {
         Pagination pagination = new Pagination();
 
         map.replace("listSize", Integer.parseInt(map.get("listSize").toString()));
-
-        pagination.pageInfo(Integer.parseInt(map.get("page").toString()),Integer.parseInt(map.get("range").toString()),listCnt);
         pagination.setListSize(Integer.parseInt(map.get("listSize").toString()));
+        pagination.pageInfo(Integer.parseInt(map.get("page").toString()),Integer.parseInt(map.get("range").toString()),listCnt);
+
         System.out.println("pagination = " + pagination);
         map.put("startList", pagination.getStartList());
         List<ContentExcel> contentExcelList = listService.getBoardList(map);
 
-        ModelAndView mv = new ModelAndView("/content/content_search");
+        ModelAndView mv = new ModelAndView("jsonView");
         mv.addObject("contentExcelList", contentExcelList);
         mv.addObject("pagination", pagination);
 
