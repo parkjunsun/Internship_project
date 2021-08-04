@@ -17,6 +17,8 @@
     var glb_pagination;
     var glb_contentList;
 
+    var glb_range=1;
+
     $(document).ready(function() {
         $.initPage();
     });
@@ -39,7 +41,7 @@
         var orderBy = $('#orderBy').val();
         var listSize = $('#dspCnt').val();
         var page = $('#dspPage').val();
-        var range = 1;
+        var range = glb_range;
         var params = "dspStDt=" + dspStDt
             + "&dspEndDt=" + dspEndDt
             + "&dspYn=" + dspYn
@@ -163,7 +165,7 @@
                 var pageStr = String(pagination["page"]);
                 var rangeStr = String(pagination["range"]);
                 var rangeSizeStr = String(pagination["rangeSize"]);
-                a.setAttribute("onClick", "fn_prev(+" + pageStr + "," + rangeStr + "," + rangeSizeStr + "+)");
+                a.setAttribute("onClick", "fn_prev(" + pageStr + "," + rangeStr + "," + rangeSizeStr + ")");
                 a.innerText = "<";
                 ul.appendChild(li);
 
@@ -318,7 +320,7 @@
             newInput.setAttribute("class", "form-control");
             newInput.setAttribute("id", "dspPage");
             newInput.setAttribute("onchange", "pageCheck($('#dspPage').val())");
-            newInput.setAttribute("value", glb_pagination["page"]);과
+            newInput.setAttribute("value", glb_pagination["page"]);
             newInput.setAttribute("style", "width:50px;height:40px;margin-right:3px;display:inline-block;");
 
             var theadRight = document.getElementById("theadRight");
@@ -368,21 +370,15 @@
     // });
 
     function fn_prev(page, range, rangeSize) {
-        var page = ((range - 2) * rangeSize) + 1;
-        var range = range - 1;
-        var url = "/content/search";
-        url = url + "?page=" + page;
-        url = url + "&range=" + range;
-        location.href = url;
+        document.getElementById("dspPage").setAttribute("value",String(((range - 2) * rangeSize) + 1));
+        glb_range = range-1;
+        sendData();
     }
 
     function fn_next(page, range, rangeSize) {
-        var page = parseInt((range * rangeSize)) + 1;
-        var range = parseInt(range) + 1;
-        var url = "/content/search";
-        url = url + "?page=" + page;
-        url = url + "&range=" + range;
-        location.href = url;
+        document.getElementById("dspPage").setAttribute("value",String((range * rangeSize) + 1));
+        glb_range = range+1;
+        sendData();
     }
 
 
