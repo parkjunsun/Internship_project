@@ -65,6 +65,12 @@
                 glb_contentList = content;
                 glb_pagination = pagination;
                 document.getElementById("dspPage").setAttribute("value", pagination["page"]);
+
+
+
+
+
+
                 maxPage = document.getElementById("maxPage");
                 if (maxPage.hasChildNodes()) {
                     maxPage.removeChild(maxPage.firstChild);
@@ -86,7 +92,9 @@
                     tr.appendChild(checkbox);
 
                     var index = document.createElement('td');
-                    index.innerText = Number(c) + 1;
+                    var indexNum = (parseInt(pagination["page"])-1)*parseInt(pagination["listSize"])+parseInt(c)+1;
+                    index.setAttribute("value",indexNum);
+                    index.innerText = indexNum;
                     tr.appendChild(index);
 
                     var ctnNm = document.createElement('td');
@@ -153,6 +161,19 @@
                 var ul = nav.appendChild(document.createElement("ul"));
                 ul.setAttribute("class", "pagination justify-content-center");
 
+                // << 버튼
+                var li = document.createElement("li");
+                li.setAttribute("class", "page-item");
+                var a = li.appendChild(document.createElement("a"));
+                a.setAttribute("class", "page-link");
+                a.setAttribute("href", "#");
+                var pageStr = String(pagination["page"]);
+                var rangeStr = String(pagination["range"]);
+                var rangeSizeStr = String(pagination["rangeSize"]);
+                a.setAttribute("onClick", "fn_first()");
+                a.innerText = "<<";
+                ul.appendChild(li);
+
                 // < 버튼
                 var li = document.createElement("li");
                 li.setAttribute("class", "page-item disabled");
@@ -195,10 +216,22 @@
                 var a = li.appendChild(document.createElement("a"));
                 a.setAttribute("class", "page-link");
                 a.setAttribute("href", "#");
-                a.setAttribute("onClick", "fn_next(+" + pageStr + "," + rangeStr + "," + rangeSizeStr + "+)");
+                a.setAttribute("onClick", "fn_next(" + pageStr + "," + rangeStr + "," + rangeSizeStr + ")");
                 a.innerText = ">";
                 ul.appendChild(li);
 
+                // >> 버튼
+                var li = document.createElement("li");
+                li.setAttribute("class", "page-item");
+                var a = li.appendChild(document.createElement("a"));
+                a.setAttribute("class", "page-link");
+                a.setAttribute("href", "#");
+                var pageStr = String(pagination["page"]);
+                var rangeStr = String(pagination["range"]);
+                var rangeSizeStr = String(pagination["rangeSize"]);
+                a.setAttribute("onClick", "fn_last()");
+                a.innerText = ">>";
+                ul.appendChild(li);
 
                 $('#chart').show();
                 $('#navigation').show();
@@ -285,6 +318,21 @@
         $('select').prop('selectedIndex',0);
     }
 
+    function resetPageCnt(){
+        var newInput = document.createElement("input");
+        newInput.setAttribute("type", "text");
+        newInput.setAttribute("name", "dspPage");
+        newInput.setAttribute("class", "form-control");
+        newInput.setAttribute("id", "dspPage");
+        newInput.setAttribute("onchange", "pageCheck($('#dspPage').val())");
+        newInput.setAttribute("value", "1");
+        newInput.setAttribute("style", "width:50px;height:40px;margin-right:3px;display:inline-block;");
+
+        var theadRight = document.getElementById("theadRight");
+        var dspPage = document.getElementById("dspPage");
+        theadRight.replaceChild(newInput, dspPage);
+    }
+
     // 검색 버튼
     $(function(){
         $('#btn_submit').on('click',sendData);
@@ -328,7 +376,7 @@
             theadRight.replaceChild(newInput,oldInput);
         }
         else if(parseInt(page)<1){
-            alert("입력 범위를 초했습니다");
+            alert("입력 범위를 초과했습니다");
             var newInput = document.createElement("input");
             newInput.setAttribute("type", "text");
             newInput.setAttribute("name", "dspPage");
@@ -378,6 +426,18 @@
     function fn_next(page, range, rangeSize) {
         document.getElementById("dspPage").setAttribute("value",String((range * rangeSize) + 1));
         glb_range = range+1;
+        sendData();
+    }
+
+    function fn_last() {
+        glb_range = Math.floor(parseInt(glb_pagination["pageCnt"])/parseInt(glb_pagination["rangeSize"]))+1;
+        document.getElementById("dspPage").setAttribute("value",glb_pagination["pageCnt"]);
+        sendData();
+    }
+
+    function fn_first() {
+        document.getElementById("dspPage").setAttribute("value","1");
+        glb_range = 1;
         sendData();
     }
 
@@ -499,7 +559,6 @@
                             </table>
 <%--                            </form>--%>
                         </div>
-
                         <!-- Button Set (middle 정렬) // -->
                         <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
                             <div class="btn-toolbar mb-2">
@@ -531,7 +590,7 @@
                                         </select>
                                     </label>
                                     <label>
-                                        <select name="searchType" class="form-select w100" id="dspCnt" style="margin-left:6px; margin-right:3px; display: inline-block;">
+                                        <select name="searchType" class="form-select w100" id="dspCnt" onchange="resetPageCnt()" style="margin-left:6px; margin-right:3px; display: inline-block;">
                                             <option value="20" selected>20개</option>
                                             <option value="30">30개</option>
                                             <option value="40">40개</option>
@@ -564,42 +623,8 @@
                     </table>
                 </div>
 
-                <!-- pagination{s} -->
-
-<%--                <div id="paginationBox">--%>
-<%--                    <ul class="pagination">--%>
-<%--                        <c:if test="${pagination.prev}">--%>
-<%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>--%>
-<%--                        </c:if>--%>
-<%--                        <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">--%>
-<%--                            <li class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')"> ${idx} </a></li>--%>
-<%--                        </c:forEach>--%>
-<%--                        <c:if test="${pagination.next}">--%>
-<%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')" >Next</a></li>--%>
-<%--                        </c:if>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-
-                <!-- pagination{e} -->
-
                 <div id = navigation style="display:none">
-<%--                    <nav aria-label="Page navigation example">--%>
-<%--                        <ul class="pagination justify-content-center">--%>
-<%--                            <li class="page-item disabled">--%>
-<%--                                <a class="page-link" href="#" tabindex="-1"> << </a>--%>
-<%--                            </li>--%>
-<%--                            <li class="page-item disabled">--%>
-<%--                                <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>--%>
-<%--                            </li>--%>
-<%--                            <li class="page-item"><a class="page-link" href="#">1</a></li>--%>
-<%--                            <li class="page-item">--%>
-<%--                                <a class="page-link" id="next" href="#"> > </a>--%>
-<%--                            </li>--%>
-<%--                            <li class="page-item">--%>
-<%--                                <a class="page-link" href="#"> >> </a>--%>
-<%--                            </li>--%>
-<%--                        </ul>--%>
-<%--                    </nav>--%>
+
                 </div>
 
 
