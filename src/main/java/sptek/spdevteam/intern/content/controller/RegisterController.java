@@ -69,11 +69,13 @@ public class RegisterController {
         image.setFeSz(fileUploadUtil.getSize());
         image.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
         image.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+        image.setImgOdr(0);
         image.setUseYn("y");
 
         registerService.imgSave(image);
 
         if (multipartFiles != null) {
+            int odr = 1;
             for (MultipartFile file : multipartFiles) {
                 if (!file.isEmpty()) {
 
@@ -89,10 +91,13 @@ public class RegisterController {
                     ctnDetImage.setFeSz(ctnDetUploadUtil.getSize());
                     ctnDetImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
                     ctnDetImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+                    ctnDetImage.setImgOdr(odr);
                     ctnDetImage.setUseYn("y");
 
                     ctnDetUploadUtil.UploadImage();
                     registerService.imgSave(ctnDetImage);
+
+                    odr += 1;
                 }
             }
         }

@@ -613,7 +613,7 @@
                                 <input type="text" class="form-control" name="ctnNm" id="ctnNm" maxlength="50">
                             </td>
                             <th>콘텐츠 구분</th>
-                            <td colspan="2">
+                            <td colspan="3">
                                 <div>
                                     <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked>
                                     <label class="form-check-label" for="inside">
@@ -625,7 +625,6 @@
                                     </label>
                                 </div>
                             </td>
-                            <td></td>
                         </tr>
                         <tr>
                             <th>템플릿 유형</th>
@@ -639,6 +638,9 @@
                                     </c:forEach>
                                 </div>
                             </td>
+                            <th ></th>
+                            <td colspan="3"></td>
+                        </tr>
                         <tr>
                             <th>전시 기간</th>
                             <td>
@@ -677,7 +679,7 @@
                             <th></th>
                             <td></td>
                             <th>콘텐츠 출처</th>
-                            <td colspan="2">
+                            <td colspan="3">
                                 <select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
                                     <option selected>전체</option>
                                     <c:forEach var="item" items="${srcList}">
@@ -685,7 +687,6 @@
                                     </c:forEach>
                                 </select>
                             </td>
-                            <td></td>
                         </tr>
                         <tr>
                             <th rowspan="2">대표이미지</th>
@@ -701,7 +702,7 @@
                                 </div>
                             </td>
                             <th>상담하기</th>
-                            <td colspan="2">
+                            <td colspan="3">
                                 <div>
                                     <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked>
                                     <label class="form-check-label" for="not_use">
@@ -713,14 +714,12 @@
                                     </label>
                                 </div>
                             </td>
-                            <td></td>
                         </tr>
                         <tr>
                             <th>팝업문구</th>
-                            <td colspan="2">
+                            <td colspan="3">
                                 <input type="text" class="form-control" name="popMsg" id="popMsg" placeholder="25자 이내로 작성해 주세요" maxlength="25">
                             </td>
-                            <td></td>
                         </tr>
                         </tbody>
                     </table>
