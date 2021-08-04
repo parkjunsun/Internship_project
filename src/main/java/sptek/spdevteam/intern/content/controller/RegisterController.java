@@ -121,7 +121,9 @@ public class RegisterController {
 
         registerService.ctnDetSave(contentDet);
 
-        return "redirect:/content/register";
+        int ctnSeq = contentDet.getCtnSeq();
+
+        return "redirect:/content/update/" + Integer.toString(ctnSeq);
     }
 
 }

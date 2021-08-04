@@ -143,13 +143,6 @@
                 alert("이미지 포맷이 맞지 않습니다.");
                 return false;
             }
-
-            // //미리 만들어 놓은 div에 text(파일 이름) 추가
-            // const name = document.getElementById('fileName');
-            // name.textContent = file.name;
-
-            //새로운 이미지 div 추가
-
         }
 
         function ctn_loadFile(input) {
@@ -194,7 +187,6 @@
             // name.textContent = file.name;
 
         }
-
 
 
         function checkArrowAble() {
