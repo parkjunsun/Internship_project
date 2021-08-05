@@ -65,12 +65,6 @@
                 glb_contentList = content;
                 glb_pagination = pagination;
                 document.getElementById("dspPage").setAttribute("value", pagination["page"]);
-
-
-
-
-
-
                 maxPage = document.getElementById("maxPage");
                 if (maxPage.hasChildNodes()) {
                     maxPage.removeChild(maxPage.firstChild);
@@ -82,12 +76,16 @@
                 while (conList.hasChildNodes()) {
                     conList.removeChild(conList.firstChild);
                 }
+                document.getElementById('checkAll').checked = false;
+
                 for (var c in content) {
                     var tr = document.createElement('tr');
                     tr.setAttribute('style', 'text-align: center');
+                    tr.setAttribute('id', String(parseInt(c)+1));
                     var checkbox = document.createElement('td');
                     var input = document.createElement('input');
                     input.setAttribute('type', 'checkbox');
+                    input.setAttribute('name', 'checkbox');
                     checkbox.appendChild(input);
                     tr.appendChild(checkbox);
 
@@ -301,7 +299,7 @@
         $("img.ui-datepicker-trigger").css({'cursor': 'pointer', 'margin-left': '5px'});
     })
 
-    // page 초기화 함수
+    // 검색필터 초기화 함수
     function resetPage(){
         $('#startdate').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
         $('#enddate').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
@@ -318,6 +316,7 @@
         $('select').prop('selectedIndex',0);
     }
 
+    // 페이지 입력창 초기화 함수
     function resetPageCnt(){
         var newInput = document.createElement("input");
         newInput.setAttribute("type", "text");
@@ -392,55 +391,41 @@
         }
     }
 
-    // // 이전 버튼 이벤트
-    // $(function(){
-    //     $('#prev').on('click',fn_prev());
-    // })
-    //
-    // // 다음 버튼 이벤트
-    // $(function(){
-    //     $('#next').on('click',fn_next());
-    // })
-
-
-    // $('#dspPage').on("change keyup paste", function() {
-    //     var currentVal = this.val();
-    //     alert(currentVal);
-    //     if(currentVal > $('#maxPage').val()){
-    //         alert("최종 페이지를 초과했습니다");
-    //         $('#dspPage').val(glb_pagination['page']);
-    //     }
-    // });
-
-    // $(function(){
-    //     $('#dspPage').change(pageCheck($('#dspPage').val()));
-    // })
-    // });
-
+    // < 버튼
     function fn_prev(page, range, rangeSize) {
         document.getElementById("dspPage").setAttribute("value",String(((range - 2) * rangeSize) + 1));
         glb_range = range-1;
         sendData();
     }
 
+    // > 버튼
     function fn_next(page, range, rangeSize) {
         document.getElementById("dspPage").setAttribute("value",String((range * rangeSize) + 1));
         glb_range = range+1;
         sendData();
     }
 
+    // >> 버튼
     function fn_last() {
         glb_range = Math.floor(parseInt(glb_pagination["pageCnt"])/parseInt(glb_pagination["rangeSize"]))+1;
         document.getElementById("dspPage").setAttribute("value",glb_pagination["pageCnt"]);
         sendData();
     }
 
+    // << 버튼
     function fn_first() {
         document.getElementById("dspPage").setAttribute("value","1");
         glb_range = 1;
         sendData();
     }
 
+    function checkAll(checkAll){
+        var checkboxes = document.getElementsByName('checkbox');
+        console.log(checkboxes);
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = checkAll.checked;
+        })
+    }
 
 
 </script>
@@ -448,15 +433,17 @@
 <!-- Top(header) 영역// -->
 <%@ include file="/WEB-INF/jsp/include/common_hearder.jsp" %>
 <!-- //Top(header) 영역 -->
+
 <!-- Content Wrapper// -->
 <div class="container-fluid">
     <div class="row">
         <!-- Left(Sidebar) 영역// -->
         <%@ include file="/WEB-INF/jsp/include/common_left.jsp" %>
         <!-- //Left(Sidebar) 영역 -->
-        <!-- Content Body 영역 // -->
 
+        <!-- Content Body 영역 // -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <%--헤드라인--%>
                 <div class="no_border_head">
                     <span class="tab_span flSpan">콘텐츠조회</span>
                     <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
@@ -467,8 +454,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Form Table 영역 // -->
-
+                    <!--검색필터-->
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
 <%--                            <form action="/content/search" method="post" id="searchForm">--%>
                             <table class="table table-sm seaerch-table" >
@@ -559,7 +545,7 @@
                             </table>
 <%--                            </form>--%>
                         </div>
-                        <!-- Button Set (middle 정렬) // -->
+                        <!-- 초기화, 검색버튼 -->
                         <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
                             <div class="btn-toolbar mb-2">
                                 <div class="btn-group">
@@ -568,9 +554,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="frameLine mb-3"></div>
-                        <!-- // Button Set (middle 정렬) -->
-
+                <!--검색 리스트-->
                 <div id="chart" style="display:none"  class="table-responsive" >
                     <table class="table table-striped table-sm">
                         <thead>
@@ -606,7 +590,7 @@
                         </tr>
                         <tr>
                             <th style="text-align: center; width:40px; height: 40px" scope="col">
-                                <input type="checkbox" name="xxx" value="yyy">
+                                <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this)">
                             </th>
                             <th style="text-align: center; width:40px;" scope="col">번호</th>
                             <th style="text-align: center; width:300px;" scope="col">콘텐츠명</th>
@@ -622,12 +606,10 @@
                         </tbody>
                     </table>
                 </div>
-
+                <!--페이지 내비게이션-->
                 <div id = navigation style="display:none">
 
                 </div>
-
-
             </main>
         <!-- //Content Body 영역 -->
     </div>
