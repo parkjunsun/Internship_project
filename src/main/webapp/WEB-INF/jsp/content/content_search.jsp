@@ -86,6 +86,7 @@
                     var input = document.createElement('input');
                     input.setAttribute('type', 'checkbox');
                     input.setAttribute('name', 'checkbox');
+                    input.setAttribute('value', String(parseInt(c)+1));
                     checkbox.appendChild(input);
                     tr.appendChild(checkbox);
 
@@ -421,12 +422,71 @@
 
     function checkAll(checkAll){
         var checkboxes = document.getElementsByName('checkbox');
-        console.log(checkboxes);
         checkboxes.forEach((checkbox) => {
             checkbox.checked = checkAll.checked;
         })
     }
+    function displayConfig() {
+        if ($("input:checkbox[name=checkbox]:checked").length==0){
+            alert("선택된 콘텐츠가 없습니다");
+        }
+        else{
+            $('#testModal').modal("show");
+        }
+    }
 
+    function changeDspConfig(){
+        if ($("input:radio[name=changeDspYn]:checked").length==0){
+            alert("전시 상태를 선택 후 저장하시기 바랍니다");
+        }
+        else{
+            var items = $('input:checkbox[name=checkbox]:checked').map(function () {
+                return this.value;
+            }).get();
+
+            // 전시를 선택했을 경우
+            if($("input:radio[name=changeDspYn]:checked").val()=='Y'){
+                for (i in items) {
+                    var dspStDt = new Date(glb_contentList[parseInt(items[i]) - 1]["dspStDt"].split(' ')[0]);
+                    var dspEndDt = new Date(glb_contentList[parseInt(items[i]) - 1]["dspEndDt"].split(' ')[0]);
+                    var useYn = glb_contentList[parseInt(items[i]) - 1]["useYn"];
+                    var today = new Date();
+                    if (today <= dspStDt) {
+                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다");
+                        return;
+                    }
+                    if (today >= dspEndDt) {
+                        alert("전시 종료일이 지난 콘텐츠는 전시설정을 할 수 없습니다");
+                        return;
+                    }
+                    if (useYn=='N') {
+                        alert("미사용 콘텐츠 카테고리에 매핑된 미전시 콘텐츠는 전시설정을 할 수 없습니다. 해당 콘텐츠는 [콘텐츠 조회/수정] 화면에서 전시 카테고리를 수정하여 주시기 바랍니다");
+                        return;
+                    }
+                }
+            }
+
+            var params = "items=";
+            for(i in items){
+                var seq = glb_contentList[parseInt(items[i]) - 1]["ctnSeq"];
+                params += (seq+" ");
+            }
+            params+="&dspYn=";
+            params+=$("input:radio[name=changeDspYn]:checked").val();
+            $.ajax({
+                url: "/content/change-dspstate"
+                , method: "post"
+                , data: params
+                , sync: false
+                , success: function (data){
+                    alert('전시 설정이 저장되었습니다');
+                    $('#testModal').modal('hide');
+                }
+            })
+
+        }
+
+    }
 
 </script>
 <body>
@@ -554,7 +614,47 @@
                                 </div>
                             </div>
                         </div>
-                <!--검색 리스트-->
+
+                    <!-- 팝업 될 레이어 -->
+                    <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">전시설정</h5>
+                                    <button type="button" class="btn btn-light" onclick="$('#testModal').modal('hide');">X</button>
+                                </div>
+                                <div class="modal-body">
+
+                                        <table class="table table-sm seaerch-table">
+                                            <tbody>
+                                                <tr style="height: 50px">
+                                                    <th style="width: 100px">전시상태</th>
+                                                    <td>
+                                                        <div>
+                                                            <input class="form-check-input" type="radio" name="changeDspYn" value="Y" id="dspChangeRadioY" style="margin-left:6px; margin-right:6px;">
+                                                            <label class="display-state-label" for="flexRadio2">
+                                                                전시
+                                                            </label>
+                                                            <input class="form-check-input" type="radio" name="changeDspYn" value="N" id="dspChangeRadioN" style="margin-left:6px; margin-right:6px;">
+                                                            <label class="display-state-label" for="flexRadio3">
+                                                                전시안함
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <div style="text-align: center;">선택하신 항목에 일괄 적용합니다</div>
+                                </div>
+                                <div style="margin:auto" class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_reset" onclick="$('#testModal').modal('hide');">취소</button>
+                                    <button type="button" class="btn btn-primary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_submit" onclick="changeDspConfig()">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!--검색 결과 리스트-->
                 <div id="chart" style="display:none"  class="table-responsive" >
                     <table class="table table-striped table-sm">
                         <thead>
@@ -562,7 +662,7 @@
                             <td colspan="9">
                                 <div style="float: left;">
                                     <button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button>
-                                    <button type="button" class="btn btn-outline-secondary">전시 설정</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-example" onclick="displayConfig()">전시설정</button>
                                 </div>
                                 <div id="theadRight" style="float: right;">
                                     정렬 순서

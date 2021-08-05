@@ -45,6 +45,10 @@ public class ListServiceImpl implements ListService {
         return listMapper.getBoardListCnt(map);
     }
 
+    @Override
+    public void updateDspYn(HashMap<String, Object> map) throws Exception {
+        listMapper.updateDspYn(map);
+    }
 
 
 }
