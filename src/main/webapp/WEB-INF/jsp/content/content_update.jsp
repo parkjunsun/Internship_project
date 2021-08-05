@@ -40,7 +40,8 @@
         })(jQuery);
 
         window.onload = function(){
-            document.getElementById('tplCd0').checked = true;
+            // document.getElementById('tplCd0').checked = true;
+            $('input[name=dspStDt]').datepicker('disable');
         };
 
         $(function() {
@@ -101,8 +102,8 @@
 
 
             //초기값을 오늘 날짜로 설정해줘야 합니다.
-            $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-            $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+            $('#dspStDt').datepicker('setDate', '${content.dspStDt}'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+            $('#dspEndDt').datepicker('setDate', '${content.dspEndDt}'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
             $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
 
         });
@@ -580,7 +581,7 @@
                 </div>
             </div>
             <!-- Form Table 영역 // -->
-            <form action="/content/register" method="post" id="registerForm" enctype="multipart/form-data" style="display: inline">
+            <form action="/content/update/${content.ctnSeq}" method="post" id="updateForm" enctype="multipart/form-data" style="display: inline">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
                     <table class="table table-sm search-table">
                         <tbody>
@@ -596,16 +597,26 @@
                         </colgroup>
                             <th>콘텐츠명</th>
                             <td colspan="3">
-                                <input type="text" class="form-control" name="ctnNm" id="ctnNm" maxlength="50">
+                                <input type="text" class="form-control" name="ctnNm" id="ctnNm" value="${content.ctnNm}" maxlength="50">
                             </td>
                             <th>콘텐츠 구분</th>
                             <td colspan="3">
                                 <div>
-                                    <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked>
+                                    <c:if test="${content.ctnDiv eq 'in'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked>
+                                    </c:if>
+                                    <c:if test="${content.ctnDiv ne 'in'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in">
+                                    </c:if>
                                     <label class="form-check-label" for="inside">
                                         내부
                                     </label>
-                                    <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out">
+                                    <c:if test="${content.ctnDiv eq 'out'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out" checked>
+                                    </c:if>
+                                    <c:if test="${content.ctnDiv ne 'out'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out">
+                                    </c:if>
                                     <label class="form-check-label" for="outside">
                                         외부
                                     </label>
@@ -614,36 +625,37 @@
                         </tr>
                         <tr>
                             <th>템플릿 유형</th>
-                            <td>
-                                <div>
-                                    <c:forEach var="item" items="${tplList}" varStatus="status">
-                                        <input class="form-check-input" type="radio" name="tplCd" id="tplCd${status.index}" value="${item.cd}" onclick="changeMenu(this)">
-                                        <label class="form-check-label" for="tplCd${status.index}">
-                                                ${item.cd_nm}
-                                        </label>
-                                    </c:forEach>
-                                </div>
-                            </td>
+                            <td>${tplNm}</td>
                             <th>화면코드</th>
-                            <td>0000</td>
+                            <td>${ctnSeq}</td>
                             <th></th>
                             <td colspan="3"></td>
                         </tr>
                         <tr>
                             <th>전시 기간</th>
                             <td colspan="3">
-                                <input type="text" class="datepicker" name="dspStDt" id="dspStDt">
+                                <input type="text" class="datepicker" name="dspStDt" id="dspStDt" disabled>
                                 ~
                                 <input type="text" class="datepicker" name="dspEndDt" id="dspEndDt">
                             </td>
                             <th>전시 상태</th>
                             <td>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" checked>
+                                    <c:if test="${content.dspYn eq 'y'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" checked>
+                                    </c:if>
+                                    <c:if test="${content.dspYn ne 'y'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y">
+                                    </c:if>
                                     <label class="form-check-label" for="display">
                                         전시
                                     </label>
-                                    <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n">
+                                    <c:if test="${content.dspYn eq 'n'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n" checked>
+                                    </c:if>
+                                    <c:if test="${content.dspYn ne 'n'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n">
+                                    </c:if>
                                     <label class="form-check-label" for="not_display">
                                         전시안함
                                     </label>
@@ -652,11 +664,21 @@
                             <th>댓글가능 여부</th>
                             <td>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" checked>
+                                    <c:if test="${content.cmtYn eq 'y'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" checked>
+                                    </c:if>
+                                    <c:if test="${content.cmtYn ne 'y'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y">
+                                    </c:if>
                                     <label class="form-check-label" for="yes">
                                         가능
                                     </label>
-                                    <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n">
+                                    <c:if test="${content.cmtYn eq 'n'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n" checked>
+                                    </c:if>
+                                    <c:if test="${content.cmtYn ne 'n'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n">
+                                    </c:if>
                                     <label class="form-check-label" for="no">
                                         불가능
                                     </label>
@@ -669,7 +691,7 @@
                             <th>콘텐츠 출처</th>
                             <td colspan="3">
                                 <select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
-                                    <option selected>전체</option>
+                                    <option selected value="${content.srcCd}">${srcNm}</option>
                                     <c:forEach var="item" items="${srcList}">
                                         <option value="${item.cd}">${item.cd_nm}</option>
                                     </c:forEach>
@@ -681,6 +703,7 @@
                             <td rowspan="2" colspan="3">
                                 <div class="fileInput">
                                     <div class="image-show" id="image-show"></div>
+                                    <img class="reprImg" src="file:///D:/upload/013b08e3-49c2-439d-9957-a27eefcd862c.jpg">
                                 </div>
                                 <div>
                                     <label class="file-input" for="repr_img">
@@ -692,11 +715,21 @@
                             <th>상담하기</th>
                             <td colspan="3">
                                 <div>
-                                    <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked>
+                                    <c:if test="${content.cstYn eq 'y'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked>
+                                    </c:if>
+                                    <c:if test="${content.cstYn ne 'y'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y">
+                                    </c:if>
                                     <label class="form-check-label" for="not_use">
                                         미사용
                                     </label>
-                                    <input class="form-check-input" type="radio" name="cstYn" id="use" value="n">
+                                    <c:if test="${content.cstYn eq 'n'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n" checked>
+                                    </c:if>
+                                    <c:if test="${content.cstYn ne 'n'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n">
+                                    </c:if>
                                     <label class="form-check-label" for="use">
                                         사용
                                     </label>
@@ -706,8 +739,12 @@
                         <tr>
                             <th>팝업문구</th>
                             <td colspan="3">
-                                <input type="text" class="form-control" name="popMsg" id="popMsg" placeholder="25자 이내로 작성해 주세요" maxlength="25">
+                                <input type="text" class="form-control" name="popMsg" id="popMsg" value="${content.popMsg}" placeholder="25자 이내로 작성해 주세요" maxlength="25">
                             </td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2">대표이미지 개별등록</th>
+                            <td colspan="7"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -737,6 +774,16 @@
                     </table>
                 </div>
             </form>
+            <br><br><br><br>
+            <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
+                <div class="btn-toolbar mb-2">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="showList();" style="margin-right: 400px;">목록</button>
+                        <button type="submit" class="btn btn-primary" id="btn_submit" form="updateForm" onclick="return checkSave();">수정</button>
+                        <button type="button" class="btn btn-secondary" onclick="return checkCancel();" style="margin-left: 400px;float: right">취소</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 </div>

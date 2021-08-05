@@ -23,14 +23,11 @@ public class FileUploadUtil {
     }
 
     public String getFileName() {
-        String originalFilename = multipartFile.getOriginalFilename();
-        String extension = getExtension();
-        return originalFilename;
+        return multipartFile.getOriginalFilename();
     }
 
     public String getEncFileName() {
-        String extension = getExtension();
-        return UUID.randomUUID().toString() + "." + extension;
+        return UUID.randomUUID().toString();
     }
 
     public long getSize() {
@@ -38,13 +35,13 @@ public class FileUploadUtil {
     }
 
 
-    public String getPath() {
-        String encFileName = getEncFileName();
-        return uploadFilePath + encFileName;
+    public String getPath(String encFileName) {
+        String extension = getExtension();
+        return uploadFilePath + encFileName + '.' + extension;
     }
 
-    public void UploadImage() throws IOException {
-        String pathName = getPath();
+    public void UploadImage(String encFileName) throws IOException {
+        String pathName = getPath(encFileName);
         File dest = new File(pathName);
         multipartFile.transferTo(dest);
     }

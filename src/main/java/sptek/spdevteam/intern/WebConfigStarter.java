@@ -18,6 +18,7 @@ public class WebConfigStarter implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
         registry.addResourceHandler("/plugin/**").addResourceLocations("/resources/plugin/");
         registry.addResourceHandler("/upload/**").addResourceLocations("/resources/upload/");
+//        registry.addResourceHandler("/content/register/**").addResourceLocations("C:/Users/user/Desktop/upload/**");
     }
 
     @Bean

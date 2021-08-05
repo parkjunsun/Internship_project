@@ -55,16 +55,18 @@ public class RegisterController {
 
 
         FileUploadUtil fileUploadUtil = new FileUploadUtil(multipartFile, uploadFilePath);
-        fileUploadUtil.UploadImage();
 
         String imgGrpId = randomOutUtil.getRandomStr();
 
         Image image = new Image();
         image.setImgGrpId(imgGrpId);
         image.setImgTyCd(COMMON_REPR_IMG);
-        image.setPath(fileUploadUtil.getPath());
+
+        String encFileName = fileUploadUtil.getEncFileName();
+
+        image.setPath(fileUploadUtil.getPath(encFileName));
         image.setFeNm(fileUploadUtil.getFileName());
-        image.setEncFeNm(fileUploadUtil.getEncFileName());
+        image.setEncFeNm(encFileName);
         image.setFeExt(fileUploadUtil.getExtension());
         image.setFeSz(fileUploadUtil.getSize());
         image.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
@@ -72,6 +74,7 @@ public class RegisterController {
         image.setImgOdr(0);
         image.setUseYn("y");
 
+        fileUploadUtil.UploadImage(encFileName);
         registerService.imgSave(image);
 
         if (multipartFiles != null) {
@@ -84,9 +87,12 @@ public class RegisterController {
                     Image ctnDetImage = new Image();
                     ctnDetImage.setImgGrpId(imgGrpId);
                     ctnDetImage.setImgTyCd(CARD_DET_IMG);
-                    ctnDetImage.setPath(ctnDetUploadUtil.getPath());
+
+                    String ctnDetEncFileName = ctnDetUploadUtil.getEncFileName();
+
+                    ctnDetImage.setPath(ctnDetUploadUtil.getPath(ctnDetEncFileName));
                     ctnDetImage.setFeNm(ctnDetUploadUtil.getFileName());
-                    ctnDetImage.setEncFeNm(ctnDetUploadUtil.getEncFileName());
+                    ctnDetImage.setEncFeNm(ctnDetEncFileName);
                     ctnDetImage.setFeExt(ctnDetUploadUtil.getExtension());
                     ctnDetImage.setFeSz(ctnDetUploadUtil.getSize());
                     ctnDetImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
@@ -94,7 +100,7 @@ public class RegisterController {
                     ctnDetImage.setImgOdr(odr);
                     ctnDetImage.setUseYn("y");
 
-                    ctnDetUploadUtil.UploadImage();
+                    ctnDetUploadUtil.UploadImage(ctnDetEncFileName);
                     registerService.imgSave(ctnDetImage);
 
                     odr += 1;
@@ -125,5 +131,8 @@ public class RegisterController {
 
         return "redirect:/content/update/" + Integer.toString(ctnSeq);
     }
+
+
+
 
 }
