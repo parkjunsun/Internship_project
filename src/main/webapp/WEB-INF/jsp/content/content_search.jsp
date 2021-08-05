@@ -87,6 +87,7 @@
                     input.setAttribute('type', 'checkbox');
                     input.setAttribute('name', 'checkbox');
                     input.setAttribute('value', String(parseInt(c)+1));
+                    input.setAttribute('onclick', 'countSelectBox()');
                     checkbox.appendChild(input);
                     tr.appendChild(checkbox);
 
@@ -232,11 +233,20 @@
                 a.innerText = ">>";
                 ul.appendChild(li);
 
+                // 조회결과, 선택건수
+                var totalCnt = document.getElementById("totalCnt");
+                var selectCnt = document.getElementById("selectCnt");
+
+                totalCnt.innerText = glb_pagination["listCnt"].toLocaleString();
+                selectCnt.innerText = 0;
+
                 $('#chart').show();
                 $('#navigation').show();
             }
         })
     }
+
+
 
     // datepicker 초기화
     $(function() {
@@ -488,6 +498,16 @@
 
     }
 
+    function countSelectBox(){
+        var cntOld = document.getElementById("selectCnt");
+        var cntParent = document.getElementById("searchResult");
+        var cntNew = document.createElement('span');
+        cntNew.setAttribute('id', 'selectCnt');
+        cntNew.setAttribute('style', 'color: blue; font-weight: bold;');
+        cntNew.innerText = $("input:checkbox[name=checkbox]:checked").length;
+        cntParent.replaceChild(cntNew, cntOld);
+    }
+
 </script>
 <body>
 <!-- Top(header) 영역// -->
@@ -615,6 +635,8 @@
                             </div>
                         </div>
 
+
+
                     <!-- 팝업 될 레이어 -->
                     <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -654,8 +676,14 @@
                         </div>
                     </div>
 
+
+
                 <!--검색 결과 리스트-->
                 <div id="chart" style="display:none"  class="table-responsive" >
+                    <!--조회결과, 선택건수-->
+                    <div id="searchResult" style="float: left;  margin: 4px; font-size: 15px">
+                        조회결과 <span id="totalCnt" style="color: blue; font-weight: bold; "></span>건  |  선택 <span id="selectCnt" style="color: blue; font-weight: bold;"></span>건
+                    </div>
                     <table class="table table-striped table-sm">
                         <thead>
                         <tr>
@@ -690,7 +718,7 @@
                         </tr>
                         <tr>
                             <th style="text-align: center; width:40px; height: 40px" scope="col">
-                                <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this)">
+                                <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this); countSelectBox();">
                             </th>
                             <th style="text-align: center; width:40px;" scope="col">번호</th>
                             <th style="text-align: center; width:300px;" scope="col">콘텐츠명</th>
