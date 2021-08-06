@@ -658,11 +658,11 @@
                 <div id="chart" style="display:none"  class="table-responsive" >
                     <table class="table table-striped table-sm">
                         <thead>
-                        <tr>
+                        <tr style="background-color: #e6efff">
                             <td colspan="9">
                                 <div style="float: left;">
-                                    <button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button>
-                                    <button type="button" class="btn btn-outline-secondary btn-example" onclick="displayConfig()">전시설정</button>
+                                    <button type="button" class="btn btn-outline-secondary" style="background-color: #ecedee; color: black; font-size: 15px">엑셀 다운로드</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-example" style="background-color: #ecedee; color: black;  font-size: 15px" onclick="displayConfig()">전시설정</button>
                                 </div>
                                 <div id="theadRight" style="float: right;">
                                     정렬 순서
