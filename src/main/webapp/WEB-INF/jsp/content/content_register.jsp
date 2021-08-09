@@ -52,7 +52,7 @@
                 ,changeYear: true //option값 년 선택 가능
                 ,changeMonth: true //option값  월 선택 가능
                 ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+                ,buttonImage: "http://images.jautour.com/jautour/images/main/search/btn_cale.gif" //버튼 이미지 경로
                 ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
                 ,buttonText: "선택" //버튼 호버 텍스트
                 ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
@@ -79,7 +79,7 @@
                 ,changeYear: true //option값 년 선택 가능
                 ,changeMonth: true //option값  월 선택 가능
                 ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+                ,buttonImage: "http://images.jautour.com/jautour/images/main/search/btn_cale.gif" //버튼 이미지 경로
                 ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
                 ,buttonText: "선택" //버튼 호버 텍스트
                 ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
@@ -134,8 +134,8 @@
                 newImage.style.objectFit = "contain";
 
                 const container = document.getElementById('image-show');
-                if (container.querySelector('.img') != null) {
-                    const oldImage = container.querySelector('.img');
+                if (container.querySelector('.reprImg') != null) {
+                    const oldImage = container.querySelector('.reprImg');
                     container.removeChild(oldImage);
                 }
                 container.appendChild(newImage);
@@ -172,8 +172,8 @@
                 newImage.style.objectFit = "contain";
 
                 var container = document.getElementById('ctn_image-show' + cur);
-                if (container.querySelector('.img') != null) {
-                    const oldImage = container.querySelector('.img');
+                if (container.querySelector('.ctnDetImg') != null) {
+                    const oldImage = container.querySelector('.ctnDetImg');
                     container.removeChild(oldImage);
                 }
                 container.appendChild(newImage);
@@ -489,16 +489,158 @@
             newCell4.append(remove_btn)
         }
 
+        function addUrlRow() {
+            const rootDiv = document.createElement('div');
+            rootDiv.classList.add('table-responsive');
+            rootDiv.id = 'urlDiv'
+
+            const div = document.createElement('div');
+            div.style.border = '1px solid black';
+            div.style.height = '30px';
+
+            const span = document.createElement('span');
+            span.style.float = 'left';
+            span.innerText = '콘텐츠 본문내용';
+
+            div.appendChild(span);
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-striped' , 'table-sm');
+            const colgroup = document.createElement('colgroup')
+            const col1 = document.createElement('col');
+            const col2 = document.createElement('col');
+            col1.style.width = '150px';
+            col2.style.width = '*';
+
+            colgroup.appendChild(col1);
+            colgroup.appendChild(col2);
+
+            const tbody = document.createElement('tbody');
+            const th = document.createElement('th');
+            th.innerText = 'URL 주소';
+            const td = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.style.width = '1100px';
+            input.name = 'inputUrl';
+
+            td.appendChild(input);
+
+            tbody.appendChild(th);
+            tbody.append(td);
+
+            table.appendChild(colgroup);
+            table.appendChild(tbody);
+
+            rootDiv.appendChild(div);
+            rootDiv.appendChild(table);
+
+            const form = document.getElementById('registerForm');
+            form.appendChild(rootDiv);
+        }
+
+        function addCardHead() {
+            const rootDiv = document.createElement('div');
+            rootDiv.classList.add('table-responsive');
+            rootDiv.id = 'cardDiv';
+
+            const div = document.createElement('div');
+            div.style.border = '1px solid black';
+            div.style.height = '30px';
+
+            const span = document.createElement('span');
+            span.style.float = 'left';
+            span.innerText = '콘텐츠 본문내용';
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.style.float = 'right';
+            btn.id = 'add_btn';
+            btn.addEventListener('click', function () {addRow()});
+            btn.innerText = '콘텐츠 추가';
+
+            div.appendChild(span);
+            div.appendChild(btn);
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-striped', 'table-sm');
+            table.id = 'extraContent';
+
+            const colgroup = document.createElement('colgroup');
+            colgroup.id = 'colgroup';
+            const col1 = document.createElement('col');
+            const col2 = document.createElement('col');
+            const col3 = document.createElement('col');
+            const col4 = document.createElement('col');
+
+            col1.style.width = '150px';
+            col2.style.width = '150px';
+            col3.style.width = '*';
+            col4.style.width = '150px';
+
+            colgroup.appendChild(col1);
+            colgroup.appendChild(col2);
+            colgroup.appendChild(col3);
+            colgroup.appendChild(col4);
+
+            const thead = document.createElement('thead');
+            thead.id = 'thead';
+            const tr = document.createElement('tr');
+
+            const th1 = document.createElement('th');
+            th1.scope = 'col';
+            th1.style.textAlign = 'center';
+            th1.innerText = '본문';
+            const th2 = document.createElement('th');
+            th2.scope = 'col';
+            th2.style.textAlign = 'center';
+            th2.innerText = '전시순서';
+            const th3 = document.createElement('th');
+            th3.scope = 'col';
+            th3.style.textAlign = 'center';
+            th3.innerText = '본문 이미지';
+            const th4 = document.createElement('th');
+            th4.scope = 'col';
+            th4.style.textAlign = 'center';
+            th4.innerText = '영역 삭제';
+
+            tr.appendChild(th1);
+            tr.appendChild(th2);
+            tr.appendChild(th3);
+            tr.appendChild(th4);
+
+            thead.appendChild(tr);
+
+            const tbody = document.createElement('tbody');
+            tbody.id = 'tbody';
+
+            table.appendChild(colgroup);
+            table.appendChild(thead);
+            table.appendChild(tbody);
+
+            rootDiv.appendChild(div);
+            rootDiv.appendChild(table);
+
+            const form = document.getElementById('registerForm');
+            form.appendChild(rootDiv);
+        }
 
          function changeMenu(e) {
-            const cardDiv = document.getElementById('cardDiv');
-            const urlDiv = document.getElementById('urlDiv');
+
             if (e.id === "tplCd1") {
-                cardDiv.style.display = 'none';
-                urlDiv.style.display = '';
+                const cardDiv = document.getElementById('cardDiv');
+                cardDiv.remove();
+                addUrlRow();
+                ctn_index = 0;
+                // cardDiv.style.display = 'none';
+                // urlDiv.style.display = '';
             } else {
-                cardDiv.style.display = '';
-                urlDiv.style.display = 'none';
+                const urlDiv = document.getElementById('urlDiv');
+                urlDiv.remove();
+                addCardHead();
+                ctn_index = 0;
+                // cardDiv.style.display = '';
+                // urlDiv.style.display = 'none';
             }
          }
 
@@ -741,23 +883,23 @@
                     </table>
                 </div>
 <!-- -------------------------------------------------------------------------------------- -->
-                <div class="table-responsive" id="urlDiv" style="display: none">
-                    <div style="border: 1px solid black; height: 30px;">
-                        <span style="float:left;">콘텐츠 본문내용</span>
-                    </div>
-                    <table class="table table-striped table-sm">
-                        <colgroup>
-                            <col width="150px">
-                            <col width="*">
-                        </colgroup>
-                        <tbody>
-                            <th>URL 주소</th>
-                            <td>
-                                <input type="text" style="width: 1100px;" name="inputUrl">
-                            </td>
-                        </tbody>
-                    </table>
-                </div>
+<%--                <div class="table-responsive" id="urlDiv" style="display: none">--%>
+<%--                    <div style="border: 1px solid black; height: 30px;">--%>
+<%--                        <span style="float:left;">콘텐츠 본문내용</span>--%>
+<%--                    </div>--%>
+<%--                    <table class="table table-striped table-sm">--%>
+<%--                        <colgroup>--%>
+<%--                            <col width="150px">--%>
+<%--                            <col width="*">--%>
+<%--                        </colgroup>--%>
+<%--                        <tbody>--%>
+<%--                            <th>URL 주소</th>--%>
+<%--                            <td>--%>
+<%--                                <input type="text" style="width: 1100px;" name="inputUrl">--%>
+<%--                            </td>--%>
+<%--                        </tbody>--%>
+<%--                    </table>--%>
+<%--                </div>--%>
             </form>
             <br><br><br><br>
             <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">

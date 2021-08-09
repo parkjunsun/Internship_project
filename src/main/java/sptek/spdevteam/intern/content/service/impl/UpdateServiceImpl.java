@@ -3,6 +3,7 @@ package sptek.spdevteam.intern.content.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sptek.spdevteam.intern.content.domain.Content;
+import sptek.spdevteam.intern.content.domain.ContentDet;
 import sptek.spdevteam.intern.content.domain.Image;
 import sptek.spdevteam.intern.content.mybatis.UpdateMapper;
 import sptek.spdevteam.intern.content.service.UpdateService;
@@ -21,8 +22,8 @@ public class UpdateServiceImpl implements UpdateService {
     }
 
     @Override
-    public List<Image> getImages(String imgGrpId) {
-        return updateMapper.getImages(imgGrpId);
+    public List<Image> getImages(String imgGrpId, String useYn) {
+        return updateMapper.getImages(imgGrpId, useYn);
     }
 
     @Override
@@ -33,5 +34,25 @@ public class UpdateServiceImpl implements UpdateService {
     @Override
     public void updateContent(Content content) {
         updateMapper.updateContent(content);
+    }
+
+    @Override
+    public void updateImage(Image image) {
+        updateMapper.updateImage(image);
+    }
+
+    @Override
+    public void updateContentDet(ContentDet contentDet) {
+        updateMapper.updateContentDet(contentDet);
+    }
+
+    @Override
+    public Image getImage(Integer imgSeq) {
+        return updateMapper.getImage(imgSeq);
+    }
+
+    @Override
+    public ContentDet getCtnDet(Integer ctnSeq) {
+        return updateMapper.getCtnDet(ctnSeq);
     }
 }

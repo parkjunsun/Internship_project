@@ -39,9 +39,208 @@
             };
         })(jQuery);
 
+        function addUrlRow() {
+            const rootDiv = document.createElement('div');
+            rootDiv.classList.add('table-responsive');
+            rootDiv.id = 'urlDiv'
+
+            const div = document.createElement('div');
+            div.style.border = '1px solid black';
+            div.style.height = '30px';
+
+            const span = document.createElement('span');
+            span.style.float = 'left';
+            span.innerText = '콘텐츠 본문내용';
+
+            div.appendChild(span);
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-striped' , 'table-sm');
+            const colgroup = document.createElement('colgroup')
+            const col1 = document.createElement('col');
+            const col2 = document.createElement('col');
+            col1.style.width = '150px';
+            col2.style.width = '*';
+
+            colgroup.appendChild(col1);
+            colgroup.appendChild(col2);
+
+            const tbody = document.createElement('tbody');
+            const th = document.createElement('th');
+            th.innerText = 'URL 주소';
+            const td = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.style.width = '1100px';
+            input.name = 'inputUrl';
+            input.value = "${urlAddr}";
+
+            td.appendChild(input);
+
+            tbody.appendChild(th);
+            tbody.append(td);
+
+            table.appendChild(colgroup);
+            table.appendChild(tbody);
+
+            rootDiv.appendChild(div);
+            rootDiv.appendChild(table);
+
+            const form = document.getElementById('updateForm');
+            form.appendChild(rootDiv);
+        }
+
+        function addCardHead() {
+            const rootDiv = document.createElement('div');
+            rootDiv.classList.add('table-responsive');
+            rootDiv.id = 'cardDiv';
+
+            const div = document.createElement('div');
+            div.style.border = '1px solid black';
+            div.style.height = '30px';
+
+            const span = document.createElement('span');
+            span.style.float = 'left';
+            span.innerText = '콘텐츠 본문내용';
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.style.float = 'right';
+            btn.id = 'add_btn';
+            btn.addEventListener('click', function () {addRow()});
+            btn.innerText = '콘텐츠 추가';
+
+            div.appendChild(span);
+            div.appendChild(btn);
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-striped', 'table-sm');
+            table.id = 'extraContent';
+
+            const colgroup = document.createElement('colgroup');
+            colgroup.id = 'colgroup';
+            const col1 = document.createElement('col');
+            const col2 = document.createElement('col');
+            const col3 = document.createElement('col');
+            const col4 = document.createElement('col');
+
+            col1.style.width = '150px';
+            col2.style.width = '150px';
+            col3.style.width = '*';
+            col4.style.width = '150px';
+
+            colgroup.appendChild(col1);
+            colgroup.appendChild(col2);
+            colgroup.appendChild(col3);
+            colgroup.appendChild(col4);
+
+            const thead = document.createElement('thead');
+            thead.id = 'thead';
+            const tr = document.createElement('tr');
+
+            const th1 = document.createElement('th');
+            th1.scope = 'col';
+            th1.style.textAlign = 'center';
+            th1.innerText = '본문';
+            const th2 = document.createElement('th');
+            th2.scope = 'col';
+            th2.style.textAlign = 'center';
+            th2.innerText = '전시순서';
+            const th3 = document.createElement('th');
+            th3.scope = 'col';
+            th3.style.textAlign = 'center';
+            th3.innerText = '본문 이미지';
+            const th4 = document.createElement('th');
+            th4.scope = 'col';
+            th4.style.textAlign = 'center';
+            th4.innerText = '영역 삭제';
+
+            tr.appendChild(th1);
+            tr.appendChild(th2);
+            tr.appendChild(th3);
+            tr.appendChild(th4);
+
+            thead.appendChild(tr);
+
+            const tbody = document.createElement('tbody');
+            tbody.id = 'tbody';
+
+            table.appendChild(colgroup);
+            table.appendChild(thead);
+            table.appendChild(tbody);
+
+            rootDiv.appendChild(div);
+            rootDiv.appendChild(table);
+
+            const form = document.getElementById('updateForm');
+            form.appendChild(rootDiv);
+        }
+
+        var ctnDetImages = [];
+
         window.onload = function(){
             // document.getElementById('tplCd0').checked = true;
             $('input[name=dspStDt]').datepicker('disable');
+
+            if ("${tplCd}" === "T0001") {
+                if (document.getElementById('urlDiv') != null) {
+                    urlDiv.remove();
+                }
+                addCardHead();
+                <c:forEach items="${ctnDetImages}" var="item">
+                var obj = {
+                    "imgSeq" : "${item.imgSeq}",
+                    "imgGrpId": "${item.imgGrpId}",
+                    "imgTyCd": "${item.imgTyCd}",
+                    "path": "${item.path}",
+                    "feNm": "${item.feNm}",
+                    "encFeNm": "${item.encFeNm}",
+                    "feExt": "${item.feExt}",
+                    "feSz": "${item.feSz}",
+                    "regDt": "${item.regDt}",
+                    "modDt": "${item.modDt}",
+                    "useYn": "${item.useYn}",
+                    "imgOdr": "${item.imgOdr}"
+                };
+                ctnDetImages.push(obj);
+                </c:forEach>
+
+
+                var cur = 1;
+                for (let i=0; i<ctnDetImages.length; i++) {
+                    addRow();
+                    var newImage = document.createElement("img");
+                    newImage.setAttribute("class", "ctnDetImg");
+
+                    newImage.src = "/image/" + ctnDetImages[i]["encFeNm"] + '.' + ctnDetImages[i]["feExt"];
+
+                    newImage.style.width = "150px";
+                    newImage.style.height = "150px";
+                    newImage.style.visibility = "visible";
+                    newImage.style.objectFit = "contain";
+
+                    var inputHidden = document.createElement("input");
+                    inputHidden.type = 'hidden';
+                    inputHidden.name = 'imgSeq';
+                    inputHidden.value = ctnDetImages[i]["imgSeq"];
+
+                    var container = document.getElementById('ctn_image-show' + cur);
+                    if (container.querySelector('.ctnDetImg') != null) {
+                        const oldImage = container.querySelector('.ctnDetImg');
+                        container.removeChild(oldImage);
+                    }
+                    container.appendChild(newImage);
+                    container.appendChild(inputHidden);
+                    cur += 1;
+                }
+                ctn_index = 0;
+            } else if ("${tplCd}" === "T0002") {
+                if (document.getElementById('cardDiv') != null) {
+                    cardDiv.remove();
+                }
+                addUrlRow();
+                ctn_index = 0;
+            }
         };
 
         $(function() {
@@ -53,7 +252,7 @@
                 ,changeYear: true //option값 년 선택 가능
                 ,changeMonth: true //option값  월 선택 가능
                 ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+                ,buttonImage: "http://images.jautour.com/jautour/images/main/search/btn_cale.gif" //버튼 이미지 경로
                 ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
                 ,buttonText: "선택" //버튼 호버 텍스트
                 ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
@@ -80,7 +279,7 @@
                 ,changeYear: true //option값 년 선택 가능
                 ,changeMonth: true //option값  월 선택 가능
                 ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+                ,buttonImage: "http://images.jautour.com/jautour/images/main/search/btn_cale.gif" //버튼 이미지 경로
                 ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
                 ,buttonText: "선택" //버튼 호버 텍스트
                 ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
@@ -123,23 +322,24 @@
             }
 
             if (extension === "gif" || extension === "jpg" || extension === "png") {
-                const newImage = document.createElement("img");
-                newImage.setAttribute("class", 'reprImg');
-
+                // const newImage = document.createElement("img");
+                // newImage.setAttribute("class", 'reprImg');
+                //
                 //이미지 source 가져오기
+                const newImage = document.getElementsByClassName('reprImg')[0];
                 newImage.src = URL.createObjectURL(file);
-
+                //
                 newImage.style.width = "150px;";
                 newImage.style.height = "150px;";
                 newImage.style.visibility = "visible";
                 newImage.style.objectFit = "contain";
 
                 const container = document.getElementById('image-show');
-                if (container.querySelector('.img') != null) {
-                    const oldImage = container.querySelector('.img');
+                if (container.querySelector('.reprImg') != null) {
+                    const oldImage = container.querySelector('.reprImg');
                     container.removeChild(oldImage);
                 }
-                container.appendChild(newImage);
+                // container.appendChild(newImage);
             } else {
                 alert("이미지 포맷이 맞지 않습니다.");
                 return false;
@@ -173,8 +373,8 @@
                 newImage.style.objectFit = "contain";
 
                 var container = document.getElementById('ctn_image-show' + cur);
-                if (container.querySelector('.img') != null) {
-                    const oldImage = container.querySelector('.img');
+                if (container.querySelector('.ctnDetImg') != null) {
+                    const oldImage = container.querySelector('.ctnDetImg');
                     container.removeChild(oldImage);
                 }
                 container.appendChild(newImage);
@@ -219,6 +419,22 @@
 
         function removeRow(e) {
             const cur = Number(e.id[e.id.length-1]);
+
+            const ctnDiv = document.getElementById('ctn_image-show' + cur);
+            const findInputHidden = ctnDiv.getElementsByTagName('input')[0];
+            const findImgSeq = findInputHidden.value;
+
+
+            $(document).ready(function () {
+                $.ajax({
+                    url:'/content/delete',
+                    method: "post",
+                    data: {"imgSeq" : findImgSeq},
+                    sync: false
+                });
+            });
+
+
             const table = document.getElementById('extraContent');
             table.deleteRow(cur);
             idx_list.pop();
@@ -246,8 +462,6 @@
                 var img_show = document.getElementById('ctn_image-show' + String(i));
                 img_show.id = 'ctn_image-show' + String(i - 1);
 
-                // var fNm = document.getElementById('ctn_fileName' + String(i));
-                // fNm.id = 'ctn_fileName' + String(i - 1);
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
@@ -262,10 +476,8 @@
             document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
             document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
 
-            // if (idx_list.length === 1) {
-            //     document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
-            //     document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
-            // }
+
+
         }
 
         function moveUpTr(node) {
@@ -502,7 +714,6 @@
             const ctnDetImgLength = document.getElementsByClassName("ctnDetImg").length;
             const inputUrl = document.getElementsByName("inputUrl")[0];
             const targetOption = document.getElementById("srcCd");
-
             if (contentName.value === "") {
                 alert("콘텐츠명을 작성해주세요.");
                 return false;
@@ -703,7 +914,7 @@
                             <td rowspan="2" colspan="3">
                                 <div class="fileInput">
                                     <div class="image-show" id="image-show"></div>
-                                    <img class="reprImg" src="file:///D:/upload/013b08e3-49c2-439d-9957-a27eefcd862c.jpg">
+                                    <img class="reprImg" src="/image/${reprImg.encFeNm}.${reprImg.feExt}">
                                 </div>
                                 <div>
                                     <label class="file-input" for="repr_img">
@@ -744,35 +955,64 @@
                         </tr>
                         <tr>
                             <th rowspan="2">대표이미지 개별등록</th>
-                            <td colspan="7"></td>
+                            <td colspan="7">
+                                <div style="width: 500px; height: 500px; float: left; margin-left: 30px;">
+                                    <span style="margin-left: 170px; font-weight: bold">[빅 사이즈]</span><br><br>
+                                    <img class="bigImg" src="/image/${bigImg.encFeNm}.${bigImg.feExt}">
+                                </div>
+                                <div style="width: 500px; height: 500px; float: left">
+                                    <span style="margin-left: 65px; font-weight: bold">[작은 이미지형 및 연관 게시물 썸네일]</span><br><br>
+                                    <img class="smallImg" src="/image/${smallImg.encFeNm}.${smallImg.feExt}">
+                                </div>
+
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div><br><br><br>
-                <div class="table-responsive" id="cardDiv">
-                    <div style="border: 1px solid black; height: 30px;">
-                        <span style="float:left;">콘텐츠 본문내용</span>
-                        <button type="button" style="float: right" id="add_btn" onclick="addRow()">콘텐츠 추가</button>
-                    </div>
-                    <table class="table table-striped table-sm" id="extraContent">
-                        <colgroup id="colgroup">
-                            <col width="150px">
-                            <col width="150px">
-                            <col width="*">
-                            <col width="150px">
-                        </colgroup>
-                        <thead id="thead">
-                        <tr>
-                            <th scope="col" style="text-align: center;">본문</th>
-                            <th scope="col" style="text-align: center;">전시순서</th>
-                            <th scope="col" style="text-align: center">본문 이미지</th>
-                            <th scope="col" style="text-align: center;">영역 삭제</th>
-                        </tr>
-                        </thead>
-                        <tbody id="tbody">
-                        </tbody>
-                    </table>
-                </div>
+<%--                <div class="table-responsive" id="cardDiv">--%>
+<%--                    <div style="border: 1px solid black; height: 30px;">--%>
+<%--                        <span style="float:left;">콘텐츠 본문내용</span>--%>
+<%--                        <button type="button" style="float: right" id="add_btn" onclick="addRow()">콘텐츠 추가</button>--%>
+<%--                    </div>--%>
+<%--                    <table class="table table-striped table-sm" id="extraContent">--%>
+<%--                        <colgroup id="colgroup">--%>
+<%--                            <col width="150px">--%>
+<%--                            <col width="150px">--%>
+<%--                            <col width="*">--%>
+<%--                            <col width="150px">--%>
+<%--                        </colgroup>--%>
+<%--                        <thead id="thead">--%>
+<%--                        <tr>--%>
+<%--                            <th scope="col" style="text-align: center;">본문</th>--%>
+<%--                            <th scope="col" style="text-align: center;">전시순서</th>--%>
+<%--                            <th scope="col" style="text-align: center">본문 이미지</th>--%>
+<%--                            <th scope="col" style="text-align: center;">영역 삭제</th>--%>
+<%--                        </tr>--%>
+<%--                        </thead>--%>
+<%--                        <tbody id="tbody">--%>
+<%--                        </tbody>--%>
+<%--                    </table>--%>
+<%--                </div>--%>
+<!--------------------------------------------------------------------------------------->
+<%--                <div class="table-responsive" id="urlDiv" style="display: none">--%>
+<%--                    <div style="border: 1px solid black; height: 30px;">--%>
+<%--                        <span style="float:left;">콘텐츠 본문내용</span>--%>
+<%--                    </div>--%>
+<%--                    <table class="table table-striped table-sm">--%>
+<%--                        <colgroup>--%>
+<%--                            <col width="150px">--%>
+<%--                            <col width="*">--%>
+<%--                        </colgroup>--%>
+<%--                        <tbody>--%>
+<%--                        <th>URL 주소</th>--%>
+<%--                        <td>--%>
+<%--                            <input type="text" style="width: 1100px;" name="inputUrl">--%>
+<%--                        </td>--%>
+<%--                        </tbody>--%>
+<%--                    </table>--%>
+<%--                </div>--%>
+
             </form>
             <br><br><br><br>
             <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">

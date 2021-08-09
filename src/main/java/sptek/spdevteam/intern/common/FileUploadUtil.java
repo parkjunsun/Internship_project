@@ -19,7 +19,7 @@ public class FileUploadUtil {
     }
 
     public String getExtension() {
-        return multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1, multipartFile.getOriginalFilename().length());
+        return multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1);
     }
 
     public String getFileName() {
