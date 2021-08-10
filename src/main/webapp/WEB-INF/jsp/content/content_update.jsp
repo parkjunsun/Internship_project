@@ -39,6 +39,12 @@
             };
         })(jQuery);
 
+        var Detection = false;
+
+        function checkDetection() {
+            Detection = true;
+        }
+
         function addUrlRow() {
             const rootDiv = document.createElement('div');
             rootDiv.classList.add('table-responsive');
@@ -108,6 +114,7 @@
             btn.style.float = 'right';
             btn.id = 'add_btn';
             btn.addEventListener('click', function () {addRow()});
+            btn.addEventListener('click', function () {checkDetection()});
             btn.innerText = '콘텐츠 추가';
 
             div.appendChild(span);
@@ -233,7 +240,7 @@
                     container.appendChild(inputHidden);
                     cur += 1;
                 }
-                ctn_index = 0;
+                ctn_index = cur - 1;
             } else if ("${tplCd}" === "T0002") {
                 if (document.getElementById('cardDiv') != null) {
                     cardDiv.remove();
@@ -308,6 +315,7 @@
         });
 
         function loadFile(input) {
+            checkDetection();
             const file = input.files[0];	//선택된 파일 가져오기
 
             const fileName = file.name;
@@ -347,6 +355,7 @@
         }
 
         function ctn_loadFile(input) {
+            checkDetection();
             const cur = input.id[input.id.length-1];
 
             var file = input.files[0];
@@ -418,22 +427,24 @@
         var idx_list = [];
 
         function removeRow(e) {
+            checkDetection();
             const cur = Number(e.id[e.id.length-1]);
 
             const ctnDiv = document.getElementById('ctn_image-show' + cur);
-            const findInputHidden = ctnDiv.getElementsByTagName('input')[0];
-            const findImgSeq = findInputHidden.value;
 
+            if (ctnDiv.getElementsByTagName('input')[0] != null) {
+                const findInputHidden = ctnDiv.getElementsByTagName('input')[0];
+                const findImgSeq = findInputHidden.value;
 
-            $(document).ready(function () {
-                $.ajax({
-                    url:'/content/delete',
-                    method: "post",
-                    data: {"imgSeq" : findImgSeq},
-                    sync: false
+                $(document).ready(function () {
+                    $.ajax({
+                        url:'/content/image/delete',
+                        method: "post",
+                        data: {"imgSeq" : findImgSeq},
+                        sync: false
+                    });
                 });
-            });
-
+            }
 
             const table = document.getElementById('extraContent');
             table.deleteRow(cur);
@@ -481,6 +492,7 @@
         }
 
         function moveUpTr(node) {
+            checkDetection();
             const table = document.getElementById('tbody');
 
             const curTr = node.parentElement.parentElement;
@@ -536,6 +548,7 @@
         }
 
         function moveDownTr(node) {
+            checkDetection();
             const table = document.getElementById('tbody');
 
             const currentTr = node.parentElement.parentElement;
@@ -660,6 +673,12 @@
             const imgDiv = document.createElement('div');
             imgDiv.id = 'ctn_image-show' + String(my_index);
 
+            // var inputHidden = document.createElement("input");
+            // inputHidden.type = 'hidden';
+            // inputHidden.name = 'imgSeq';
+            //
+            // imgDiv.append(inputHidden);
+
             // const feNmP = document.createElement('p');
             // feNmP.id = 'ctn_fileName' + String(my_index);
             // feNmP.style.float = 'left';
@@ -696,17 +715,17 @@
         }
 
 
-        function changeMenu(e) {
-            const cardDiv = document.getElementById('cardDiv');
-            const urlDiv = document.getElementById('urlDiv');
-            if (e.id === "tplCd1") {
-                cardDiv.style.display = 'none';
-                urlDiv.style.display = '';
-            } else {
-                cardDiv.style.display = '';
-                urlDiv.style.display = 'none';
-            }
-        }
+        // function changeMenu(e) {
+        //     const cardDiv = document.getElementById('cardDiv');
+        //     const urlDiv = document.getElementById('urlDiv');
+        //     if (e.id === "tplCd1") {
+        //         cardDiv.style.display = 'none';
+        //         urlDiv.style.display = '';
+        //     } else {
+        //         cardDiv.style.display = '';
+        //         urlDiv.style.display = 'none';
+        //     }
+        // }
 
         function checkSave() {
             const contentName = document.getElementById("ctnNm");
@@ -714,6 +733,9 @@
             const ctnDetImgLength = document.getElementsByClassName("ctnDetImg").length;
             const inputUrl = document.getElementsByName("inputUrl")[0];
             const targetOption = document.getElementById("srcCd");
+            const tbody = document.getElementById('tbody');
+
+
             if (contentName.value === "") {
                 alert("콘텐츠명을 작성해주세요.");
                 return false;
@@ -730,29 +752,33 @@
                 return false;
             }
 
-            if (document.getElementById('tplCd0').checked === true && document.getElementById('tr1') === null) {
-                alert("콘텐츠 본문내용이 존재하지 않습니다.");
-                return false;
-            }
-
-            if (document.getElementById('tplCd0').checked === true && ctnDetImgLength === 0) {
+            if (tbody.childElementCount !== tbody.getElementsByTagName("img").length) {
                 alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
                 return false;
             }
 
-
-            if (document.getElementById('tplCd1').checked === true && inputUrl.value === ''){
-                alert("콘텐츠 본문내용이 존재하지 않습니다.");
-                return false;
-            }
-
-
-            if (document.getElementById('tplCd1').checked === true && inputUrl.value !== '') {
-                if (inputUrl.value.substring(0, 7) !== 'http://' && inputUrl.value.substring(0, 8) !== 'https://') {
-                    alert("URL 주소 형식은 http:// 또는 https://로 시작되야합니다");
+            if ("${tplCd}" === 'T0001') {
+                if (document.getElementById('tr1') === null) {
+                    alert("콘텐츠 본문내용이 존재하지 않습니다.");
                     return false;
                 }
+
+                if (ctnDetImgLength === 0) {
+                    alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
+                    return false;
+                }
+            } else if ("${tplCd}" === 'T0002') {
+                if (inputUrl.value === '') {
+                    alert("콘텐츠 본문내용이 존재하지 않습니다.");
+                    return false;
+                } else if (inputUrl.value !== '') {
+                    if (inputUrl.value.substring(0, 7) !== 'http://' && inputUrl.value.substring(0, 8) !== 'https://') {
+                        alert("URL 주소 형식은 http:// 또는 https://로 시작되야합니다");
+                        return false;
+                    }
+                }
             }
+
 
             if (!confirm("저장하시겠습니까?")) {
                 return false;
@@ -760,13 +786,36 @@
         }
 
 
-        function checkCancel() {
-            if (!confirm("등록을 취소하시겠습니까?")) {
-                return false;
+        function showList() {
+            if (Detection === true) {
+                if (!confirm("변경된 내용이 있습니다. 취소하시겠습니까?")) {
+                    return false;
+                } else {
+                    location.href = '/content/search';
+                }
             } else {
-                location.href = '/';
+                location.href = '/content/search';
             }
         }
+
+
+        function checkRemove() {
+            if (!confirm("해당 콘텐츠를 삭제하시겠습니까?")) {
+                return false;
+            } else {
+                $(document).ready(function () {
+                    $.ajax({
+                        url:'/content/delete',
+                        method: "post",
+                        data: {"ctnSeq" : "${content.ctnSeq}"},
+                        sync: false
+                    });
+                });
+                location.href = '/content/search';
+            }
+        }
+
+
     </script>
 </head>
 <body>
@@ -808,25 +857,25 @@
                         </colgroup>
                             <th>콘텐츠명</th>
                             <td colspan="3">
-                                <input type="text" class="form-control" name="ctnNm" id="ctnNm" value="${content.ctnNm}" maxlength="50">
+                                <input type="text" class="form-control" name="ctnNm" id="ctnNm" value="${content.ctnNm}" maxlength="50" onchange="checkDetection()">
                             </td>
                             <th>콘텐츠 구분</th>
                             <td colspan="3">
                                 <div>
                                     <c:if test="${content.ctnDiv eq 'in'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked>
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.ctnDiv ne 'in'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="inside">
                                         내부
                                     </label>
                                     <c:if test="${content.ctnDiv eq 'out'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out" checked>
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.ctnDiv ne 'out'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="outside">
                                         외부
@@ -847,25 +896,25 @@
                             <td colspan="3">
                                 <input type="text" class="datepicker" name="dspStDt" id="dspStDt" disabled>
                                 ~
-                                <input type="text" class="datepicker" name="dspEndDt" id="dspEndDt">
+                                <input type="text" class="datepicker" name="dspEndDt" id="dspEndDt" onchange="checkDetection()">
                             </td>
                             <th>전시 상태</th>
                             <td>
                                 <div>
                                     <c:if test="${content.dspYn eq 'y'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" checked>
+                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.dspYn ne 'y'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="display">
                                         전시
                                     </label>
                                     <c:if test="${content.dspYn eq 'n'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n" checked>
+                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.dspYn ne 'n'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="not_display">
                                         전시안함
@@ -876,19 +925,19 @@
                             <td>
                                 <div>
                                     <c:if test="${content.cmtYn eq 'y'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" checked>
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.cmtYn ne 'y'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="yes">
                                         가능
                                     </label>
                                     <c:if test="${content.cmtYn eq 'n'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n" checked>
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.cmtYn ne 'n'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="no">
                                         불가능
@@ -902,7 +951,7 @@
                             <th>콘텐츠 출처</th>
                             <td colspan="3">
                                 <select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
-                                    <option selected value="${content.srcCd}">${srcNm}</option>
+                                    <option selected value="${content.srcCd}" onchange="checkDetection()">${srcNm}</option>
                                     <c:forEach var="item" items="${srcList}">
                                         <option value="${item.cd}">${item.cd_nm}</option>
                                     </c:forEach>
@@ -927,19 +976,19 @@
                             <td colspan="3">
                                 <div>
                                     <c:if test="${content.cstYn eq 'y'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked>
+                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.cstYn ne 'y'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="not_use">
                                         미사용
                                     </label>
                                     <c:if test="${content.cstYn eq 'n'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n" checked>
+                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n" checked onchange="checkDetection()">
                                     </c:if>
                                     <c:if test="${content.cstYn ne 'n'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="use">
                                         사용
@@ -950,7 +999,7 @@
                         <tr>
                             <th>팝업문구</th>
                             <td colspan="3">
-                                <input type="text" class="form-control" name="popMsg" id="popMsg" value="${content.popMsg}" placeholder="25자 이내로 작성해 주세요" maxlength="25">
+                                <input type="text" class="form-control" name="popMsg" id="popMsg" value="${content.popMsg}" placeholder="25자 이내로 작성해 주세요" maxlength="25" onchange="checkDetection()">
                             </td>
                         </tr>
                         <tr>
@@ -1020,7 +1069,7 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-secondary" onclick="showList();" style="margin-right: 400px;">목록</button>
                         <button type="submit" class="btn btn-primary" id="btn_submit" form="updateForm" onclick="return checkSave();">수정</button>
-                        <button type="button" class="btn btn-secondary" onclick="return checkCancel();" style="margin-left: 400px;float: right">취소</button>
+                        <button type="button" class="btn btn-secondary" onclick="return checkRemove();" style="margin-left: 400px;float: right">삭제</button>
                     </div>
                 </div>
             </div>

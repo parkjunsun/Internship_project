@@ -91,6 +91,7 @@
         ,   cst_yn = #{cstYn}
         ,   pop_msg = #{popMsg}
         ,   mod_dt = #{modDt}
+        ,   use_yn = #{useYn}
         WHERE ctn_seq = #{ctnSeq}
     </update>
 

@@ -1,13 +1,7 @@
 package sptek.spdevteam.intern.content.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.message.Message;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.relational.core.sql.In;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import sptek.spdevteam.intern.common.CommonService;
 import sptek.spdevteam.intern.common.FileUploadUtil;
 import sptek.spdevteam.intern.content.domain.*;
+import sptek.spdevteam.intern.content.service.RegisterService;
 import sptek.spdevteam.intern.content.service.UpdateService;
-
-import javax.servlet.http.HttpServletRequest;
-import java.awt.font.ImageGraphicAttribute;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,6 +24,7 @@ public class UpdateController {
 
     private final CommonService commonService;
     private final UpdateService updateService;
+    private final RegisterService registerService;
 
     private static final String CARD_TYPE = "T0001";
     private static final String URL_TYPE = "T0002";
@@ -55,6 +45,10 @@ public class UpdateController {
         model.addAttribute("srcList", srcList);
 
         Content findContent = updateService.getContent(ctnSeq);
+
+        if (findContent.getUseYn().equals("n")) {
+            return "content/content_error";
+        }
 
         findContent.setDspStDt(findContent.getDspStDt().substring(0, 10));
         findContent.setDspEndDt(findContent.getDspEndDt().substring(0, 10));
@@ -111,7 +105,6 @@ public class UpdateController {
                          @RequestParam("repr_img") MultipartFile multipartFile, @RequestParam(value = "ctn_img", required = false) List<MultipartFile> multipartFiles,
                          @RequestParam(value = "imgSeq", required = false) List<Integer> imgSeqs, @RequestParam(value = "inputUrl", required = false) String inputUrl) throws IOException {
 
-        System.out.println(imgSeqs);
 
         Content content = updateService.getContent(ctnSeq);
 
@@ -160,28 +153,75 @@ public class UpdateController {
         if (multipartFiles != null) {
             int odr = 1;
             for (MultipartFile file : multipartFiles) {
+
                 if (!file.isEmpty()) {
 //                    Image ctnDetImage = ctnDetImages.get(odr - 1);
-                    Integer imgSeq = imgSeqs.get(odr - 1);
-                    Image ctnDetImage = updateService.getImage(imgSeq);
+                    if (imgSeqs != null) {
+                        if (odr - 1 >= imgSeqs.size()) {
+                            Image newImage = new Image();
 
+                            FileUploadUtil util = new FileUploadUtil(file, uploadFilePath);
 
-                    FileUploadUtil ctnDetUploadUtil = new FileUploadUtil(file, uploadFilePath);
+                            newImage.setImgGrpId(content.getImgGrpId());
+                            newImage.setImgTyCd(CARD_DET_IMG);
 
-                    String ctnDetEncFileName = ctnDetUploadUtil.getEncFileName();
+                            String encFileName = util.getEncFileName();
+                            newImage.setPath(util.getPath(encFileName));
+                            newImage.setFeNm(util.getFileName());
+                            newImage.setEncFeNm(encFileName);
+                            newImage.setFeExt(util.getExtension());
+                            newImage.setFeSz(util.getSize());
+                            newImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
+                            newImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+                            newImage.setUseYn("y");
+                            newImage.setImgOdr(odr);
 
-                    ctnDetImage.setPath(ctnDetUploadUtil.getPath(ctnDetEncFileName));
-                    ctnDetImage.setFeNm(ctnDetUploadUtil.getFileName());
-                    ctnDetImage.setEncFeNm(ctnDetEncFileName);
-                    ctnDetImage.setFeExt(ctnDetUploadUtil.getExtension());
-                    ctnDetImage.setFeSz(ctnDetUploadUtil.getSize());
-                    ctnDetImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-                    ctnDetImage.setUseYn("y");
-                    ctnDetImage.setImgOdr(odr);
+                            util.UploadImage(encFileName);
+                            registerService.imgSave(newImage);
 
-                    ctnDetUploadUtil.UploadImage(ctnDetEncFileName);
-                    updateService.updateImage(ctnDetImage);
+                        } else {
 
+                            Integer imgSeq = imgSeqs.get(odr - 1);
+                            Image ctnDetImage = updateService.getImage(imgSeq);
+
+                            FileUploadUtil ctnDetUploadUtil = new FileUploadUtil(file, uploadFilePath);
+
+                            String ctnDetEncFileName = ctnDetUploadUtil.getEncFileName();
+
+                            ctnDetImage.setPath(ctnDetUploadUtil.getPath(ctnDetEncFileName));
+                            ctnDetImage.setFeNm(ctnDetUploadUtil.getFileName());
+                            ctnDetImage.setEncFeNm(ctnDetEncFileName);
+                            ctnDetImage.setFeExt(ctnDetUploadUtil.getExtension());
+                            ctnDetImage.setFeSz(ctnDetUploadUtil.getSize());
+                            ctnDetImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+                            ctnDetImage.setUseYn("y");
+                            ctnDetImage.setImgOdr(odr);
+
+                            ctnDetUploadUtil.UploadImage(ctnDetEncFileName);
+                            updateService.updateImage(ctnDetImage);
+                        }
+                    } else {
+                        Image newImage = new Image();
+
+                        FileUploadUtil util = new FileUploadUtil(file, uploadFilePath);
+
+                        newImage.setImgGrpId(content.getImgGrpId());
+                        newImage.setImgTyCd(CARD_DET_IMG);
+
+                        String encFileName = util.getEncFileName();
+                        newImage.setPath(util.getPath(encFileName));
+                        newImage.setFeNm(util.getFileName());
+                        newImage.setEncFeNm(encFileName);
+                        newImage.setFeExt(util.getExtension());
+                        newImage.setFeSz(util.getSize());
+                        newImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
+                        newImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+                        newImage.setUseYn("y");
+                        newImage.setImgOdr(odr);
+
+                        util.UploadImage(encFileName);
+                        registerService.imgSave(newImage);
+                    }
                 } else {
                     // 파일 찾기를 누르지 않은 것은 input hidden값을 받아서 ctnDetImage에 업데이트 시켜야한다.
                     Integer imgSeq = imgSeqs.get(odr - 1);
@@ -208,9 +248,22 @@ public class UpdateController {
     }
 
     @PostMapping("/delete")
-    public Message deleteImage(@RequestParam("imgSeq") Integer imgSeq) {
+    public Message deleteContent(@RequestParam("ctnSeq") Integer ctnSeq) {
 
-        System.out.println(imgSeq);
+        Content findContent = updateService.getContent(ctnSeq);
+        findContent.setUseYn("n");
+        findContent.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+
+        updateService.updateContent(findContent);
+
+        Message message = new Message();
+        message.setMsg("정상적으로 데이터 삭제가 완료되었습니다.");
+
+        return message;
+    }
+
+    @PostMapping("/image/delete")
+    public Message deleteImage(@RequestParam("imgSeq") Integer imgSeq) {
 
         Image findImage = updateService.getImage(imgSeq);
         findImage.setUseYn("n");
