@@ -119,31 +119,49 @@
            sync: false,
             success: function (data) {
                 const quizs = data["qzList"];
+                const pagination = data["pagination"];
+
+                glb_pagination = pagination;
+                document.getElementById("dspPage").value = pagination["page"];
+
+                var maxPage = document.getElementById("maxPage");
+                if (maxPage.hasChildNodes()) {
+                    maxPage.removeChild(maxPage.firstChild);
+                }
+
+                var span = document.createElement("span");
+                span.innerText = "/ " + pagination["pageCnt"];
+                maxPage.appendChild(span);
+
                 const qzList = document.getElementById('qzList');
-
-
                 while (qzList.hasChildNodes()) {
                     qzList.removeChild(qzList.firstChild);
                 }
 
-                var seq = 1;
                 for (var q in quizs) {
                     const tr = document.createElement('tr');
                     tr.style.textAlign = 'center';
+                    tr.style.height = '40px';
                     const td1 = document.createElement('td');
                     const checkBox = document.createElement('input');
                     checkBox.type = 'checkbox';
+                    checkBox.name = 'checkbox';
+                    checkBox.value = String(parseInt(q)+1);
                     td1.appendChild(checkBox);
                     tr.appendChild(td1);
 
                     const td2 = document.createElement('td');
-                    td2.innerText = seq;
-                    seq += 1;
+                    const index = (parseInt(pagination["page"])-1) * parseInt(pagination["listSize"]) + parseInt(q) + 1;
+                    td2.innerText = String(index);
                     tr.appendChild(td2);
 
 
                     const td3 = document.createElement('td');
-                    td3.innerText = quizs[q]["qzNm"];
+                    const td3_a = document.createElement('a');
+                    td3_a.href = '/quiz/update/' + quizs[q]["qzSeq"];
+                    td3_a.innerText = quizs[q]["qzNm"];
+                    td3_a.style.textDecoration = 'none';
+                    td3.appendChild(td3_a);
                     tr.appendChild(td3);
 
                     const td4 = document.createElement('td');
@@ -156,7 +174,7 @@
                     tr.appendChild(td5);
 
                     const td6 = document.createElement('td');
-                    td6.innerText = quizs[q]["stDt"] + '~' + quizs[q]["endDt"];
+                    td6.innerText = quizs[q]["stDt"].substr(0, 16) + ' ~ ' + quizs[q]["endDt"].substr(0, 16);
                     tr.appendChild(td6);
 
                     const td7 = document.createElement('td');
@@ -169,16 +187,163 @@
                     tr.appendChild(td7);
 
                     const td8 = document.createElement('td');
-                    td8.innerText = quizs[q]["regDt"];
+                    td8.innerText = quizs[q]["regDt"].substr(0, 10);
                     tr.appendChild(td8)
 
                     qzList.appendChild(tr);
                 }
 
+                const navigation = document.getElementById("navigation");
+                if (navigation.hasChildNodes()) {
+                    navigation.removeChild(navigation.firstChild);
+                }
+
+                const nav = navigation.appendChild(document.createElement("nav"));
+                nav.setAttribute("aria-label", "Page navigation example");
+                const ul = nav.appendChild(document.createElement("ul"));
+                ul.classList.add("pagination", "justify-content-center");
+
+                // <<버튼
+                const dp_li = document.createElement("li");
+                dp_li.classList.add("page-item");
+                const dp_a = dp_li.appendChild(document.createElement("a"));
+                dp_a.classList.add("page-link");
+                dp_a.href = "#";
+                var pageStr = String(pagination["page"]);
+                var rangeStr = String(pagination["range"]);
+                var rangeSizeStr = String(pagination["rangeSize"]);
+                dp_a.addEventListener('click', function () {fn_first()});
+                dp_a.innerText = "<<";
+                ul.appendChild(dp_li);
+
+                // <버튼
+                const sp_li = document.createElement("li");
+                sp_li.classList.add("page-item", "disabled");
+                if (pagination["prev"]) {
+                    sp_li.classList.remove("disabled");
+                }
+
+                const sp_a = sp_li.appendChild(document.createElement('a'));
+                sp_a.classList.add("page-link");
+                sp_a.href = "#";
+                var pageStr = String(pagination["page"]);
+                var rangeStr = String(pagination["range"]);
+                var rangeSizeStr = String(pagination["rangeSize"]);
+                sp_a.addEventListener('click', function () {fn_prev(pageStr, rangeStr, rangeSizeStr)});
+                sp_a.innerText = "<";
+                ul.appendChild(sp_li);
+
+                // 숫자버튼
+                for (let i = pagination["startPage"]; i <= pagination["endPage"]; i++) {
+                    const num_li = document.createElement("li");
+                    num_li.classList.add("page-item")
+                    if (pagination["page"] === i) {
+                        num_li.classList.add("page-item", "active");
+                    }
+                    const num_a = num_li.appendChild(document.createElement("a"));
+                    num_a.classList.add("page-link");
+                    num_a.href = "#";
+                    var pageStr = String(pagination["page"]);
+                    var rangeStr = String(pagination["range"]);
+                    var rangeSizeStr = String(pagination["rangeSize"]);
+                    num_a.addEventListener('click', function () {
+                        document.getElementById('dspPage').value = i;
+                        sendData();
+                    })
+                    num_a.innerText = i;
+                    ul.appendChild(num_li);
+                }
+
+                // > 버튼
+                const sn_li = document.createElement("li");
+                sn_li.classList.add("page-item", "disabled");
+                if (pagination["next"]) {
+                    sn_li.classList.remove("disabled");
+                }
+
+                const sn_a = sn_li.appendChild(document.createElement("a"));
+                sn_a.classList.add("page-link");
+                sn_a.href = "#";
+                sn_a.addEventListener('click', function () {fn_next(pageStr, rangeStr, rangeSizeStr)});
+                sn_a.innerText = ">";
+                ul.appendChild(sn_li);
+
+
+                // >> 버튼
+                const dn_li = document.createElement("li");
+                dn_li.classList.add("page-item");
+                const dn_a = dn_li.appendChild(document.createElement("a"));
+                dn_a.classList.add("page-link");
+                dn_a.href = "#";
+                var pageStr = String(pagination["page"]);
+                var rangeStr = String(pagination["range"]);
+                var rangeSizeStr = String(pagination["rangeSize"]);
+                dn_a.addEventListener('click', function () {fn_last()});
+                dn_a.innerText = ">>";
+                ul.appendChild(dn_li);
+
                 const chart = document.getElementById('chart');
                 chart.style.display = '';
+
+                const navi = document.getElementById('navigation');
+                navi.style.display = '';
+
             }
         });
+    }
+
+    // << 버튼
+    function fn_first() {
+        document.getElementById("dspPage").value = "1";
+        glb_range = 1;
+        sendData();
+    }
+
+    // < 버튼
+    function fn_prev(page, range, rangeSize) {
+        document.getElementById("dspPage").value = String(((range - 2) * rangeSize) + 1);
+        glb_range = range-1;
+        sendData();
+    }
+
+    // >> 버튼
+    function fn_last() {
+        glb_range = Math.floor(parseInt(glb_pagination["pageCnt"])/parseInt(glb_pagination["rangeSize"]))+1;
+        document.getElementById("dspPage").value = glb_pagination["pageCnt"];
+        sendData();
+    }
+
+    // > 버튼
+    function fn_next(page, range, rangeSize) {
+        document.getElementById("dspPage").setAttribute("value",String((range * rangeSize) + 1));
+        glb_range = range+1;
+        sendData();
+    }
+
+    function pageCheck(pageNum) {
+        if (isNaN(pageNum)) {
+            alert("숫자가 아닙니다.");
+            return false;
+        }
+
+        if (parseInt(pageNum) > glb_pagination["pageCnt"]) {
+            alert("최종 페이지를 초과했습니다.");
+            return false;
+        }
+
+        if (parseInt(pageNum) < 1) {
+            alert("입력 범위를 초과했습니다.");
+            return false;
+        }
+
+        sendData();
+    }
+
+    function checkAll(input) {
+        const checkBoxes = document.getElementsByName('checkbox');
+        checkBoxes.forEach((checkBox) => {
+            checkBox.checked = input.checked;
+        })
     }
 
 </script>
@@ -201,7 +366,7 @@
                 <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onClick="location.href='./register'">등록</button>
+                            <button type="button" class="btn btn-primary" onClick="location.href='/quiz/register'">등록</button>
                         </div>
                     </div>
                 </div>
@@ -283,13 +448,12 @@
                                 <label>
                                     <select name="dspCnt" class="form-select w100" id="dspCnt" style="margin-left:6px; margin-right:3px; display: inline-block;">
                                         <option value="20" selected>20개</option>
-                                        <option value="30">30개</option>
-                                        <option value="40">40개</option>
                                         <option value="50">50개</option>
+                                        <option value="100">100개</option>
                                     </select>
                                 </label>
-                                <input type="text" name="dspPage" class="form-control" id="dspPage" onchange="pageCheck($('#dspPage').val())" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
-                                <span id="maxPage" value="${pagination.endPage}">
+                                <input type="text" name="dspPage" class="form-control" id="dspPage" onkeypress="if(event.keyCode == 13) pageCheck($('#dspPage').val());" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
+                                <span id="maxPage" value="${pagination.endPage}" style="font-size: 15px;">
                                         / ${pagination.endPage}
                                 </span>
                             </div>
@@ -297,58 +461,22 @@
                     </tr>
                     <tr>
                         <th style="text-align: center; width:40px; height: 40px" scope="col">
-                            <input type="checkbox" name="xxx" value="yyy">
+                            <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this)">
                         </th>
                         <th style="text-align: center; width:40px;" scope="col">번호</th>
-                        <th style="text-align: center; width:300px;" scope="col">퀴즈명</th>
+                        <th style="text-align: center; width:150px;" scope="col">퀴즈명</th>
                         <th style="text-align: center; width:60px;" scope="col">유형</th>
                         <th style="text-align: center; width:60px;" scope="col">퀴즈번호</th>
-                        <th style="text-align: center; width:60px;" scope="col">진행기간</th>
+                        <th style="text-align: center; width:150px;" scope="col">진행기간</th>
                         <th style="text-align: center; width:60px;" scope="col">전시상태</th>
-                        <th style="text-align: center; width:300px;" scope="col">등록일</th>
+                        <th style="text-align: center; width:100px;" scope="col">등록일</th>
                     </tr>
                     </thead>
                     <tbody id="qzList">
                     </tbody>
                 </table>
             </div>
-
-            <!-- pagination{s} -->
-
-            <%--                <div id="paginationBox">--%>
-            <%--                    <ul class="pagination">--%>
-            <%--                        <c:if test="${pagination.prev}">--%>
-            <%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>--%>
-            <%--                        </c:if>--%>
-            <%--                        <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">--%>
-            <%--                            <li class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')"> ${idx} </a></li>--%>
-            <%--                        </c:forEach>--%>
-            <%--                        <c:if test="${pagination.next}">--%>
-            <%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')" >Next</a></li>--%>
-            <%--                        </c:if>--%>
-            <%--                    </ul>--%>
-            <%--                </div>--%>
-
-            <!-- pagination{e} -->
-
             <div id = navigation style="display:none">
-                <%--                    <nav aria-label="Page navigation example">--%>
-                <%--                        <ul class="pagination justify-content-center">--%>
-                <%--                            <li class="page-item disabled">--%>
-                <%--                                <a class="page-link" href="#" tabindex="-1"> << </a>--%>
-                <%--                            </li>--%>
-                <%--                            <li class="page-item disabled">--%>
-                <%--                                <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>--%>
-                <%--                            </li>--%>
-                <%--                            <li class="page-item"><a class="page-link" href="#">1</a></li>--%>
-                <%--                            <li class="page-item">--%>
-                <%--                                <a class="page-link" id="next" href="#"> > </a>--%>
-                <%--                            </li>--%>
-                <%--                            <li class="page-item">--%>
-                <%--                                <a class="page-link" href="#"> >> </a>--%>
-                <%--                            </li>--%>
-                <%--                        </ul>--%>
-                <%--                    </nav>--%>
             </div>
         </main>
     </div>

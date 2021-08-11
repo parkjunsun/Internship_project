@@ -21,7 +21,12 @@ public class QzListServiceImpl implements QzListService {
     }
 
     @Override
-    public Integer getListCnt(HashMap<String, String> map) {
+    public List<QuizDto> getBoardList(HashMap<String, Object> map) {
+        return qzListMapper.getBoardList(map);
+    }
+
+    @Override
+    public Integer getListCnt(HashMap<String, Object> map) {
         return qzListMapper.getListCnt(map);
     }
 }

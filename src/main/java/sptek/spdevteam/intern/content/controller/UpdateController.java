@@ -244,7 +244,7 @@ public class UpdateController {
 
         }
 
-        return "redirect:/";
+        return "redirect:/content/search";
     }
 
     @PostMapping("/delete")

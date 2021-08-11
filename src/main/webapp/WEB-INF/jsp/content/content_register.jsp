@@ -211,12 +211,19 @@
                     document.getElementById('down_arrow' + String(i)).style.cursor = 'pointer';
                     document.getElementById('up_arrow' + String(i)).classList.remove('disabled');
                     document.getElementById('up_arrow' + String(i)).style.cursor = 'pointer';
+
                 }
 
                 document.getElementById('up_arrow1').classList.add('disabled');
                 document.getElementById('up_arrow1').style.cursor = 'default';
                 document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
                 document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'pointer';
+            }
+
+            for (var i = 2; i <= ctn_index; i++) {
+                if (document.getElementById('down_arrow' + String(i)).classList.contains('disabled')) {
+                    document.getElementById('down_arrow' + String(i)).style.cursor = 'default';
+                }
             }
         }
 
@@ -749,11 +756,11 @@
                             <th>콘텐츠 구분</th>
                             <td colspan="3">
                                 <div>
-                                    <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked>
+                                    <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="IN" checked>
                                     <label class="form-check-label" for="inside">
                                         내부
                                     </label>
-                                    <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out">
+                                    <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="OUT">
                                     <label class="form-check-label" for="outside">
                                         외부
                                     </label>
@@ -785,11 +792,11 @@
                             <th>전시 상태</th>
                             <td>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" checked>
+                                    <input class="form-check-input" type="radio" name="dspYn" id="display" value="Y" checked>
                                     <label class="form-check-label" for="display">
                                         전시
                                     </label>
-                                    <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n">
+                                    <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="N">
                                     <label class="form-check-label" for="not_display">
                                         전시안함
                                     </label>
@@ -798,11 +805,11 @@
                             <th>댓글가능 여부</th>
                             <td>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" checked>
+                                    <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="Y" checked>
                                     <label class="form-check-label" for="yes">
                                         가능
                                     </label>
-                                    <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n">
+                                    <input class="form-check-input" type="radio" name="cmtYn" id="no" value="N">
                                     <label class="form-check-label" for="no">
                                         불가능
                                     </label>
@@ -838,11 +845,11 @@
                             <th>상담하기</th>
                             <td colspan="3">
                                 <div>
-                                    <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked>
+                                    <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="Y" checked>
                                     <label class="form-check-label" for="not_use">
                                         미사용
                                     </label>
-                                    <input class="form-check-input" type="radio" name="cstYn" id="use" value="n">
+                                    <input class="form-check-input" type="radio" name="cstYn" id="use" value="N">
                                     <label class="form-check-label" for="use">
                                         사용
                                     </label>

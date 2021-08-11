@@ -11,6 +11,8 @@ public interface QzListMapper {
 
     List<QuizDto> getList(HashMap<String, String> map);
 
-    Integer getListCnt(HashMap<String, String> map);
+    List<QuizDto> getBoardList(HashMap<String, Object> map);
+
+    Integer getListCnt(HashMap<String, Object> map);
 
 }

@@ -26,28 +26,35 @@ public class QuizListController {
 
     @PostMapping("/search")
     @ResponseBody
-    public ModelAndView searchResultPage(@RequestParam HashMap<String, String> paramMap) {
-        List<QuizDto> qzList = qzListService.getList(paramMap);
+    public ModelAndView searchResultPage(@RequestParam HashMap<String, Object> paramMap) {
 
         Integer listCnt = qzListService.getListCnt(paramMap);
         System.out.println(listCnt);
 
         Pagination pagination = new Pagination();
-        pagination.setListSize(Integer.parseInt(paramMap.get("listSize")));
+
+        paramMap.replace("listSize", Integer.parseInt(paramMap.get("listSize").toString()));
+        pagination.setListSize(Integer.parseInt(paramMap.get("listSize").toString()));
 
         int page;
         if (paramMap.get("page").equals("")) {
             page = 1;
         } else {
-            page = Integer.parseInt(paramMap.get("page"));
+            page = Integer.parseInt(paramMap.get("page").toString());
         }
-        pagination.pageInfo(page, Integer.parseInt(paramMap.get("range")), listCnt);
+
+        pagination.pageInfo(page, Integer.parseInt(paramMap.get("range").toString()), listCnt);
 
         System.out.println(pagination);
 
+        paramMap.put("startList", pagination.getStartList());
+        System.out.println(paramMap);
+        List<QuizDto> qzList = qzListService.getBoardList(paramMap);
 
         ModelAndView mv = new ModelAndView("jsonView");
+
         mv.addObject("qzList", qzList);
+        mv.addObject("pagination", pagination);
 
         return mv;
     }

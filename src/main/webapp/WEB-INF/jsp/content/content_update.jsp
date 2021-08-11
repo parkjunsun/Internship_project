@@ -422,6 +422,12 @@
                 document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
                 document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'pointer';
             }
+
+            for (var i = 2; i <= ctn_index; i++) {
+                if (document.getElementById('down_arrow' + String(i)).classList.contains('disabled')) {
+                    document.getElementById('down_arrow' + String(i)).style.cursor = 'default';
+                }
+            }
         }
 
         var idx_list = [];
@@ -862,20 +868,20 @@
                             <th>콘텐츠 구분</th>
                             <td colspan="3">
                                 <div>
-                                    <c:if test="${content.ctnDiv eq 'in'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked onchange="checkDetection()">
+                                    <c:if test="${content.ctnDiv eq 'IN'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="IN" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.ctnDiv ne 'in'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" onchange="checkDetection()">
+                                    <c:if test="${content.ctnDiv ne 'IN'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="IN" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="inside">
                                         내부
                                     </label>
-                                    <c:if test="${content.ctnDiv eq 'out'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out" checked onchange="checkDetection()">
+                                    <c:if test="${content.ctnDiv eq 'OUT'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="OUT" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.ctnDiv ne 'out'}">
-                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out" onchange="checkDetection()">
+                                    <c:if test="${content.ctnDiv ne 'OUT'}">
+                                        <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="OUT" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="outside">
                                         외부
@@ -901,20 +907,20 @@
                             <th>전시 상태</th>
                             <td>
                                 <div>
-                                    <c:if test="${content.dspYn eq 'y'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" checked onchange="checkDetection()">
+                                    <c:if test="${content.dspYn eq 'Y'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="Y" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.dspYn ne 'y'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" onchange="checkDetection()">
+                                    <c:if test="${content.dspYn ne 'Y'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="display" value="Y" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="display">
                                         전시
                                     </label>
-                                    <c:if test="${content.dspYn eq 'n'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n" checked onchange="checkDetection()">
+                                    <c:if test="${content.dspYn eq 'N'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="N" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.dspYn ne 'n'}">
-                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n" onchange="checkDetection()">
+                                    <c:if test="${content.dspYn ne 'N'}">
+                                        <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="N" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="not_display">
                                         전시안함
@@ -924,20 +930,20 @@
                             <th>댓글가능 여부</th>
                             <td>
                                 <div>
-                                    <c:if test="${content.cmtYn eq 'y'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" checked onchange="checkDetection()">
+                                    <c:if test="${content.cmtYn eq 'Y'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="Y" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.cmtYn ne 'y'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" onchange="checkDetection()">
+                                    <c:if test="${content.cmtYn ne 'Y'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="Y" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="yes">
                                         가능
                                     </label>
-                                    <c:if test="${content.cmtYn eq 'n'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n" checked onchange="checkDetection()">
+                                    <c:if test="${content.cmtYn eq 'N'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="N" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.cmtYn ne 'n'}">
-                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n" onchange="checkDetection()">
+                                    <c:if test="${content.cmtYn ne 'N'}">
+                                        <input class="form-check-input" type="radio" name="cmtYn" id="no" value="N" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="no">
                                         불가능
@@ -975,20 +981,20 @@
                             <th>상담하기</th>
                             <td colspan="3">
                                 <div>
-                                    <c:if test="${content.cstYn eq 'y'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked onchange="checkDetection()">
+                                    <c:if test="${content.cstYn eq 'Y'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="Y" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.cstYn ne 'y'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" onchange="checkDetection()">
+                                    <c:if test="${content.cstYn ne 'Y'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="N" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="not_use">
                                         미사용
                                     </label>
-                                    <c:if test="${content.cstYn eq 'n'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n" checked onchange="checkDetection()">
+                                    <c:if test="${content.cstYn eq 'N'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="N" checked onchange="checkDetection()">
                                     </c:if>
-                                    <c:if test="${content.cstYn ne 'n'}">
-                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="n" onchange="checkDetection()">
+                                    <c:if test="${content.cstYn ne 'N'}">
+                                        <input class="form-check-input" type="radio" name="cstYn" id="use" value="N" onchange="checkDetection()">
                                     </c:if>
                                     <label class="form-check-label" for="use">
                                         사용
