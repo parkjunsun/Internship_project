@@ -19,10 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/content")
@@ -35,6 +32,15 @@ public class ListController {
 
     @Autowired
     CommonService commonService;
+
+    @PostMapping("/change-dspstate")
+    public void displayConfigPage(HttpServletRequest request, HttpServletResponse response) throws Exception{
+        HashMap<String, Object> updateParam = new HashMap<>();
+        String[] items = request.getParameter("items").split(" ");
+        updateParam.put("items", items);
+        updateParam.put("dspYn", request.getParameter("dspYn"));
+        listService.updateDspYn(updateParam);
+    }
 
     @GetMapping("/search")
     public ModelAndView searchMainPage(HttpServletRequest request, HttpServletResponse response) throws Exception{

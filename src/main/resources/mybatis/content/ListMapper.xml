@@ -42,7 +42,8 @@
             dsp_st_dt as dspStDt,
             dsp_end_dt as dspEndDt,
             ctn_div as ctnDiv,
-            dsp_yn as dspYn
+            dsp_yn as dspYn,
+            ctn.use_yn as useYn
         FROM internsc.tb_ctn ctn
         left outer join internsc.tb_cd tplCd on ctn.tpl_cd=tplCd.cd and tplCd.grp_cd = 'TPL_TY'
         left outer join internsc.tb_cd srcCd on ctn.src_cd=srcCd.cd and srcCd.grp_cd = 'SRC_TY'
@@ -92,4 +93,12 @@
             AND ctn_div = #{ctnDiv}
         </if>
     </select>
+    <update id="updateDspYn" parameterType="hashmap">
+        UPDATE internsc.tb_ctn
+        SET dsp_yn = #{dspYn}
+        WHERE
+        <foreach collection="items" item="item" separator="or" index="index">
+            ctn_seq = ${item}
+        </foreach>
+</update>
 </mapper>

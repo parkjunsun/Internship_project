@@ -19,4 +19,6 @@ public class ContentExcel {
     private String dspEndDt;
     private String ctnDiv;
     private String dspYn;
+    private String useYn;
+
 }

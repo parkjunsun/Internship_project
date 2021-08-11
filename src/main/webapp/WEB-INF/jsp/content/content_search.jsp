@@ -76,17 +76,24 @@
                 while (conList.hasChildNodes()) {
                     conList.removeChild(conList.firstChild);
                 }
+                document.getElementById('checkAll').checked = false;
+
                 for (var c in content) {
                     var tr = document.createElement('tr');
                     tr.setAttribute('style', 'text-align: center');
+                    tr.setAttribute('id', String(parseInt(c)+1));
                     var checkbox = document.createElement('td');
                     var input = document.createElement('input');
                     input.setAttribute('type', 'checkbox');
+                    input.setAttribute('name', 'checkbox');
+                    input.setAttribute('value', String(parseInt(c)+1));
                     checkbox.appendChild(input);
                     tr.appendChild(checkbox);
 
                     var index = document.createElement('td');
-                    index.innerText = Number(c) + 1;
+                    var indexNum = (parseInt(pagination["page"])-1)*parseInt(pagination["listSize"])+parseInt(c)+1;
+                    index.setAttribute("value",indexNum);
+                    index.innerText = indexNum;
                     tr.appendChild(index);
 
                     var ctnNm = document.createElement('td');
@@ -153,6 +160,19 @@
                 var ul = nav.appendChild(document.createElement("ul"));
                 ul.setAttribute("class", "pagination justify-content-center");
 
+                // << 버튼
+                var li = document.createElement("li");
+                li.setAttribute("class", "page-item");
+                var a = li.appendChild(document.createElement("a"));
+                a.setAttribute("class", "page-link");
+                a.setAttribute("href", "#");
+                var pageStr = String(pagination["page"]);
+                var rangeStr = String(pagination["range"]);
+                var rangeSizeStr = String(pagination["rangeSize"]);
+                a.setAttribute("onClick", "fn_first()");
+                a.innerText = "<<";
+                ul.appendChild(li);
+
                 // < 버튼
                 var li = document.createElement("li");
                 li.setAttribute("class", "page-item disabled");
@@ -195,10 +215,22 @@
                 var a = li.appendChild(document.createElement("a"));
                 a.setAttribute("class", "page-link");
                 a.setAttribute("href", "#");
-                a.setAttribute("onClick", "fn_next(+" + pageStr + "," + rangeStr + "," + rangeSizeStr + "+)");
+                a.setAttribute("onClick", "fn_next(" + pageStr + "," + rangeStr + "," + rangeSizeStr + ")");
                 a.innerText = ">";
                 ul.appendChild(li);
 
+                // >> 버튼
+                var li = document.createElement("li");
+                li.setAttribute("class", "page-item");
+                var a = li.appendChild(document.createElement("a"));
+                a.setAttribute("class", "page-link");
+                a.setAttribute("href", "#");
+                var pageStr = String(pagination["page"]);
+                var rangeStr = String(pagination["range"]);
+                var rangeSizeStr = String(pagination["rangeSize"]);
+                a.setAttribute("onClick", "fn_last()");
+                a.innerText = ">>";
+                ul.appendChild(li);
 
                 $('#chart').show();
                 $('#navigation').show();
@@ -268,7 +300,7 @@
         $("img.ui-datepicker-trigger").css({'cursor': 'pointer', 'margin-left': '5px'});
     })
 
-    // page 초기화 함수
+    // 검색필터 초기화 함수
     function resetPage(){
         $('#startdate').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
         $('#enddate').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
@@ -283,6 +315,22 @@
         $(':radio[name="ctnDiv"]').removeAttr('checked');
         $(':radio[name="ctnDiv"]').filter("[value=all]").prop("checked",true);
         $('select').prop('selectedIndex',0);
+    }
+
+    // 페이지 입력창 초기화 함수
+    function resetPageCnt(){
+        var newInput = document.createElement("input");
+        newInput.setAttribute("type", "text");
+        newInput.setAttribute("name", "dspPage");
+        newInput.setAttribute("class", "form-control");
+        newInput.setAttribute("id", "dspPage");
+        newInput.setAttribute("onchange", "pageCheck($('#dspPage').val())");
+        newInput.setAttribute("value", "1");
+        newInput.setAttribute("style", "width:50px;height:40px;margin-right:3px;display:inline-block;");
+
+        var theadRight = document.getElementById("theadRight");
+        var dspPage = document.getElementById("dspPage");
+        theadRight.replaceChild(newInput, dspPage);
     }
 
     // 검색 버튼
@@ -328,7 +376,7 @@
             theadRight.replaceChild(newInput,oldInput);
         }
         else if(parseInt(page)<1){
-            alert("입력 범위를 초했습니다");
+            alert("입력 범위를 초과했습니다");
             var newInput = document.createElement("input");
             newInput.setAttribute("type", "text");
             newInput.setAttribute("name", "dspPage");
@@ -344,59 +392,118 @@
         }
     }
 
-    // // 이전 버튼 이벤트
-    // $(function(){
-    //     $('#prev').on('click',fn_prev());
-    // })
-    //
-    // // 다음 버튼 이벤트
-    // $(function(){
-    //     $('#next').on('click',fn_next());
-    // })
-
-
-    // $('#dspPage').on("change keyup paste", function() {
-    //     var currentVal = this.val();
-    //     alert(currentVal);
-    //     if(currentVal > $('#maxPage').val()){
-    //         alert("최종 페이지를 초과했습니다");
-    //         $('#dspPage').val(glb_pagination['page']);
-    //     }
-    // });
-
-    // $(function(){
-    //     $('#dspPage').change(pageCheck($('#dspPage').val()));
-    // })
-    // });
-
+    // < 버튼
     function fn_prev(page, range, rangeSize) {
         document.getElementById("dspPage").setAttribute("value",String(((range - 2) * rangeSize) + 1));
         glb_range = range-1;
         sendData();
     }
 
+    // > 버튼
     function fn_next(page, range, rangeSize) {
         document.getElementById("dspPage").setAttribute("value",String((range * rangeSize) + 1));
         glb_range = range+1;
         sendData();
     }
 
+    // >> 버튼
+    function fn_last() {
+        glb_range = Math.floor(parseInt(glb_pagination["pageCnt"])/parseInt(glb_pagination["rangeSize"]))+1;
+        document.getElementById("dspPage").setAttribute("value",glb_pagination["pageCnt"]);
+        sendData();
+    }
 
+    // << 버튼
+    function fn_first() {
+        document.getElementById("dspPage").setAttribute("value","1");
+        glb_range = 1;
+        sendData();
+    }
+
+    function checkAll(checkAll){
+        var checkboxes = document.getElementsByName('checkbox');
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = checkAll.checked;
+        })
+    }
+    function displayConfig() {
+        if ($("input:checkbox[name=checkbox]:checked").length==0){
+            alert("선택된 콘텐츠가 없습니다");
+        }
+        else{
+            $('#testModal').modal("show");
+        }
+    }
+
+    function changeDspConfig(){
+        if ($("input:radio[name=changeDspYn]:checked").length==0){
+            alert("전시 상태를 선택 후 저장하시기 바랍니다");
+        }
+        else{
+            var items = $('input:checkbox[name=checkbox]:checked').map(function () {
+                return this.value;
+            }).get();
+
+            // 전시를 선택했을 경우
+            if($("input:radio[name=changeDspYn]:checked").val()=='Y'){
+                for (i in items) {
+                    var dspStDt = new Date(glb_contentList[parseInt(items[i]) - 1]["dspStDt"].split(' ')[0]);
+                    var dspEndDt = new Date(glb_contentList[parseInt(items[i]) - 1]["dspEndDt"].split(' ')[0]);
+                    var useYn = glb_contentList[parseInt(items[i]) - 1]["useYn"];
+                    var today = new Date();
+                    if (today <= dspStDt) {
+                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다");
+                        return;
+                    }
+                    if (today >= dspEndDt) {
+                        alert("전시 종료일이 지난 콘텐츠는 전시설정을 할 수 없습니다");
+                        return;
+                    }
+                    if (useYn=='N') {
+                        alert("미사용 콘텐츠 카테고리에 매핑된 미전시 콘텐츠는 전시설정을 할 수 없습니다. 해당 콘텐츠는 [콘텐츠 조회/수정] 화면에서 전시 카테고리를 수정하여 주시기 바랍니다");
+                        return;
+                    }
+                }
+            }
+
+            var params = "items=";
+            for(i in items){
+                var seq = glb_contentList[parseInt(items[i]) - 1]["ctnSeq"];
+                params += (seq+" ");
+            }
+            params+="&dspYn=";
+            params+=$("input:radio[name=changeDspYn]:checked").val();
+            $.ajax({
+                url: "/content/change-dspstate"
+                , method: "post"
+                , data: params
+                , sync: false
+                , success: function (data){
+                    alert('전시 설정이 저장되었습니다');
+                    $('#testModal').modal('hide');
+                }
+            })
+
+        }
+
+    }
 
 </script>
 <body>
 <!-- Top(header) 영역// -->
 <%@ include file="/WEB-INF/jsp/include/common_hearder.jsp" %>
 <!-- //Top(header) 영역 -->
+
 <!-- Content Wrapper// -->
 <div class="container-fluid">
     <div class="row">
         <!-- Left(Sidebar) 영역// -->
         <%@ include file="/WEB-INF/jsp/include/common_left.jsp" %>
         <!-- //Left(Sidebar) 영역 -->
-        <!-- Content Body 영역 // -->
 
+        <!-- Content Body 영역 // -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <%--헤드라인--%>
                 <div class="no_border_head">
                     <span class="tab_span flSpan">콘텐츠조회</span>
                     <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
@@ -407,8 +514,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Form Table 영역 // -->
-
+                    <!--검색필터-->
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
 <%--                            <form action="/content/search" method="post" id="searchForm">--%>
                             <table class="table table-sm seaerch-table" >
@@ -499,8 +605,7 @@
                             </table>
 <%--                            </form>--%>
                         </div>
-
-                        <!-- Button Set (middle 정렬) // -->
+                        <!-- 초기화, 검색버튼 -->
                         <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
                             <div class="btn-toolbar mb-2">
                                 <div class="btn-group">
@@ -509,17 +614,55 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="frameLine mb-3"></div>
-                        <!-- // Button Set (middle 정렬) -->
 
+                    <!-- 팝업 될 레이어 -->
+                    <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">전시설정</h5>
+                                    <button type="button" class="btn btn-light" onclick="$('#testModal').modal('hide');">X</button>
+                                </div>
+                                <div class="modal-body">
+
+                                        <table class="table table-sm seaerch-table">
+                                            <tbody>
+                                                <tr style="height: 50px">
+                                                    <th style="width: 100px">전시상태</th>
+                                                    <td>
+                                                        <div>
+                                                            <input class="form-check-input" type="radio" name="changeDspYn" value="Y" id="dspChangeRadioY" style="margin-left:6px; margin-right:6px;">
+                                                            <label class="display-state-label" for="flexRadio2">
+                                                                전시
+                                                            </label>
+                                                            <input class="form-check-input" type="radio" name="changeDspYn" value="N" id="dspChangeRadioN" style="margin-left:6px; margin-right:6px;">
+                                                            <label class="display-state-label" for="flexRadio3">
+                                                                전시안함
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <div style="text-align: center;">선택하신 항목에 일괄 적용합니다</div>
+                                </div>
+                                <div style="margin:auto" class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_reset" onclick="$('#testModal').modal('hide');">취소</button>
+                                    <button type="button" class="btn btn-primary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_submit" onclick="changeDspConfig()">저장</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <!--검색 결과 리스트-->
                 <div id="chart" style="display:none"  class="table-responsive" >
                     <table class="table table-striped table-sm">
                         <thead>
-                        <tr>
+                        <tr style="background-color: #e6efff">
                             <td colspan="9">
                                 <div style="float: left;">
-                                    <button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button>
-                                    <button type="button" class="btn btn-outline-secondary">전시 설정</button>
+                                    <button type="button" class="btn btn-outline-secondary" style="background-color: #ecedee; color: black; font-size: 15px">엑셀 다운로드</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-example" style="background-color: #ecedee; color: black;  font-size: 15px" onclick="displayConfig()">전시설정</button>
                                 </div>
                                 <div id="theadRight" style="float: right;">
                                     정렬 순서
@@ -531,7 +674,7 @@
                                         </select>
                                     </label>
                                     <label>
-                                        <select name="searchType" class="form-select w100" id="dspCnt" style="margin-left:6px; margin-right:3px; display: inline-block;">
+                                        <select name="searchType" class="form-select w100" id="dspCnt" onchange="resetPageCnt()" style="margin-left:6px; margin-right:3px; display: inline-block;">
                                             <option value="20" selected>20개</option>
                                             <option value="30">30개</option>
                                             <option value="40">40개</option>
@@ -547,7 +690,7 @@
                         </tr>
                         <tr>
                             <th style="text-align: center; width:40px; height: 40px" scope="col">
-                                <input type="checkbox" name="xxx" value="yyy">
+                                <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this)">
                             </th>
                             <th style="text-align: center; width:40px;" scope="col">번호</th>
                             <th style="text-align: center; width:300px;" scope="col">콘텐츠명</th>
@@ -563,46 +706,10 @@
                         </tbody>
                     </table>
                 </div>
-
-                <!-- pagination{s} -->
-
-<%--                <div id="paginationBox">--%>
-<%--                    <ul class="pagination">--%>
-<%--                        <c:if test="${pagination.prev}">--%>
-<%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>--%>
-<%--                        </c:if>--%>
-<%--                        <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" var="idx">--%>
-<%--                            <li class="page-item <c:out value="${pagination.page == idx ? 'active' : ''}"/> "><a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')"> ${idx} </a></li>--%>
-<%--                        </c:forEach>--%>
-<%--                        <c:if test="${pagination.next}">--%>
-<%--                            <li class="page-item"><a class="page-link" href="#" onClick="fn_next('${pagination.range}', '${pagination.range}', '${pagination.rangeSize}')" >Next</a></li>--%>
-<%--                        </c:if>--%>
-<%--                    </ul>--%>
-<%--                </div>--%>
-
-                <!-- pagination{e} -->
-
+                <!--페이지 내비게이션-->
                 <div id = navigation style="display:none">
-<%--                    <nav aria-label="Page navigation example">--%>
-<%--                        <ul class="pagination justify-content-center">--%>
-<%--                            <li class="page-item disabled">--%>
-<%--                                <a class="page-link" href="#" tabindex="-1"> << </a>--%>
-<%--                            </li>--%>
-<%--                            <li class="page-item disabled">--%>
-<%--                                <a class="page-link" id="prev" href="#" tabindex="-1"> < </a>--%>
-<%--                            </li>--%>
-<%--                            <li class="page-item"><a class="page-link" href="#">1</a></li>--%>
-<%--                            <li class="page-item">--%>
-<%--                                <a class="page-link" id="next" href="#"> > </a>--%>
-<%--                            </li>--%>
-<%--                            <li class="page-item">--%>
-<%--                                <a class="page-link" href="#"> >> </a>--%>
-<%--                            </li>--%>
-<%--                        </ul>--%>
-<%--                    </nav>--%>
+
                 </div>
-
-
             </main>
         <!-- //Content Body 영역 -->
     </div>
