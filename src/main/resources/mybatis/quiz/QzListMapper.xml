@@ -97,4 +97,13 @@
             AND qz_nm LIKE '%' || #{qzNm} || '%'
         </if>
     </select>
+
+    <update id="updateDspYn" parameterType="hashmap">
+        UPDATE internsc.tb_qz
+        SET dsp_yn = #{dspYn}
+        WHERE
+        <foreach collection="items" item="item" separator="or" index="index">
+            qz_seq = ${item}
+        </foreach>
+    </update>
 </mapper>

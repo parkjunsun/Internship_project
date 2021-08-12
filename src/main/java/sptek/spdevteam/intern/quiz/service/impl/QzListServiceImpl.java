@@ -2,6 +2,7 @@ package sptek.spdevteam.intern.quiz.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sptek.spdevteam.intern.quiz.domain.DspYnDto;
 import sptek.spdevteam.intern.quiz.domain.QuizDto;
 import sptek.spdevteam.intern.quiz.mybatis.QzListMapper;
 import sptek.spdevteam.intern.quiz.service.QzListService;
@@ -28,5 +29,10 @@ public class QzListServiceImpl implements QzListService {
     @Override
     public Integer getListCnt(HashMap<String, Object> map) {
         return qzListMapper.getListCnt(map);
+    }
+
+    @Override
+    public void updateDspYn(HashMap<String, Object> map) {
+        qzListMapper.updateDspYn(map);
     }
 }

@@ -1,13 +1,18 @@
 package sptek.spdevteam.intern.quiz.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import sptek.spdevteam.intern.common.domain.Pagination;
+import sptek.spdevteam.intern.quiz.domain.DspYnDto;
 import sptek.spdevteam.intern.quiz.domain.QuizDto;
 import sptek.spdevteam.intern.quiz.service.QzListService;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,5 +63,37 @@ public class QuizListController {
 
         return mv;
     }
+
+    @PostMapping("/change-dspstate")
+    @ResponseBody
+    public Message displayConfigPage(@RequestParam String jsonData) throws JsonProcessingException {
+
+        HashMap<String, Object> updateParam = new HashMap<>();
+        List<String> qzSeqList = new ArrayList<>();
+
+        List<DspYnDto> dspYnList = new ObjectMapper().readValue(jsonData, new TypeReference<List<DspYnDto>>() {});
+
+        for (DspYnDto dspYnDto : dspYnList) {
+            qzSeqList.add(Integer.toString(dspYnDto.getQzSeq()));
+        }
+
+        updateParam.put("items", qzSeqList);
+        updateParam.put("dspYn", dspYnList.get(0).getDspYn());
+
+        qzListService.updateDspYn(updateParam);
+
+        Message message = new Message();
+        message.setMsg("정상적으로 데이터 수정이 완료되었습니다.");
+        return message;
+    }
+
+
+    static class Message {
+        private String msg;
+
+        public String getMsg() {return msg;}
+        public void setMsg(String msg) {this.msg = msg;}
+    }
+
 
 }

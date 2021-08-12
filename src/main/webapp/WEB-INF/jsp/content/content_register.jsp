@@ -732,7 +732,7 @@
                 <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onClick="location.href='/temp/detail'">DetailPage</button>
+                            <button type="button" class="btn btn-primary" onClick="location.href='/temp/detail'" style="visibility: hidden">DetailPage</button>
                         </div>
                     </div>
                 </div>

@@ -36,7 +36,7 @@
                 var start = new Date($("#startdate").datepicker("getDate"));
                 var end = new Date($("#enddate").datepicker("getDate"));
                 if (end - start < 0) {
-                    alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+                    alert("시작일이 종료일보다 미래날짜는 설정할 수 없습니다.");
                     $('#startdate').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
                 }
             }
@@ -62,8 +62,20 @@
                 var start = new Date($("#startdate").datepicker("getDate"));
                 var end = new Date($("#enddate").datepicker("getDate"));
                 if (end - start < 0) {
-                    alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+                    alert("종료일이 시작일보다 과거 날짜는 설정할 수 없습니다.");
                     $('#enddate').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+                }
+
+                const target = document.getElementById('searchType');
+                const searchType = target.options[target.selectedIndex].value;
+
+                const today = new Date();
+
+                if (searchType === 'regDay') {
+                    if (today < end) {
+                        alert("등록일의 종료일은 미래날짜로 설정할 수 없습니다.");
+                        $('#enddate').datepicker('setDate', 'today');
+                    }
                 }
             }
         });
@@ -85,6 +97,7 @@
     }
 
     var glb_pagination;
+    var glb_quizList;
     var glb_range = 1;
 
     function sendData() {
@@ -122,6 +135,7 @@
                 const pagination = data["pagination"];
 
                 glb_pagination = pagination;
+                glb_quizList = quizs;
                 document.getElementById("dspPage").value = pagination["page"];
 
                 var maxPage = document.getElementById("maxPage");
@@ -346,6 +360,109 @@
         })
     }
 
+    function displayConfig() {
+        const checkBoxes = document.getElementsByName('checkbox');
+        var count = 0;
+        for (let checkBox of checkBoxes) {
+            if (checkBox.checked) {
+                count += 1;
+            }
+        }
+
+        if (count === 0) {
+            alert("퀴즈를 선택해주세요.");
+        } else {
+            $('#testModal').modal("show");
+        }
+    }
+
+    function changeDspConfig() {
+        const checkBoxes = document.getElementsByName("changeDspYn");
+        var count = 0;
+        for (let checkBox of checkBoxes) {
+            if (checkBox.checked) {
+                count += 1
+            }
+        }
+
+        if (count === 0) {
+            alert("전시상태를 선택 후 저장하시기 바랍니다.");
+            return false;
+        }
+
+        var items = $('input:checkbox[name=checkbox]:checked').map(function () {
+            return this.value;
+        }).get();
+
+
+
+        if ($("input:radio[name=changeDspYn]:checked").val() === 'Y' || $("input:radio[name=changeDspYn]:checked").val() === 'N') {
+            for (let seq of items) {
+                const dspStDt = new Date(glb_quizList[seq-1]["stDt"]);
+                const dspEndDt = new Date(glb_quizList[seq-1]["endDt"]);
+                const today = new Date();
+
+                if (today <= dspStDt) {
+                    alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+                    return false;
+                }
+
+                if (today >= dspEndDt) {
+                    alert("전시 종료일이 지난 콘텐츠는 전시설정을 할 수 가 없습니다.");
+                    return false;
+                }
+            }
+        }
+
+        var params = [];
+
+        if ($("input:radio[name=changeDspYn]:checked").val() === 'Y') {
+            for (let seq of items) {
+                var obj = {
+                    "qzSeq": glb_quizList[seq-1]["qzSeq"],
+                    "dspYn": 'Y'
+                }
+                params.push(obj);
+            }
+            var jsonData = JSON.stringify(params);
+            $.ajax({
+                url: "/quiz/change-dspstate",
+                method: "post",
+                dataType: "json",
+                traditional: true,
+                data: {"jsonData": jsonData},
+                sync: false,
+                success: function () {
+                    alert("전시 설정이 저장되었습니다.");
+                    $('#testModal').modal("hide");
+                }
+            });
+        } else {
+            for (let seq of items) {
+                var obj = {
+                    "qzSeq": glb_quizList[seq-1]["qzSeq"],
+                    "dspYn": 'N'
+                }
+                params.push(obj);
+            }
+            var jsonData = JSON.stringify(params);
+            $.ajax({
+                url: "/quiz/change-dspstate",
+                method: "post",
+                dataType: "json",
+                traditional: true,
+                data: {"jsonData": jsonData},
+                sync: false,
+                success: function () {
+                    alert("전시 설정이 저장되었습니다.");
+                    $('#testModal').modal("hide");
+                }
+            });
+        }
+
+
+    }
+
 </script>
 
 <body>
@@ -383,10 +500,10 @@
                         <col width="130px">
                         <col width="*">
                     </colgroup>
-                    <tr height="50">
-                        <th>기간</th>
+                    <tr style="height: 80px;">
+                        <th style="text-align: center;">기간</th>
                         <td>
-                            <select name="searchType" id="searchType">
+                            <select name="searchType" id="searchType" style="height: 40px;">
                                 <option value="period">진행기간</option>
                                 <option value="regDay">등록일</option>
                             </select>
@@ -394,7 +511,7 @@
                             ~
                             <label for="enddate"></label><input type="text" class="datepicker" name="dspEndDt" id="enddate" style="margin-left:6px; width:110px; height:40px;">
                         </td>
-                        <th>전시상태</th>
+                        <th style="text-align: center;">전시상태</th>
                         <td>
                             <div>
                                 <input class="form-check-input" type="radio" name="dspYn" value="all" id="flexRadio1" checked style="margin-left:6px; margin-right:6px;">
@@ -412,10 +529,10 @@
                             </div>
                         </td>
                     </tr>
-                    <tr  height="50">
-                        <th>퀴즈</th>
+                    <tr style="height: 80px;">
+                        <th style="text-align: center;">퀴즈</th>
                         <td>
-                            <input type="text" name="qzNm" class="form-control" id="qzNm" style="width:400px;height:40px; margin-right:3px; display: inline-block;">
+                            <input type="text" name="qzNm" class="form-control" id="qzNm" style="width:570px;height:40px; margin-right:3px; display: inline-block;">
                         </td>
                         <th></th>
                         <td></td>
@@ -435,6 +552,44 @@
             </div>
             <div class="frameLine mb-3"></div>
 
+            <!-- 팝업 될 레이어 -->
+            <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="width: 600px; height: 400px; margin-top: 200px;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">전시설정</h5>
+                            <button type="button" class="btn btn-light" onclick="$('#testModal').modal('hide');">X</button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-sm seaerch-table">
+                                <tbody>
+                                <tr style="height: 50px">
+                                    <th style="width: 100px">전시상태</th>
+                                    <td>
+                                        <div>
+                                            <input class="form-check-input" type="radio" name="changeDspYn" value="Y" id="dspChangeRadioY" style="margin-left:6px; margin-right:6px;">
+                                            <label class="display-state-label" for="flexRadio2">
+                                                전시
+                                            </label>
+                                            <input class="form-check-input" type="radio" name="changeDspYn" value="N" id="dspChangeRadioN" style="margin-left:6px; margin-right:6px;">
+                                            <label class="display-state-label" for="flexRadio3">
+                                                전시안함
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table><br>
+                            <div style="text-align: center;">선택하신 항목에 일괄 적용합니다</div>
+                        </div>
+                        <div style="margin:auto" class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_reset" onclick="$('#testModal').modal('hide');">취소</button>
+                            <button type="button" class="btn btn-primary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_submit" onclick="changeDspConfig()">저장</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="chart" class="table-responsive" style="display: none">
                 <table class="table table-striped table-sm">
                     <thead>
@@ -442,7 +597,7 @@
                         <td colspan="9">
                             <div style="float: left;">
                                 <button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button>
-                                <button type="button" class="btn btn-outline-secondary">전시 설정</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="displayConfig()">전시 설정</button>
                             </div>
                             <div id="theadRight" style="float: right;">
                                 <label>
