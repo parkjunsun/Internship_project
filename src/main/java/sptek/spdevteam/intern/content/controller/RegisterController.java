@@ -81,7 +81,7 @@ public class RegisterController {
         image.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
         image.setModDt(Timestamp.valueOf(LocalDateTime.now()));
         image.setImgOdr(0);
-        image.setUseYn("y");
+        image.setUseYn("Y");
 
         fileUploadUtil.UploadImage(encFileName);
         registerService.imgSave(image);
@@ -106,7 +106,7 @@ public class RegisterController {
         bigImage.setFeSz(bigFeSz);
         bigImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
         bigImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-        bigImage.setUseYn("y");
+        bigImage.setUseYn("Y");
         bigImage.setImgOdr(0);
 
         ImageIO.write(newImage, bigExt, new File(bigPath));
@@ -133,7 +133,7 @@ public class RegisterController {
         smallImage.setFeSz(smallFeSz);
         smallImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
         smallImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-        smallImage.setUseYn("y");
+        smallImage.setUseYn("Y");
         smallImage.setImgOdr(0);
 
         ImageIO.write(newImage2, smallExt, new File(smallPath));
@@ -161,7 +161,7 @@ public class RegisterController {
                     ctnDetImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
                     ctnDetImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
                     ctnDetImage.setImgOdr(odr);
-                    ctnDetImage.setUseYn("y");
+                    ctnDetImage.setUseYn("Y");
 
                     ctnDetUploadUtil.UploadImage(ctnDetEncFileName);
                     registerService.imgSave(ctnDetImage);
@@ -175,7 +175,7 @@ public class RegisterController {
         content.setImgGrpId(imgGrpId);
         content.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
         content.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-        content.setUseYn("y");
+        content.setUseYn("Y");
         registerService.ctnSave(content);
 
 
@@ -186,7 +186,7 @@ public class RegisterController {
         contentDet.setUrlAddr(inputUrl);
         contentDet.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
         contentDet.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-        contentDet.setUseYn("y");
+        contentDet.setUseYn("Y");
 
         registerService.ctnDetSave(contentDet);
 

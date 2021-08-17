@@ -12,12 +12,12 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column mb-2">
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/content/search">
                     콘텐츠관리
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/quiz/search">
                     퀴즈관리
                 </a>
             </li>

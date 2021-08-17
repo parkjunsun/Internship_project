@@ -4,13 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,11 +13,8 @@ import sptek.spdevteam.intern.common.domain.Pagination;
 import sptek.spdevteam.intern.quiz.domain.DspYnDto;
 import sptek.spdevteam.intern.quiz.domain.QuizDto;
 import sptek.spdevteam.intern.quiz.service.QzListService;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -118,7 +110,7 @@ public class QuizListController {
         List<QuizDto> excelList = qzListService.getExcelList(paramMap);
 
         Workbook wb = new XSSFWorkbook();
-        Sheet sheet = wb.createSheet("sample_sheet");
+        Sheet sheet = wb.createSheet("sheet");
         Row row = null;
         Cell cell = null;
         int rowNum = 0;
@@ -126,11 +118,17 @@ public class QuizListController {
         row = sheet.createRow(rowNum++);
         String[] headers = {"번호", "퀴즈명", "유형", "퀴즈번호", "진행기간", "전시상태", "등록일"};
 
+        CellStyle middleArrange = wb.createCellStyle();
+        middleArrange.setAlignment(HorizontalAlignment.CENTER);
+
+
         //Header
         for(int i = 0; i<7; i++) {
             cell = row.createCell(i);
+            cell.setCellStyle(middleArrange);
             cell.setCellValue(headers[i]);
         }
+
 
         //Body
         int seq = 1;
@@ -138,26 +136,39 @@ public class QuizListController {
             row = sheet.createRow(rowNum++);
 
             cell = row.createCell(0);
+            cell.setCellStyle(middleArrange);
             cell.setCellValue(seq++);
 
             cell = row.createCell(1);
+            cell.setCellStyle(middleArrange);
             cell.setCellValue(quizDto.getQzNm());
 
             cell = row.createCell(2);
+            cell.setCellStyle(middleArrange);
             cell.setCellValue("퀴즈");
 
             cell = row.createCell(3);
+            cell.setCellStyle(middleArrange);
             cell.setCellValue(quizDto.getQzSeq());
 
             cell = row.createCell(4);
-            cell.setCellValue(quizDto.getStDt() + " ~ " + quizDto.getEndDt());
+            cell.setCellStyle(middleArrange);
+            cell.setCellValue(quizDto.getStDt().substring(0, 16) + " ~ " + quizDto.getEndDt().substring(0, 16));
 
             cell = row.createCell(5);
+            cell.setCellStyle(middleArrange);
             String strDspYn = quizDto.getDspYn().equals("Y") ? "전시" : "미전시";
             cell.setCellValue(strDspYn);
 
             cell = row.createCell(6);
-            cell.setCellValue(quizDto.getRegDt());
+            cell.setCellStyle(middleArrange);
+            cell.setCellValue(quizDto.getRegDt().substring(0, 10));
+        }
+
+
+        for(int i=0; i<7;i++) {
+            sheet.autoSizeColumn(i);
+            sheet.setColumnWidth(i, (sheet.getColumnWidth(i)) + (short)1024);
         }
 
 

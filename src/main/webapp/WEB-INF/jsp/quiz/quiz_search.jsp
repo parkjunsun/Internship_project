@@ -12,6 +12,12 @@
 </head>
 <script type="text/javascript">
 
+
+    function resetPageCnt() {
+        const dspPage = document.getElementById("dspPage");
+        dspPage.value = '';
+    }
+
     // datepicker 초기화
     $(function() {
         //input을 datepicker로 선언
@@ -33,6 +39,7 @@
             , minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
             , maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
             , onSelect: function (d) {
+                resetPageCnt();
                 var start = new Date($("#startdate").datepicker("getDate"));
                 var end = new Date($("#enddate").datepicker("getDate"));
                 if (end - start < 0) {
@@ -59,6 +66,7 @@
             , minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
             , maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
             , onSelect: function (d) {
+                resetPageCnt();
                 var start = new Date($("#startdate").datepicker("getDate"));
                 var end = new Date($("#enddate").datepicker("getDate"));
                 if (end - start < 0) {
@@ -96,9 +104,23 @@
         $('select').prop('selectedIndex',0);
     }
 
+
     var glb_pagination;
     var glb_quizList;
     var glb_range = 1;
+    var glb_checkCnt = 0;
+
+
+    function changeCheckCnt(input) {
+
+        const checkCnt = document.getElementById("checkCnt");
+
+        if (input.checked) {glb_checkCnt += 1;}
+        else {glb_checkCnt -= 1;}
+
+        checkCnt.innerText = glb_checkCnt;
+    }
+
 
     function sendData() {
         const target = document.getElementById('searchType');
@@ -112,6 +134,25 @@
         const dspCnt = document.getElementById('dspCnt');
         const listSize = dspCnt.options[dspCnt.selectedIndex].value;
         var page = document.getElementById('dspPage').value;
+
+        if (isNaN(page)) {
+            alert("페이지 번호가 숫자가 아닙니다.");
+            return false;
+        }
+
+        const lastPageText = document.getElementById('maxPage').innerText;
+        const lastPage = parseInt(lastPageText.split('/ ')[1]);
+
+        if (parseInt(page) > lastPage) {
+            alert("최종 페이지를 초과했습니다.");
+            return false;
+        }
+
+        if (parseInt(page) < 1) {
+            alert("입력 범위를 초과했습니다.");
+            return false;
+        }
+
         var range = glb_range;
 
         const params = {
@@ -136,7 +177,12 @@
 
                 glb_pagination = pagination;
                 glb_quizList = quizs;
+                glb_checkCnt = 0;
+
+                document.getElementById("checkCnt").innerText = glb_checkCnt;
                 document.getElementById("dspPage").value = pagination["page"];
+                const searchCnt = document.getElementById("searchCnt");
+                searchCnt.innerText = String(pagination["listCnt"]);
 
                 var maxPage = document.getElementById("maxPage");
                 if (maxPage.hasChildNodes()) {
@@ -151,6 +197,7 @@
                 while (qzList.hasChildNodes()) {
                     qzList.removeChild(qzList.firstChild);
                 }
+                document.getElementById('checkAll').checked = false;
 
                 for (var q in quizs) {
                     const tr = document.createElement('tr');
@@ -161,6 +208,7 @@
                     checkBox.type = 'checkbox';
                     checkBox.name = 'checkbox';
                     checkBox.value = String(parseInt(q)+1);
+                    checkBox.addEventListener('click', function () {changeCheckCnt(this)})
                     td1.appendChild(checkBox);
                     tr.appendChild(td1);
 
@@ -387,6 +435,20 @@
         })
     }
 
+    function changeAllCheckCnt(input) {
+        const checkBoxes = document.getElementsByName('checkbox');
+        const allCnt = checkBoxes.length;
+
+        if (input.checked) {
+            glb_checkCnt = allCnt;
+        } else {
+            glb_checkCnt = 0;
+        }
+
+        const checkCnt = document.getElementById("checkCnt");
+        checkCnt.innerText = glb_checkCnt;
+    }
+
     function displayConfig() {
         const checkBoxes = document.getElementsByName('checkbox');
         var count = 0;
@@ -486,9 +548,8 @@
                 }
             });
         }
-
-
     }
+
 
 </script>
 
@@ -515,7 +576,7 @@
                     </div>
                 </div>
             </div>
-            <form action="/quiz/excel/download" style="display: inline" method="post">
+            <form action="/quiz/excel/download" style="display: inline" method="post" id="excelDownLoadForm">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
                     <table class="table table-sm seaerch-table" >
                         <tbody>
@@ -528,7 +589,7 @@
                         <tr style="height: 80px;">
                             <th style="text-align: center;">기간</th>
                             <td>
-                                <select name="searchType" id="searchType" style="height: 40px;">
+                                <select name="searchType" id="searchType" style="height: 40px;" onchange="resetPageCnt()">
                                     <option value="period">진행기간</option>
                                     <option value="regDay">등록일</option>
                                 </select>
@@ -539,15 +600,15 @@
                             <th style="text-align: center;">전시상태</th>
                             <td>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="dspYn" value="all" id="flexRadio1" checked style="margin-left:6px; margin-right:6px;">
+                                    <input class="form-check-input" type="radio" name="dspYn" value="all" id="flexRadio1" checked style="margin-left:6px; margin-right:6px;" onchange="resetPageCnt()">
                                     <label class="display-state-label" for="flexRadio1">
                                         전체
                                     </label>
-                                    <input class="form-check-input" type="radio" name="dspYn" value="Y" id="flexRadio2" style="margin-left:6px; margin-right:6px;">
+                                    <input class="form-check-input" type="radio" name="dspYn" value="Y" id="flexRadio2" style="margin-left:6px; margin-right:6px;" onchange="resetPageCnt()">
                                     <label class="display-state-label" for="flexRadio2">
                                         전시
                                     </label>
-                                    <input class="form-check-input" type="radio" name="dspYn" value="N" id="flexRadio3" style="margin-left:6px; margin-right:6px;">
+                                    <input class="form-check-input" type="radio" name="dspYn" value="N" id="flexRadio3" style="margin-left:6px; margin-right:6px;" onchange="resetPageCnt()">
                                     <label class="display-state-label" for="flexRadio3">
                                         전시안함
                                     </label>
@@ -557,7 +618,7 @@
                         <tr style="height: 80px;">
                             <th style="text-align: center;">퀴즈</th>
                             <td>
-                                <input type="text" name="qzNm" class="form-control" id="qzNm" style="width:570px;height:40px; margin-right:3px; display: inline-block;">
+                                <input type="text" name="qzNm" class="form-control" id="qzNm" style="width:570px;height:40px; margin-right:3px; display: inline-block;" onchange="resetPageCnt();" onkeyup="resetPageCnt();" onpaste="resetPageCnt()" oninput="resetPageCnt()">
                             </td>
                             <th></th>
                             <td></td>
@@ -565,12 +626,13 @@
                         </tbody>
                     </table>
                 </div>
+            </form>
                 <!-- Button Set (middle 정렬) // -->
                 <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
                     <div class="btn-toolbar mb-2">
                         <div class="btn-group">
                             <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:80px; height:40px " id="btn_reset" onclick="resetPage();">초기화</button>
-                            <button type="button" class="btn btn-primary" style="margin-right:6px; width:80px; height:40px " id="btn_submit" onclick="sendData();">검색</button>
+                            <button type="button" class="btn btn-primary" style="margin-right:6px; width:80px; height:40px " id="btn_submit" onclick="return sendData();">검색</button>
                         </div>
                     </div>
                 </div>
@@ -615,32 +677,31 @@
                 </div>
 
                 <div id="chart" class="table-responsive" style="display: none">
+                    <div style="margin-bottom: 8px;"><span>조회결과 </span><span id="searchCnt" style="color:#0064FF">10</span><span>건 | </span><span>선택 </span><span id="checkCnt" style="color:#0064FF">0</span><span>건</span></div>
                     <table class="table table-striped table-sm">
                         <thead>
                         <tr>
                             <td colspan="9">
                                 <div style="float: left;">
-                                    <button type="submit" class="btn btn-outline-secondary">엑셀 다운로드</button>
+                                    <button type="submit" class="btn btn-outline-secondary" form="excelDownLoadForm">엑셀 다운로드</button>
                                     <button type="button" class="btn btn-outline-secondary" onclick="displayConfig()">전시 설정</button>
                                 </div>
                                 <div id="theadRight" style="float: right;">
                                     <label>
-                                        <select name="dspCnt" class="form-select w100" id="dspCnt" style="margin-left:6px; margin-right:3px; display: inline-block;">
+                                        <select name="dspCnt" class="form-select w100" id="dspCnt" onchange="resetPageCnt()" style="margin-left:6px; margin-right:3px; display: inline-block;">
                                             <option value="20" selected>20개</option>
                                             <option value="50">50개</option>
                                             <option value="100">100개</option>
                                         </select>
                                     </label>
                                     <input type="text" name="dspPage" class="form-control" id="dspPage" onkeypress="if(event.keyCode == 13) pageCheck($('#dspPage').val());" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
-                                    <span id="maxPage" value="${pagination.endPage}" style="font-size: 15px;">
-                                            / ${pagination.endPage}
-                                    </span>
+                                    <span id="maxPage" style="font-size: 15px;">${pagination.endPage}</span>
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th style="text-align: center; width:40px; height: 40px" scope="col">
-                                <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this)">
+                                <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this);" onclick="changeAllCheckCnt(this)">
                             </th>
                             <th style="text-align: center; width:40px;" scope="col">번호</th>
                             <th style="text-align: center; width:150px;" scope="col">퀴즈명</th>
@@ -657,7 +718,7 @@
                 </div>
                 <div id = navigation style="display:none">
                 </div>
-            </form>
+<%--            </form>--%>
         </main>
     </div>
 </div>

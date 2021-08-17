@@ -52,10 +52,12 @@
 
             const div = document.createElement('div');
             div.style.border = '1px solid black';
-            div.style.height = '30px';
+            div.style.lineHeight = '45px';
+            div.style.height = '45px';
 
             const span = document.createElement('span');
             span.style.float = 'left';
+            span.style.marginLeft = '10px';
             span.innerText = '콘텐츠 본문내용';
 
             div.appendChild(span);
@@ -72,19 +74,23 @@
             colgroup.appendChild(col2);
 
             const tbody = document.createElement('tbody');
+            const tr = document.createElement('tr');
             const th = document.createElement('th');
             th.innerText = 'URL 주소';
+            th.style.textAlign = 'center';
             const td = document.createElement('td');
             const input = document.createElement('input');
             input.type = 'text';
-            input.style.width = '1100px';
+            input.classList.add("form-control");
             input.name = 'inputUrl';
             input.value = "${urlAddr}";
 
             td.appendChild(input);
 
-            tbody.appendChild(th);
-            tbody.append(td);
+            tr.appendChild(th);
+            tr.appendChild(td);
+
+            tbody.appendChild(tr);
 
             table.appendChild(colgroup);
             table.appendChild(tbody);
@@ -103,15 +109,20 @@
 
             const div = document.createElement('div');
             div.style.border = '1px solid black';
-            div.style.height = '30px';
+            div.style.height = '45px';
 
             const span = document.createElement('span');
             span.style.float = 'left';
+            span.style.marginTop = '11px';
+            span.style.marginLeft = '10px';
             span.innerText = '콘텐츠 본문내용';
 
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.style.float = 'right';
+            btn.style.height = '30px';
+            btn.style.marginTop = '6px';
+            btn.style.marginRight = '10px';
             btn.id = 'add_btn';
             btn.addEventListener('click', function () {addRow()});
             btn.addEventListener('click', function () {checkDetection()});
@@ -144,6 +155,7 @@
             const thead = document.createElement('thead');
             thead.id = 'thead';
             const tr = document.createElement('tr');
+            tr.style.height = '45px';
 
             const th1 = document.createElement('th');
             th1.scope = 'col';
@@ -259,7 +271,7 @@
                 ,changeYear: true //option값 년 선택 가능
                 ,changeMonth: true //option값  월 선택 가능
                 ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://images.jautour.com/jautour/images/main/search/btn_cale.gif" //버튼 이미지 경로
+                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
                 ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
                 ,buttonText: "선택" //버튼 호버 텍스트
                 ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
@@ -286,7 +298,7 @@
                 ,changeYear: true //option값 년 선택 가능
                 ,changeMonth: true //option값  월 선택 가능
                 ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://images.jautour.com/jautour/images/main/search/btn_cale.gif" //버튼 이미지 경로
+                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
                 ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
                 ,buttonText: "선택" //버튼 호버 텍스트
                 ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
@@ -330,13 +342,9 @@
             }
 
             if (extension === "gif" || extension === "jpg" || extension === "png") {
-                // const newImage = document.createElement("img");
-                // newImage.setAttribute("class", 'reprImg');
-                //
                 //이미지 source 가져오기
                 const newImage = document.getElementsByClassName('reprImg')[0];
                 newImage.src = URL.createObjectURL(file);
-                //
                 newImage.style.width = "150px;";
                 newImage.style.height = "150px;";
                 newImage.style.visibility = "visible";
@@ -347,7 +355,7 @@
                     const oldImage = container.querySelector('.reprImg');
                     container.removeChild(oldImage);
                 }
-                // container.appendChild(newImage);
+
             } else {
                 alert("이미지 포맷이 맞지 않습니다.");
                 return false;
@@ -482,7 +490,7 @@
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
-                // inputFile.name = 'ctn_img' + String(i - 1);
+
 
                 var removeBtn = document.getElementById('remove_btn' + String(i));
                 removeBtn.id = 'remove_btn' + String(i - 1)
@@ -530,17 +538,12 @@
             curCtnImgShowBlock.id = 'ctn_image-show' + preIdx;
             preCtnImgShowBlock.id = 'ctn_image-show' + curIdx;
 
-            // const curCtnFeNmBlock = document.getElementById('ctn_fileName' + curIdx);
-            // const preCtnFeNmBlock = document.getElementById('ctn_fileName' + preIdx);
-            // curCtnFeNmBlock.id = 'ctn_fileName' + preIdx;
-            // preCtnFeNmBlock.id = 'ctn_fileName' + curIdx;
 
             const curInputFileBlock = document.getElementById('ctn_img' + curIdx);
             const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
             curInputFileBlock.id = 'ctn_img' + preIdx;
             preInputFileBlock.id = 'ctn_img' + curIdx;
-            // curInputFileBlock.name = 'ctn_img' + preIdx;
-            // preInputFileBlock.name = 'ctn_img' + curIdx;
+
 
             const curRmBtnBlock = document.getElementById('remove_btn' + curIdx);
             const preRmBtnBlock = document.getElementById('remove_btn'+ preIdx);
@@ -589,18 +592,11 @@
             nextCtnImgShowBlock.id = 'ctn_image-show' + String(currentIdx);
 
 
-            // const currentCtnFeNmBlock = document.getElementById('ctn_fileName' + String(currentIdx));
-            // const nextCtnFeNmBlock = document.getElementById('ctn_fileName' + String(nextIdx));
-            // currentCtnFeNmBlock.id = 'ctn_fileName' + String(nextIdx);
-            // nextCtnFeNmBlock.id = 'ctn_fileName' + String(currentIdx);
-
-
             const currentInputFileBlock = document.getElementById('ctn_img' + String(currentIdx));
             const nextInputFileBlock = document.getElementById('ctn_img' + String(nextIdx));
             currentInputFileBlock.id = 'ctn_img' + String(nextIdx);
             nextInputFileBlock.id = 'ctn_img' + String(currentIdx);
-            // currentInputFileBlock.name = 'ctn_img' + String(nextIdx);
-            // nextInputFileBlock.name = 'ctn_img' + String(currentIdx);
+
 
             const currentRmBtnBlock = document.getElementById('remove_btn' + String(currentIdx));
             const nextRmBtnBlock = document.getElementById('remove_btn' + String(nextIdx));
@@ -672,22 +668,11 @@
 
             newCell2.append(i_up, i_down);
 
-            // newCell3.classList.add('bottom_td');
             const feDiv = document.createElement('div');
             feDiv.classList.add('fileInput');
 
             const imgDiv = document.createElement('div');
             imgDiv.id = 'ctn_image-show' + String(my_index);
-
-            // var inputHidden = document.createElement("input");
-            // inputHidden.type = 'hidden';
-            // inputHidden.name = 'imgSeq';
-            //
-            // imgDiv.append(inputHidden);
-
-            // const feNmP = document.createElement('p');
-            // feNmP.id = 'ctn_fileName' + String(my_index);
-            // feNmP.style.float = 'left';
 
             feDiv.append(imgDiv);
 
@@ -721,17 +706,6 @@
         }
 
 
-        // function changeMenu(e) {
-        //     const cardDiv = document.getElementById('cardDiv');
-        //     const urlDiv = document.getElementById('urlDiv');
-        //     if (e.id === "tplCd1") {
-        //         cardDiv.style.display = 'none';
-        //         urlDiv.style.display = '';
-        //     } else {
-        //         cardDiv.style.display = '';
-        //         urlDiv.style.display = 'none';
-        //     }
-        // }
 
         function checkSave() {
             const contentName = document.getElementById("ctnNm");
@@ -861,11 +835,11 @@
                             <col width="8%">
                             <col width="17%">
                         </colgroup>
-                            <th>콘텐츠명</th>
+                            <th style="text-align: center">콘텐츠명</th>
                             <td colspan="3">
                                 <input type="text" class="form-control" name="ctnNm" id="ctnNm" value="${content.ctnNm}" maxlength="50" onchange="checkDetection()">
                             </td>
-                            <th>콘텐츠 구분</th>
+                            <th style="text-align: center">콘텐츠 구분</th>
                             <td colspan="3">
                                 <div>
                                     <c:if test="${content.ctnDiv eq 'IN'}">
@@ -890,21 +864,21 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>템플릿 유형</th>
+                            <th style="text-align: center">템플릿 유형</th>
                             <td>${tplNm}</td>
-                            <th>화면코드</th>
+                            <th style="text-align: center">화면코드</th>
                             <td>${ctnSeq}</td>
                             <th></th>
                             <td colspan="3"></td>
                         </tr>
                         <tr>
-                            <th>전시 기간</th>
+                            <th style="text-align: center">전시 기간</th>
                             <td colspan="3">
                                 <input type="text" class="datepicker" name="dspStDt" id="dspStDt" disabled>
                                 ~
                                 <input type="text" class="datepicker" name="dspEndDt" id="dspEndDt" onchange="checkDetection()">
                             </td>
-                            <th>전시 상태</th>
+                            <th style="text-align: center">전시 상태</th>
                             <td>
                                 <div>
                                     <c:if test="${content.dspYn eq 'Y'}">
@@ -927,7 +901,7 @@
                                     </label>
                                 </div>
                             </td>
-                            <th>댓글가능 여부</th>
+                            <th style="text-align: center">댓글가능 여부</th>
                             <td>
                                 <div>
                                     <c:if test="${content.cmtYn eq 'Y'}">
@@ -954,7 +928,7 @@
                         <tr>
                             <th></th>
                             <td colspan="3"></td>
-                            <th>콘텐츠 출처</th>
+                            <th style="text-align: center">콘텐츠 출처</th>
                             <td colspan="3">
                                 <select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
                                     <option selected value="${content.srcCd}" onchange="checkDetection()">${srcNm}</option>
@@ -965,7 +939,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th rowspan="2">대표이미지</th>
+                            <th rowspan="2" style="text-align: center">대표이미지</th>
                             <td rowspan="2" colspan="3">
                                 <div class="fileInput">
                                     <div class="image-show" id="image-show"></div>
@@ -978,7 +952,7 @@
                                     </label>
                                 </div>
                             </td>
-                            <th>상담하기</th>
+                            <th style="text-align: center">상담하기</th>
                             <td colspan="3">
                                 <div>
                                     <c:if test="${content.cstYn eq 'Y'}">
@@ -1003,13 +977,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>팝업문구</th>
+                            <th style="text-align: center">팝업문구</th>
                             <td colspan="3">
                                 <input type="text" class="form-control" name="popMsg" id="popMsg" value="${content.popMsg}" placeholder="25자 이내로 작성해 주세요" maxlength="25" onchange="checkDetection()">
                             </td>
                         </tr>
                         <tr>
-                            <th rowspan="2">대표이미지 개별등록</th>
+                            <th rowspan="2" style="text-align: center">대표이미지 개별등록</th>
                             <td colspan="7">
                                 <div style="width: 500px; height: 500px; float: left; margin-left: 30px;">
                                     <span style="margin-left: 170px; font-weight: bold">[빅 사이즈]</span><br><br>
@@ -1025,49 +999,6 @@
                         </tbody>
                     </table>
                 </div><br><br><br>
-<%--                <div class="table-responsive" id="cardDiv">--%>
-<%--                    <div style="border: 1px solid black; height: 30px;">--%>
-<%--                        <span style="float:left;">콘텐츠 본문내용</span>--%>
-<%--                        <button type="button" style="float: right" id="add_btn" onclick="addRow()">콘텐츠 추가</button>--%>
-<%--                    </div>--%>
-<%--                    <table class="table table-striped table-sm" id="extraContent">--%>
-<%--                        <colgroup id="colgroup">--%>
-<%--                            <col width="150px">--%>
-<%--                            <col width="150px">--%>
-<%--                            <col width="*">--%>
-<%--                            <col width="150px">--%>
-<%--                        </colgroup>--%>
-<%--                        <thead id="thead">--%>
-<%--                        <tr>--%>
-<%--                            <th scope="col" style="text-align: center;">본문</th>--%>
-<%--                            <th scope="col" style="text-align: center;">전시순서</th>--%>
-<%--                            <th scope="col" style="text-align: center">본문 이미지</th>--%>
-<%--                            <th scope="col" style="text-align: center;">영역 삭제</th>--%>
-<%--                        </tr>--%>
-<%--                        </thead>--%>
-<%--                        <tbody id="tbody">--%>
-<%--                        </tbody>--%>
-<%--                    </table>--%>
-<%--                </div>--%>
-<!--------------------------------------------------------------------------------------->
-<%--                <div class="table-responsive" id="urlDiv" style="display: none">--%>
-<%--                    <div style="border: 1px solid black; height: 30px;">--%>
-<%--                        <span style="float:left;">콘텐츠 본문내용</span>--%>
-<%--                    </div>--%>
-<%--                    <table class="table table-striped table-sm">--%>
-<%--                        <colgroup>--%>
-<%--                            <col width="150px">--%>
-<%--                            <col width="*">--%>
-<%--                        </colgroup>--%>
-<%--                        <tbody>--%>
-<%--                        <th>URL 주소</th>--%>
-<%--                        <td>--%>
-<%--                            <input type="text" style="width: 1100px;" name="inputUrl">--%>
-<%--                        </td>--%>
-<%--                        </tbody>--%>
-<%--                    </table>--%>
-<%--                </div>--%>
-
             </form>
             <br><br><br><br>
             <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">

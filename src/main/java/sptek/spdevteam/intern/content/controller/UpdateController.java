@@ -46,7 +46,7 @@ public class UpdateController {
 
         Content findContent = updateService.getContent(ctnSeq);
 
-        if (findContent.getUseYn().equals("n")) {
+        if (findContent.getUseYn().equals("N")) {
             return "content/content_error";
         }
 
@@ -71,7 +71,7 @@ public class UpdateController {
 
         String imgGrpId = findContent.getImgGrpId();
 
-        List<Image> images = updateService.getImages(imgGrpId, "y");
+        List<Image> images = updateService.getImages(imgGrpId, "Y");
         List<Image> ctnDetImages = new ArrayList<>();
 
         for (Image image : images) {
@@ -120,7 +120,7 @@ public class UpdateController {
 
         updateService.updateContent(content);
 
-        List<Image> images = updateService.getImages(content.getImgGrpId(), "y");
+        List<Image> images = updateService.getImages(content.getImgGrpId(), "Y");
         Image reprImage = null;
         List<Image> ctnDetImages = new ArrayList<>();
 
@@ -143,7 +143,7 @@ public class UpdateController {
             reprImage.setFeExt(fileUploadUtil.getExtension());
             reprImage.setFeSz(fileUploadUtil.getSize());
             reprImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-            reprImage.setUseYn("y");
+            reprImage.setUseYn("Y");
             reprImage.setImgOdr(0);
 
             fileUploadUtil.UploadImage(encFileName);
@@ -173,7 +173,7 @@ public class UpdateController {
                             newImage.setFeSz(util.getSize());
                             newImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
                             newImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-                            newImage.setUseYn("y");
+                            newImage.setUseYn("Y");
                             newImage.setImgOdr(odr);
 
                             util.UploadImage(encFileName);
@@ -194,7 +194,7 @@ public class UpdateController {
                             ctnDetImage.setFeExt(ctnDetUploadUtil.getExtension());
                             ctnDetImage.setFeSz(ctnDetUploadUtil.getSize());
                             ctnDetImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-                            ctnDetImage.setUseYn("y");
+                            ctnDetImage.setUseYn("Y");
                             ctnDetImage.setImgOdr(odr);
 
                             ctnDetUploadUtil.UploadImage(ctnDetEncFileName);
@@ -216,7 +216,7 @@ public class UpdateController {
                         newImage.setFeSz(util.getSize());
                         newImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
                         newImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-                        newImage.setUseYn("y");
+                        newImage.setUseYn("Y");
                         newImage.setImgOdr(odr);
 
                         util.UploadImage(encFileName);
@@ -251,7 +251,7 @@ public class UpdateController {
     public Message deleteContent(@RequestParam("ctnSeq") Integer ctnSeq) {
 
         Content findContent = updateService.getContent(ctnSeq);
-        findContent.setUseYn("n");
+        findContent.setUseYn("N");
         findContent.setModDt(Timestamp.valueOf(LocalDateTime.now()));
 
         updateService.updateContent(findContent);
@@ -266,7 +266,7 @@ public class UpdateController {
     public Message deleteImage(@RequestParam("imgSeq") Integer imgSeq) {
 
         Image findImage = updateService.getImage(imgSeq);
-        findImage.setUseYn("n");
+        findImage.setUseYn("N");
         findImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
 
         updateService.updateImage(findImage);
