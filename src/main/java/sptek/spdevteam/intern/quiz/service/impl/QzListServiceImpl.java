@@ -17,8 +17,8 @@ public class QzListServiceImpl implements QzListService {
     private final QzListMapper qzListMapper;
 
     @Override
-    public List<QuizDto> getList(HashMap<String, String> map) {
-        return qzListMapper.getList(map);
+    public List<QuizDto> getExcelList(HashMap<String, Object> map) {
+        return qzListMapper.getExcelList(map);
     }
 
     @Override

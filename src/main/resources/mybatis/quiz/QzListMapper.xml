@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sptek.spdevteam.intern.quiz.mybatis.QzListMapper">
-    <select id="getList" parameterType="hashmap" resultType="sptek.spdevteam.intern.quiz.domain.QuizDto">
+    <select id="getExcelList" parameterType="hashmap" resultType="sptek.spdevteam.intern.quiz.domain.QuizDto">
         SELECT
             qz_seq as qzSeq,
             img_grp_id as imgGrpId,
@@ -18,7 +18,7 @@
         FROM internsc.tb_qz
         WHERE 1=1
             <if test='searchType.equals("regDay")'>
-                AND reg_dt = #{regDt}
+                AND reg_dt BETWEEN to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS') AND to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
             </if>
             <if test='searchType.equals("period")'>
                 AND st_dt <![CDATA[>=]]> to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
@@ -31,12 +31,7 @@
                 AND qz_nm LIKE '%' || #{qzNm} || '%'
             </if>
 
-            <if test='searchType.equals("regDay")'>
-                ORDER BY reg_dt
-            </if>
-            <if test='searchType.equals("period")'>
-                ORDER BY st_dt
-            </if>
+            ORDER BY end_dt DESC ,qz_seq DESC ,dsp_yn DESC
     </select>
 
     <select id="getBoardList" parameterType="hashmap" resultType="sptek.spdevteam.intern.quiz.domain.QuizDto">

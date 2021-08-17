@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface QzListService {
 
-    List<QuizDto> getList(HashMap<String, String> map);
+    List<QuizDto> getExcelList(HashMap<String, Object> map);
 
     List<QuizDto> getBoardList(HashMap<String, Object> map);
 

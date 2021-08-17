@@ -353,6 +353,33 @@
         sendData();
     }
 
+
+    // function sendExcelData() {
+    //     const target = document.getElementById('searchType');
+    //     const searchType = target.options[target.selectedIndex].value;
+    //
+    //     const dspStDt = document.getElementById('startdate').value;
+    //     const dspEndDt = document.getElementById('enddate').value;
+    //     const dspYn = $(':radio[name="dspYn"]:checked').val();
+    //     const qzNm = document.getElementById('qzNm').value;
+    //
+    //     const params = {
+    //         "searchType": searchType,
+    //         "stDt": dspStDt,
+    //         "endDt": dspEndDt,
+    //         "dspYn": dspYn,
+    //         "qzNm": qzNm,
+    //     }
+    //
+    //     $.ajax({
+    //         url: "/quiz/excel/download",
+    //         method: "post",
+    //         data: params,
+    //         sync: false,
+    //     });
+    // }
+
+
     function checkAll(input) {
         const checkBoxes = document.getElementsByName('checkbox');
         checkBoxes.forEach((checkBox) => {
@@ -488,151 +515,149 @@
                     </div>
                 </div>
             </div>
-            <!-- Form Table 영역 // -->
-
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
-                <%--                            <form action="/content/search" method="post" id="searchForm">--%>
-                <table class="table table-sm seaerch-table" >
-                    <tbody>
-                    <colgroup>
-                        <col width="130px">
-                        <col width="38%">
-                        <col width="130px">
-                        <col width="*">
-                    </colgroup>
-                    <tr style="height: 80px;">
-                        <th style="text-align: center;">기간</th>
-                        <td>
-                            <select name="searchType" id="searchType" style="height: 40px;">
-                                <option value="period">진행기간</option>
-                                <option value="regDay">등록일</option>
-                            </select>
-                            <label for="startdate"></label><input type="text" class="datepicker" name="dspStDt" id="startdate" style="margin-left:6px; width:110px; height:40px;">
-                            ~
-                            <label for="enddate"></label><input type="text" class="datepicker" name="dspEndDt" id="enddate" style="margin-left:6px; width:110px; height:40px;">
-                        </td>
-                        <th style="text-align: center;">전시상태</th>
-                        <td>
-                            <div>
-                                <input class="form-check-input" type="radio" name="dspYn" value="all" id="flexRadio1" checked style="margin-left:6px; margin-right:6px;">
-                                <label class="display-state-label" for="flexRadio1">
-                                    전체
-                                </label>
-                                <input class="form-check-input" type="radio" name="dspYn" value="Y" id="flexRadio2" style="margin-left:6px; margin-right:6px;">
-                                <label class="display-state-label" for="flexRadio2">
-                                    전시
-                                </label>
-                                <input class="form-check-input" type="radio" name="dspYn" value="N" id="flexRadio3" style="margin-left:6px; margin-right:6px;">
-                                <label class="display-state-label" for="flexRadio3">
-                                    전시안함
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr style="height: 80px;">
-                        <th style="text-align: center;">퀴즈</th>
-                        <td>
-                            <input type="text" name="qzNm" class="form-control" id="qzNm" style="width:570px;height:40px; margin-right:3px; display: inline-block;">
-                        </td>
-                        <th></th>
-                        <td></td>
-                    </tr>
-                    </tbody>
-                </table>
-                <%--                            </form>--%>
-            </div>
-            <!-- Button Set (middle 정렬) // -->
-            <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
-                <div class="btn-toolbar mb-2">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:80px; height:40px " id="btn_reset" onclick="resetPage();">초기화</button>
-                        <button type="button" class="btn btn-primary" style="margin-right:6px; width:80px; height:40px " id="btn_submit" onclick="sendData();">검색</button>
-                    </div>
+            <form action="/quiz/excel/download" style="display: inline" method="post">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
+                    <table class="table table-sm seaerch-table" >
+                        <tbody>
+                        <colgroup>
+                            <col width="130px">
+                            <col width="38%">
+                            <col width="130px">
+                            <col width="*">
+                        </colgroup>
+                        <tr style="height: 80px;">
+                            <th style="text-align: center;">기간</th>
+                            <td>
+                                <select name="searchType" id="searchType" style="height: 40px;">
+                                    <option value="period">진행기간</option>
+                                    <option value="regDay">등록일</option>
+                                </select>
+                                <label for="startdate"></label><input type="text" class="datepicker" name="dspStDt" id="startdate" style="margin-left:6px; width:110px; height:40px;">
+                                ~
+                                <label for="enddate"></label><input type="text" class="datepicker" name="dspEndDt" id="enddate" style="margin-left:6px; width:110px; height:40px;">
+                            </td>
+                            <th style="text-align: center;">전시상태</th>
+                            <td>
+                                <div>
+                                    <input class="form-check-input" type="radio" name="dspYn" value="all" id="flexRadio1" checked style="margin-left:6px; margin-right:6px;">
+                                    <label class="display-state-label" for="flexRadio1">
+                                        전체
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="dspYn" value="Y" id="flexRadio2" style="margin-left:6px; margin-right:6px;">
+                                    <label class="display-state-label" for="flexRadio2">
+                                        전시
+                                    </label>
+                                    <input class="form-check-input" type="radio" name="dspYn" value="N" id="flexRadio3" style="margin-left:6px; margin-right:6px;">
+                                    <label class="display-state-label" for="flexRadio3">
+                                        전시안함
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr style="height: 80px;">
+                            <th style="text-align: center;">퀴즈</th>
+                            <td>
+                                <input type="text" name="qzNm" class="form-control" id="qzNm" style="width:570px;height:40px; margin-right:3px; display: inline-block;">
+                            </td>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div class="frameLine mb-3"></div>
-
-            <!-- 팝업 될 레이어 -->
-            <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content" style="width: 600px; height: 400px; margin-top: 200px;">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">전시설정</h5>
-                            <button type="button" class="btn btn-light" onclick="$('#testModal').modal('hide');">X</button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-sm seaerch-table">
-                                <tbody>
-                                <tr style="height: 50px">
-                                    <th style="width: 100px">전시상태</th>
-                                    <td>
-                                        <div>
-                                            <input class="form-check-input" type="radio" name="changeDspYn" value="Y" id="dspChangeRadioY" style="margin-left:6px; margin-right:6px;">
-                                            <label class="display-state-label" for="flexRadio2">
-                                                전시
-                                            </label>
-                                            <input class="form-check-input" type="radio" name="changeDspYn" value="N" id="dspChangeRadioN" style="margin-left:6px; margin-right:6px;">
-                                            <label class="display-state-label" for="flexRadio3">
-                                                전시안함
-                                            </label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table><br>
-                            <div style="text-align: center;">선택하신 항목에 일괄 적용합니다</div>
-                        </div>
-                        <div style="margin:auto" class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_reset" onclick="$('#testModal').modal('hide');">취소</button>
-                            <button type="button" class="btn btn-primary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_submit" onclick="changeDspConfig()">저장</button>
+                <!-- Button Set (middle 정렬) // -->
+                <div class="d-flex justify-content-center flex-wrap flex-md-nowrap">
+                    <div class="btn-toolbar mb-2">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:80px; height:40px " id="btn_reset" onclick="resetPage();">초기화</button>
+                            <button type="button" class="btn btn-primary" style="margin-right:6px; width:80px; height:40px " id="btn_submit" onclick="sendData();">검색</button>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="frameLine mb-3"></div>
 
-            <div id="chart" class="table-responsive" style="display: none">
-                <table class="table table-striped table-sm">
-                    <thead>
-                    <tr>
-                        <td colspan="9">
-                            <div style="float: left;">
-                                <button type="button" class="btn btn-outline-secondary">엑셀 다운로드</button>
-                                <button type="button" class="btn btn-outline-secondary" onclick="displayConfig()">전시 설정</button>
+                <!-- 팝업 될 레이어 -->
+                <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content" style="width: 600px; height: 400px; margin-top: 200px;">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">전시설정</h5>
+                                <button type="button" class="btn btn-light" onclick="$('#testModal').modal('hide');">X</button>
                             </div>
-                            <div id="theadRight" style="float: right;">
-                                <label>
-                                    <select name="dspCnt" class="form-select w100" id="dspCnt" style="margin-left:6px; margin-right:3px; display: inline-block;">
-                                        <option value="20" selected>20개</option>
-                                        <option value="50">50개</option>
-                                        <option value="100">100개</option>
-                                    </select>
-                                </label>
-                                <input type="text" name="dspPage" class="form-control" id="dspPage" onkeypress="if(event.keyCode == 13) pageCheck($('#dspPage').val());" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
-                                <span id="maxPage" value="${pagination.endPage}" style="font-size: 15px;">
-                                        / ${pagination.endPage}
-                                </span>
+                            <div class="modal-body">
+                                <table class="table table-sm seaerch-table">
+                                    <tbody>
+                                    <tr style="height: 50px">
+                                        <th style="width: 100px">전시상태</th>
+                                        <td>
+                                            <div>
+                                                <input class="form-check-input" type="radio" name="changeDspYn" value="Y" id="dspChangeRadioY" style="margin-left:6px; margin-right:6px;">
+                                                <label class="display-state-label" for="flexRadio2">
+                                                    전시
+                                                </label>
+                                                <input class="form-check-input" type="radio" name="changeDspYn" value="N" id="dspChangeRadioN" style="margin-left:6px; margin-right:6px;">
+                                                <label class="display-state-label" for="flexRadio3">
+                                                    전시안함
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table><br>
+                                <div style="text-align: center;">선택하신 항목에 일괄 적용합니다</div>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style="text-align: center; width:40px; height: 40px" scope="col">
-                            <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this)">
-                        </th>
-                        <th style="text-align: center; width:40px;" scope="col">번호</th>
-                        <th style="text-align: center; width:150px;" scope="col">퀴즈명</th>
-                        <th style="text-align: center; width:60px;" scope="col">유형</th>
-                        <th style="text-align: center; width:60px;" scope="col">퀴즈번호</th>
-                        <th style="text-align: center; width:150px;" scope="col">진행기간</th>
-                        <th style="text-align: center; width:60px;" scope="col">전시상태</th>
-                        <th style="text-align: center; width:100px;" scope="col">등록일</th>
-                    </tr>
-                    </thead>
-                    <tbody id="qzList">
-                    </tbody>
-                </table>
-            </div>
-            <div id = navigation style="display:none">
-            </div>
+                            <div style="margin:auto" class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_reset" onclick="$('#testModal').modal('hide');">취소</button>
+                                <button type="button" class="btn btn-primary" style="margin-right:6px; width:70px; height:40px " id="btn_dsp_submit" onclick="changeDspConfig()">저장</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chart" class="table-responsive" style="display: none">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <td colspan="9">
+                                <div style="float: left;">
+                                    <button type="submit" class="btn btn-outline-secondary">엑셀 다운로드</button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="displayConfig()">전시 설정</button>
+                                </div>
+                                <div id="theadRight" style="float: right;">
+                                    <label>
+                                        <select name="dspCnt" class="form-select w100" id="dspCnt" style="margin-left:6px; margin-right:3px; display: inline-block;">
+                                            <option value="20" selected>20개</option>
+                                            <option value="50">50개</option>
+                                            <option value="100">100개</option>
+                                        </select>
+                                    </label>
+                                    <input type="text" name="dspPage" class="form-control" id="dspPage" onkeypress="if(event.keyCode == 13) pageCheck($('#dspPage').val());" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
+                                    <span id="maxPage" value="${pagination.endPage}" style="font-size: 15px;">
+                                            / ${pagination.endPage}
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: center; width:40px; height: 40px" scope="col">
+                                <input type="checkbox" name="checkAll" id="checkAll" onchange="checkAll(this)">
+                            </th>
+                            <th style="text-align: center; width:40px;" scope="col">번호</th>
+                            <th style="text-align: center; width:150px;" scope="col">퀴즈명</th>
+                            <th style="text-align: center; width:60px;" scope="col">유형</th>
+                            <th style="text-align: center; width:60px;" scope="col">퀴즈번호</th>
+                            <th style="text-align: center; width:150px;" scope="col">진행기간</th>
+                            <th style="text-align: center; width:60px;" scope="col">전시상태</th>
+                            <th style="text-align: center; width:100px;" scope="col">등록일</th>
+                        </tr>
+                        </thead>
+                        <tbody id="qzList">
+                        </tbody>
+                    </table>
+                </div>
+                <div id = navigation style="display:none">
+                </div>
+            </form>
         </main>
     </div>
 </div>
