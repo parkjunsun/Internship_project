@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="/js/build/jquery.datetimepicker.full.min.js"></script>
+    <link rel="stylesheet" href="/css/jquery.datetimepicker.min.css">
+    <script type="text/javascript" src="/js/moment.js"></script>
     <style>
 
         .bottom_td {
@@ -43,69 +46,151 @@
             document.getElementById('tplCd0').checked = true;
         };
 
-        $(function() {
-            //input을 datepicker로 선언
-            $("#dspStDt").datepicker({
-                dateFormat: 'yy-mm-dd' //달력 날짜 형태
-                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-                ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
-                ,changeYear: true //option값 년 선택 가능
-                ,changeMonth: true //option값  월 선택 가능
-                ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-                ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
-                ,buttonText: "선택" //버튼 호버 텍스트
-                ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
-                ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
-                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-                ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
-                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
-                ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-                ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
-                ,onSelect:function(d){
-                    var start = new Date($("#dspStDt").datepicker("getDate"));
-                    var end = new Date($("#dspEndDt").datepicker("getDate"));
-                    if (end - start < 0){
-                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-                        $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-                    }
+        // $(function() {
+        //     //input을 datepicker로 선언
+        //     $("#dspStDt").datepicker({
+        //         dateFormat: 'yy-mm-dd' //달력 날짜 형태
+        //         ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        //         ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+        //         ,changeYear: true //option값 년 선택 가능
+        //         ,changeMonth: true //option값  월 선택 가능
+        //         ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+        //         ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+        //         ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
+        //         ,buttonText: "선택" //버튼 호버 텍스트
+        //         ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+        //         ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
+        //         ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
+        //         ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
+        //         ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+        //         ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        //         ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+        //         ,onSelect:function(d){
+        //             var start = new Date($("#dspStDt").datepicker("getDate"));
+        //             var end = new Date($("#dspEndDt").datepicker("getDate"));
+        //             if (end - start < 0){
+        //                 alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+        //                 $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //             }
+        //
+        //         }
+        //     });
+        //     $("#dspEndDt").datepicker({
+        //         dateFormat: 'yy-mm-dd' //달력 날짜 형태
+        //         ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        //         ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+        //         ,changeYear: true //option값 년 선택 가능
+        //         ,changeMonth: true //option값  월 선택 가능
+        //         ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+        //         ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+        //         ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
+        //         ,buttonText: "선택" //버튼 호버 텍스트
+        //         ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+        //         ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
+        //         ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
+        //         ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
+        //         ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+        //         ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        //         ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+        //         ,onSelect:function(d){
+        //             var start = new Date($("#dspStDt").datepicker("getDate"));
+        //             var end = new Date($("#dspEndDt").datepicker("getDate"));
+        //             if (end - start < 0){
+        //                 alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+        //                 $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //             }
+        //         }
+        //     });
+        //
+        //
+        //     //초기값을 오늘 날짜로 설정해줘야 합니다.
+        //     $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //     $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //     $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
+        //
+        // });
+
+        function getCurrentDate()
+        {
+            var date = new Date();
+            var year = date.getFullYear().toString();
+
+            var month = date.getMonth() + 1;
+            month = month < 10 ? '0' + month.toString() : month.toString();
+
+            var day = date.getDate();
+            day = day < 10 ? '0' + day.toString() : day.toString();
+
+            var hour = date.getHours();
+            hour = hour < 10 ? '0' + hour.toString() : hour.toString();
+
+            var minutes = date.getMinutes();
+            var remain = minutes % 10;
+            minutes = minutes - remain;
+            minutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+
+            // return year + month + day + hour + minutes + seconds;
+            return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes
+        }
+
+
+
+        $(function () {
+            jQuery.datetimepicker.setLocale('kr');
+
+            $('#dspStDt').datetimepicker({
+                format: 'Y-m-d H:i',
+                // defaultDate: moment(getCurrentDate()).subtract(7, 'days').format("YYYY-MM-DD HH:mm"),
+                step: 10,
+                onSelectDate: function () {
+                    var start = $('#dspStDt').val();
+                    var front = start.substr(0, 14);
+                    var back = parseInt(start.substr(14, 2));
+
+                    var remain = back % 10;
+                    back = back - remain;
+                    back = back < 10 ? '0' + back.toString() : back.toString();
+
+                    var newStart = front + back;
+                    $('#dspStDt').val(newStart);
 
                 }
             });
-            $("#dspEndDt").datepicker({
-                dateFormat: 'yy-mm-dd' //달력 날짜 형태
-                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-                ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
-                ,changeYear: true //option값 년 선택 가능
-                ,changeMonth: true //option값  월 선택 가능
-                ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-                ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
-                ,buttonText: "선택" //버튼 호버 텍스트
-                ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
-                ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
-                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-                ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
-                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
-                ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-                ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
-                ,onSelect:function(d){
-                    var start = new Date($("#dspStDt").datepicker("getDate"));
-                    var end = new Date($("#dspEndDt").datepicker("getDate"));
-                    if (end - start < 0){
-                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-                        $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-                    }
+
+            $('#dspEndDt').datetimepicker({
+                format: 'Y-m-d H:i',
+                // defaultDate: moment(getCurrentDate()).format("YYYY-MM-DD HH:mm"),
+                step: 10,
+                onSelectDate: function () {
+                    var start = $('#dspEndDt').val();
+                    var front = start.substr(0, 14);
+                    var back = parseInt(start.substr(14, 2));
+
+                    var remain = back % 10;
+                    back = back - remain;
+                    back = back < 10 ? '0' + back.toString() : back.toString();
+
+                    var newStart = front + back;
+                    $('#dspEndDt').val(newStart);
                 }
-            });
+            })
 
+            // $('#dspStDt').val(moment(getCurrentDate()).subtract(7, 'days').format("YYYY-MM-DD HH:mm"));
+            // $('#dspEndDt').val(moment(getCurrentDate()).format("YYYY-MM-DD HH:mm"));
 
-            //초기값을 오늘 날짜로 설정해줘야 합니다.
-            $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-            $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-            $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
+            $('#dspStDt').val("시작일");
+            $('#dspEndDt').val("종료일");
+
+            $('#stToggle').on('click', function () {
+                $('#dspStDt').datetimepicker('toggle');
+            })
+
+            $('#endToggle').on('click', function () {
+                $('#dspEndDt').datetimepicker('toggle');
+            })
 
         });
+
 
         function loadFile(input) {
             const file = input.files[0];	//선택된 파일 가져오기
@@ -643,10 +728,27 @@
             const inputUrl = document.getElementsByName("inputUrl")[0];
             const targetOption = document.getElementById("srcCd");
 
+            const dspStDtTime = document.getElementById("dspStDt").value;
+            const dspEndDtTime = document.getElementById("dspEndDt").value;
+            const currentDateTime = getCurrentDate();
+
+
+            const dspStDt = dspStDtTime.substr(0, 10);
+            const dspEndDt = dspEndDtTime.substr(0, 10);
+
+            const currentDate = currentDateTime.substr(0, 10);
+
+
             if (contentName.value === "") {
                 alert("콘텐츠명을 작성해주세요.");
                 return false;
             }
+
+
+             if (dspStDtTime > currentDateTime || dspStDt >= dspEndDt) {
+                 alert("전시기간이 잘못 설정되었습니다.");
+                 return false;
+             }
 
 
             if (targetOption.options[targetOption.selectedIndex].text === "전체") {
@@ -771,8 +873,10 @@
                             <th style="text-align: center">전시 기간</th>
                             <td>
                                 <input type="text" class="datepicker" name="dspStDt" id="dspStDt">
+                                <button type="button" id="stToggle" class="input-group-text" style="display: inline-block;  background-color: transparent; border:0 ;background-image: url(http://jqueryui.com/resources/demos/datepicker/images/calendar.gif); background-repeat: no-repeat; background-size: 23px 25px; width: 23px; height: 25px;"></button>
                                 ~
                                 <input type="text" class="datepicker" name="dspEndDt" id="dspEndDt">
+                                <button type="button" id="endToggle" class="input-group-text" style="display: inline-block; background-color: transparent; border:0; background-image: url(http://jqueryui.com/resources/demos/datepicker/images/calendar.gif); background-repeat: no-repeat; background-size: 23px 25px; width: 23px; height: 25px;"></button>
                             </td>
                             <th style="text-align: center">전시 상태</th>
                             <td>

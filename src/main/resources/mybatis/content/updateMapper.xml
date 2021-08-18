@@ -87,6 +87,7 @@
         ,   ctn_nm = #{ctnNm}
         ,   ctn_div = #{ctnDiv}
         ,   dsp_yn = #{dspYn}
+        ,   dsp_end_dt = to_timestamp(#{dspEndDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
         ,   cmt_yn = #{cmtYn}
         ,   cst_yn = #{cstYn}
         ,   pop_msg = #{popMsg}

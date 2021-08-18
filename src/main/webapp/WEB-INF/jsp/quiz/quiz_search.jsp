@@ -419,11 +419,16 @@
     //         "qzNm": qzNm,
     //     }
     //
+    //     alert(params);
+    //
     //     $.ajax({
-    //         url: "/quiz/excel/download",
+    //         url: "/quiz/excel/download2",
     //         method: "post",
     //         data: params,
     //         sync: false,
+    //         success: function (data) {
+    //             alert("성공");
+    //         }
     //     });
     // }
 
@@ -676,15 +681,16 @@
                     </div>
                 </div>
 
+                <!--검색결과 리스트 -->
                 <div id="chart" class="table-responsive" style="display: none">
                     <div style="margin-bottom: 8px;"><span>조회결과 </span><span id="searchCnt" style="color:#0064FF">10</span><span>건 | </span><span>선택 </span><span id="checkCnt" style="color:#0064FF">0</span><span>건</span></div>
                     <table class="table table-striped table-sm">
                         <thead>
-                        <tr>
+                        <tr style="background-color: #e6efff">
                             <td colspan="9">
                                 <div style="float: left;">
-                                    <button type="submit" class="btn btn-outline-secondary" form="excelDownLoadForm">엑셀 다운로드</button>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="displayConfig()">전시 설정</button>
+                                    <button type="submit" class="btn btn-outline-secondary" form="excelDownLoadForm" style="background-color: #ecedee; color: black; font-size: 15px">엑셀 다운로드</button>
+                                    <button type="button" class="btn btn-outline-secondary" onclick="displayConfig()" style="background-color: #ecedee; color: black; font-size: 15px">전시 설정</button>
                                 </div>
                                 <div id="theadRight" style="float: right;">
                                     <label>

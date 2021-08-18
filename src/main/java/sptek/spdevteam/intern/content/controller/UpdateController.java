@@ -50,8 +50,12 @@ public class UpdateController {
             return "content/content_error";
         }
 
-        findContent.setDspStDt(findContent.getDspStDt().substring(0, 10));
-        findContent.setDspEndDt(findContent.getDspEndDt().substring(0, 10));
+//        findContent.setDspStDt(findContent.getDspStDt().substring(0, 10));
+//        findContent.setDspEndDt(findContent.getDspEndDt().substring(0, 10));
+
+
+        findContent.setDspStDt(findContent.getDspStDt().substring(0, 16));
+        findContent.setDspEndDt(findContent.getDspEndDt().substring(0, 16));
 
         String tplCd = findContent.getTplCd();
         String tplNm = "";
