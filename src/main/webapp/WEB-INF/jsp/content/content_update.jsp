@@ -26,6 +26,16 @@
             color: white;
             cursor: pointer;
         }
+
+        .label-disabled {
+            pointer-events: none;
+            background-color: #eee;
+            color: #555;
+            opacity: 1;
+            cursor: default;
+            padding: 6px 25px;
+            border-radius: 4px;
+        }
     </style>
 
     <script type="text/javascript">
@@ -41,11 +51,38 @@
             };
         })(jQuery);
 
+
+
         var Detection = false;
 
         function checkDetection() {
             Detection = true;
         }
+
+
+        function getCurrentDate()
+        {
+            var date = new Date();
+            var year = date.getFullYear().toString();
+
+            var month = date.getMonth() + 1;
+            month = month < 10 ? '0' + month.toString() : month.toString();
+
+            var day = date.getDate();
+            day = day < 10 ? '0' + day.toString() : day.toString();
+
+            var hour = date.getHours();
+            hour = hour < 10 ? '0' + hour.toString() : hour.toString();
+
+            var minutes = date.getMinutes();
+            var remain = minutes % 10;
+            minutes = minutes - remain;
+            minutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+
+            // return year + month + day + hour + minutes + seconds;
+            return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes
+        }
+
 
         function addUrlRow() {
             const rootDiv = document.createElement('div');
@@ -84,6 +121,7 @@
             const input = document.createElement('input');
             input.type = 'text';
             input.classList.add("form-control");
+            input.id = 'inputUrl';
             input.name = 'inputUrl';
             input.value = "${urlAddr}";
 
@@ -197,11 +235,10 @@
             form.appendChild(rootDiv);
         }
 
+
         var ctnDetImages = [];
 
         window.onload = function(){
-            // document.getElementById('tplCd0').checked = true;
-            $('input[name=dspStDt]').datepicker('disable');
 
             if ("${tplCd}" === "T0001") {
                 if (document.getElementById('urlDiv') != null) {
@@ -226,7 +263,6 @@
                 ctnDetImages.push(obj);
                 </c:forEach>
 
-
                 var cur = 1;
                 for (let i=0; i<ctnDetImages.length; i++) {
                     addRow();
@@ -245,6 +281,10 @@
                     inputHidden.name = 'imgSeq';
                     inputHidden.value = ctnDetImages[i]["imgSeq"];
 
+                    if (document.getElementById('defaultImg' + cur) != null) {
+                        document.getElementById('defaultImg' + cur).remove();
+                    }
+
                     var container = document.getElementById('ctn_image-show' + cur);
                     if (container.querySelector('.ctnDetImg') != null) {
                         const oldImage = container.querySelector('.ctnDetImg');
@@ -262,6 +302,144 @@
                 addUrlRow();
                 ctn_index = 0;
             }
+
+
+            const today = getCurrentDate().substr(0, 10);
+            const dspStDt = document.getElementById("dspStDt").value.substr(0, 10);
+            const dspEndDt = document.getElementById("dspEndDt").value.substr(0, 10);
+
+
+            if (today >= dspStDt && today < dspEndDt) {
+                const dspStDtInput = document.getElementById("dspStDt");
+                dspStDtInput.setAttribute("readonly", "readonly");
+                dspStDtInput.setAttribute("disabled", "disabled");
+
+                const dspStToggle = document.getElementById("stToggle");
+                dspStToggle.style.display = "inline-block";
+                dspStToggle.style.backgroundColor = "transparent";
+                dspStToggle.style.border = 0;
+                dspStToggle.style.backgroundImage = "url('http://jqueryui.com/resources/demos/datepicker/images/calendar.gif')";
+                dspStToggle.style.backgroundRepeat = "no-repeat";
+                dspStToggle.style.backgroundSize = "23px 25px";
+                dspStToggle.style.width = "23px";
+                dspStToggle.style.height = "25px";
+
+                dspStToggle.style.filter = "grayscale(100%)";
+                dspStToggle.style.cursor = "default";
+                dspStToggle.setAttribute("disabled", "disabled");
+            }
+
+            if (today >= dspEndDt) {
+                const ctnNm = document.getElementById("ctnNm");
+                ctnNm.setAttribute("readonly", "readonly");
+
+                const ctnDivs = document.getElementsByName("ctnDiv");
+                for (let ctnDiv of ctnDivs) {
+                    ctnDiv.setAttribute("disabled", "disabled");
+                }
+
+                const dspStDtInput = document.getElementById("dspStDt");
+                dspStDtInput.setAttribute("readonly", "readonly");
+                dspStDtInput.setAttribute("disabled", "disabled");
+
+                const dspStToggle = document.getElementById("stToggle");
+                dspStToggle.style.display = "inline-block";
+                dspStToggle.style.backgroundColor = "transparent";
+                dspStToggle.style.border = 0;
+                dspStToggle.style.backgroundImage = "url('http://jqueryui.com/resources/demos/datepicker/images/calendar.gif')";
+                dspStToggle.style.backgroundRepeat = "no-repeat";
+                dspStToggle.style.backgroundSize = "23px 25px";
+                dspStToggle.style.width = "23px";
+                dspStToggle.style.height = "25px";
+
+                dspStToggle.style.filter = "grayscale(100%)";
+                dspStToggle.style.cursor = "default";
+                dspStToggle.setAttribute("disabled", "disabled");
+
+                const dspEndDtInput = document.getElementById("dspEndDt");
+                dspEndDtInput.setAttribute("readonly", "readonly");
+                dspEndDtInput.setAttribute("disabled", "disabeld");
+
+                const dspEndToggle = document.getElementById("endToggle");
+                dspEndToggle.style.display = "inline-block";
+                dspEndToggle.style.backgroundColor = "transparent";
+                dspEndToggle.style.border = 0;
+                dspEndToggle.style.backgroundImage = "url('http://jqueryui.com/resources/demos/datepicker/images/calendar.gif')";
+                dspEndToggle.style.backgroundRepeat = "no-repeat";
+                dspEndToggle.style.backgroundSize = "23px 25px";
+                dspEndToggle.style.width = "23px";
+                dspEndToggle.style.height = "25px";
+
+                dspEndToggle.style.filter = "grayscale(100%)";
+                dspEndToggle.style.cursor = "default";
+                dspEndToggle.setAttribute("disabled", "disabled");
+
+                const dspYns = document.getElementsByName("dspYn");
+                for (let dspYn of dspYns) {
+                    dspYn.setAttribute("disabled", "disabled");
+                }
+
+                const cmtYns = document.getElementsByName("cmtYn");
+                for (let cmtYn of cmtYns) {
+                    cmtYn.setAttribute("disabled", "disabled");
+                }
+
+                const srcSelect = document.getElementById("srcCd");
+                srcSelect.setAttribute("disabled", "disabled");
+
+                const reprImgBtn = document.getElementById("repr_img");
+                reprImgBtn.setAttribute("disabled", "disabled");
+
+                const cstYns = document.getElementsByName("cstYn");
+                for (let cstYn of cstYns) {
+                    cstYn.setAttribute("disabled", "disabled");
+                }
+
+                const popMsg = document.getElementById("popMsg");
+                popMsg.setAttribute("readonly", "readonly");
+
+                if ("${tplCd}" === "T0001") {
+                    const addBtn = document.getElementById("add_btn");
+                    addBtn.setAttribute("disabled", "disabled");
+
+                    const upArrows = document.getElementsByName("up_arrow");
+                    for (let upArrow of upArrows) {
+                        upArrow.classList.add("disabled");
+                        upArrow.style.cursor = "default";
+                        upArrow.style.pointerEvents = "none";
+                    }
+
+                    const downArrows = document.getElementsByName("down_arrow");
+                    for (let downArrow of downArrows) {
+                        downArrow.classList.add("disabled");
+                        downArrow.style.cursor = "default";
+                        downArrow.style.pointerEvents = "none";
+                    }
+
+
+                    const imgFindBtns = document.getElementsByName("ctn_img");
+                    for (let findBtn of imgFindBtns) {
+                        findBtn.setAttribute("disabled", "disabled");
+                    }
+
+                    const imgRemoveBtns = document.getElementsByName("remove_btn");
+                    for (let RemoveBtn of imgRemoveBtns) {
+                        RemoveBtn.setAttribute("disabled", "disabled");
+                    }
+
+                    const labels = document.getElementsByClassName("file-input");
+                    for (let label of labels) {
+                        label.style.display = "none";
+                    }
+                } else if ("${tplCd}" === "T0002") {
+                    const inputUrl = document.getElementById("inputUrl");
+                    inputUrl.setAttribute("readonly", "readonly");
+                }
+
+                const btnSubmit = document.getElementById("btn_submit");
+                btnSubmit.style.display = "none";
+            }
+
         };
 
         <%--$(function() {--%>
@@ -334,6 +512,20 @@
             $('#dspStDt').datetimepicker({
                 format: 'Y-m-d H:i',
                 defaultDate: moment('${content.dspStDt}').format("YYYY-MM-DD HH:mm"),
+                step: 10,
+                onSelectDate: function () {
+                    var start = $('#dspStDt').val();
+                    var front = start.substr(0, 14);
+                    var back = parseInt(start.substr(14, 2));
+
+                    var remain = back % 10;
+                    back = back - remain;
+                    back = back < 10 ? '0' + back.toString() : back.toString();
+
+                    var newStart = front + back;
+                    $('#dspStDt').val(newStart);
+
+                }
             });
 
             $('#dspEndDt').datetimepicker({
@@ -421,6 +613,12 @@
             }
 
             if (extension === "gif" || extension === "jpg" || extension === "png") {
+
+                if (document.getElementById("defaultImg" + cur) != null) {
+                    var defaultImg = document.getElementById("defaultImg" + cur);
+                    defaultImg.remove();
+                }
+
                 var newImage = document.createElement("img");
                 newImage.setAttribute("class", "ctnDetImg");
 
@@ -684,6 +882,7 @@
             const i_up = document.createElement('i');
             i_up.classList.add('bi', 'hoverBtn', 'bi-file-arrow-up');
             i_up.id = 'up_arrow' + String(my_index);
+            i_up.setAttribute("name", "up_arrow");
             i_up.style.cursor = 'pointer';
             i_up.addEventListener('click', function () {moveUpTr(this)});
 
@@ -691,6 +890,7 @@
             const i_down = document.createElement('i');
             i_down.classList.add('bi', 'hoverBtn', 'bi-file-arrow-down');
             i_down.id = 'down_arrow' + String(my_index);
+            i_down.setAttribute("name", "down_arrow");
             i_down.style.cursor = 'pointer';
             i_down.addEventListener('click', function () {moveDownTr(this)});
 
@@ -711,14 +911,25 @@
             newCell2.append(i_up, i_down);
 
             const feDiv = document.createElement('div');
+            feDiv.style.display = "inline-block";
+            feDiv.style.marginRight = "30px";
             feDiv.classList.add('fileInput');
 
             const imgDiv = document.createElement('div');
             imgDiv.id = 'ctn_image-show' + String(my_index);
 
+            const defaultImg = document.createElement("img");
+            defaultImg.id = 'defaultImg' + String(my_index);
+            defaultImg.src = "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg";
+            defaultImg.style.width = "100px";
+            defaultImg.style.height = "100px";
+
+            imgDiv.appendChild(defaultImg);
+
             feDiv.append(imgDiv);
 
             const div = document.createElement('div');
+            div.style.display = "inline-block";
 
             const label = document.createElement('label');
             label.classList.add('file-input');
@@ -742,33 +953,10 @@
             remove_btn.innerText = "삭제"
             remove_btn.classList.add("remove_btn");
             remove_btn.id = 'remove_btn' + String(my_index);
+            remove_btn.name = "remove_btn";
             remove_btn.setAttribute('type', 'button');
             remove_btn.addEventListener('click', function () {removeRow(this)});
             newCell4.append(remove_btn)
-        }
-
-
-        function getCurrentDate()
-        {
-            var date = new Date();
-            var year = date.getFullYear().toString();
-
-            var month = date.getMonth() + 1;
-            month = month < 10 ? '0' + month.toString() : month.toString();
-
-            var day = date.getDate();
-            day = day < 10 ? '0' + day.toString() : day.toString();
-
-            var hour = date.getHours();
-            hour = hour < 10 ? '0' + hour.toString() : hour.toString();
-
-            var minutes = date.getMinutes();
-            var remain = minutes % 10;
-            minutes = minutes - remain;
-            minutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
-
-            // return year + month + day + hour + minutes + seconds;
-            return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes
         }
 
 
@@ -796,12 +984,18 @@
                 return false;
             }
 
-
-
-            if (dspStDtTime > currentDateTime || dspStDt >= dspEndDt) {
-                alert("전시기간이 잘못 설정되었습니다.");
-                return false;
+            if (document.getElementById("dspStDt").getAttribute("disabled") === "disabled") {
+                if (dspStDt >= dspEndDt || currentDateTime > dspEndDtTime) {
+                    alert("전시기간이 잘못 설정되었습니다.");
+                    return false;
+                }
+            } else {
+                if (dspStDtTime < currentDateTime || dspStDt >= dspEndDt) {
+                    alert("전시기간이 잘못 설정되었습니다.");
+                    return false;
+                }
             }
+
 
 
             if (targetOption.options[targetOption.selectedIndex].text === "전체") {
@@ -814,14 +1008,16 @@
                 return false;
             }
 
-            if (tbody.childElementCount !== tbody.getElementsByTagName("img").length) {
-                alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
-                return false;
-            }
+
 
             if ("${tplCd}" === 'T0001') {
                 if (document.getElementById('tr1') === null) {
                     alert("콘텐츠 본문내용이 존재하지 않습니다.");
+                    return false;
+                }
+
+                if (tbody.childElementCount !== ctnDetImgLength) {
+                    alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
                     return false;
                 }
 
@@ -956,7 +1152,7 @@
                         <tr>
                             <th style="text-align: center">전시 기간</th>
                             <td colspan="3">
-                                <input type="text" class="datepicker" name="dspStDt" id="dspStDt" disabled>
+                                <input type="text" class="datepicker" name="dspStDt" id="dspStDt">
                                 <button type="button" id="stToggle" class="input-group-text" style="display: inline-block;  background-color: transparent; border:0 ;background-image: url(http://jqueryui.com/resources/demos/datepicker/images/calendar.gif); background-repeat: no-repeat; background-size: 23px 25px; width: 23px; height: 25px;"></button>
                                 ~
                                 <input type="text" class="datepicker" name="dspEndDt" id="dspEndDt" onchange="checkDetection()">
@@ -1025,11 +1221,11 @@
                         <tr>
                             <th rowspan="2" style="text-align: center">대표이미지</th>
                             <td rowspan="2" colspan="3">
-                                <div class="fileInput">
+                                <div class="fileInput" style="display: inline-block; margin-right: 30px;">
                                     <div class="image-show" id="image-show"></div>
                                     <img class="reprImg" src="/image/${reprImg.encFeNm}.${reprImg.feExt}">
                                 </div>
-                                <div>
+                                <div style="display: inline-block;">
                                     <label class="file-input" for="repr_img">
                                         찾기
                                         <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg, image/gif"  onchange="loadFile(this)" style="display: none;">

@@ -207,6 +207,12 @@
             }
 
             if (extension === "gif" || extension === "jpg" || extension === "png") {
+
+                if (document.getElementById("defaultImg") != null) {
+                    const defaultImg = document.getElementById("defaultImg");
+                    defaultImg.remove();
+                }
+
                 const newImage = document.createElement("img");
                 newImage.setAttribute("class", 'reprImg');
 
@@ -246,6 +252,12 @@
             }
 
             if (extension === "gif" || extension === "jpg" || extension === "png") {
+
+                if (document.getElementById("defaultImg" + cur)) {
+                    var defaultImg = document.getElementById("defaultImg" + cur);
+                    defaultImg.remove();
+                }
+
                 var newImage = document.createElement("img");
                 newImage.setAttribute("class", "ctnDetImg");
 
@@ -519,14 +531,25 @@
 
 
             const feDiv = document.createElement('div');
+            feDiv.style.display = "inline-block";
+            feDiv.style.marginRight = "30px";
             feDiv.classList.add('fileInput');
 
             const imgDiv = document.createElement('div');
             imgDiv.id = 'ctn_image-show' + String(my_index);
 
+            const defaultImg = document.createElement("img");
+            defaultImg.id = 'defaultImg' + String(my_index);
+            defaultImg.src = "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg";
+            defaultImg.style.width = "100px";
+            defaultImg.style.height = "100px";
+
+            imgDiv.appendChild(defaultImg);
+
             feDiv.append(imgDiv);
 
             const div = document.createElement('div');
+            div.style.display = "inline-block";
 
             const label = document.createElement('label');
             label.classList.add('file-input');
@@ -727,6 +750,7 @@
             const ctnDetImgLength = document.getElementsByClassName("ctnDetImg").length;
             const inputUrl = document.getElementsByName("inputUrl")[0];
             const targetOption = document.getElementById("srcCd");
+            const tbody = document.getElementById('tbody');
 
             const dspStDtTime = document.getElementById("dspStDt").value;
             const dspEndDtTime = document.getElementById("dspEndDt").value;
@@ -744,11 +768,17 @@
                 return false;
             }
 
+            var re = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]/;
+            if (!re.test(dspStDtTime) || !re.test(dspEndDtTime)) {
+                alert("전시날짜를 선택해주세요.");
+                return false;
+            }
 
-             if (dspStDtTime > currentDateTime || dspStDt >= dspEndDt) {
+
+            if (dspStDtTime < currentDateTime || dspStDt >= dspEndDt) {
                  alert("전시기간이 잘못 설정되었습니다.");
                  return false;
-             }
+            }
 
 
             if (targetOption.options[targetOption.selectedIndex].text === "전체") {
@@ -766,28 +796,32 @@
                 return false;
             }
 
-             if (document.getElementById('tplCd0').checked === true && ctnDetImgLength === 0) {
+
+            if (document.getElementById('tplCd0').checked === true && tbody.childElementCount !== ctnDetImgLength) {
+                alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
+                return false;
+            }
+
+
+            if (document.getElementById('tplCd0').checked === true && ctnDetImgLength === 0) {
                  alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
                  return false;
-             }
+            }
 
+            if (document.getElementById('tplCd1').checked === true && inputUrl.value === ''){
+                alert("콘텐츠 본문내용이 존재하지 않습니다.");
+                return false;
+            }
+            if (document.getElementById('tplCd1').checked === true && inputUrl.value !== '') {
+                if (inputUrl.value.substring(0, 7) !== 'http://' && inputUrl.value.substring(0, 8) !== 'https://') {
+                    alert("URL 주소 형식은 http:// 또는 https://로 시작되야합니다");
+                    return false;
+                }
+            }
 
-             if (document.getElementById('tplCd1').checked === true && inputUrl.value === ''){
-                 alert("콘텐츠 본문내용이 존재하지 않습니다.");
-                 return false;
-             }
-
-
-             if (document.getElementById('tplCd1').checked === true && inputUrl.value !== '') {
-                 if (inputUrl.value.substring(0, 7) !== 'http://' && inputUrl.value.substring(0, 8) !== 'https://') {
-                     alert("URL 주소 형식은 http:// 또는 https://로 시작되야합니다");
-                     return false;
-                 }
-             }
-
-             if (!confirm("저장하시겠습니까?")) {
-                 return false;
-             }
+            if (!confirm("저장하시겠습니까?")) {
+                return false;
+            }
          }
 
 
@@ -921,10 +955,12 @@
                         <tr>
                             <th rowspan="2" style="text-align: center">대표이미지</th>
                             <td rowspan="2">
-                                <div class="fileInput">
-                                    <div class="image-show" id="image-show"></div>
+                                <div class="fileInput" style="display: inline-block; margin-right: 30px;">
+                                    <div class="image-show" id="image-show">
+                                        <img src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg" name="defaultImg" id="defaultImg" style="width: 100px;height: 100px;">
+                                    </div>
                                 </div>
-                                <div>
+                                <div style="display: inline-block;">
                                     <label class="file-input" for="repr_img">
                                         찾기
                                         <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg, image/gif"  onchange="loadFile(this)" style="display: none;">
