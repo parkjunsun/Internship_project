@@ -8,6 +8,7 @@ import sptek.spdevteam.intern.content.domain.Image;
 import sptek.spdevteam.intern.content.mybatis.UpdateMapper;
 import sptek.spdevteam.intern.content.service.UpdateService;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -39,6 +40,11 @@ public class UpdateServiceImpl implements UpdateService {
     @Override
     public void updateImage(Image image) {
         updateMapper.updateImage(image);
+    }
+
+    @Override
+    public void updateImages(HashMap<String, Object> paramMap) {
+        updateMapper.updateImages(paramMap);
     }
 
     @Override

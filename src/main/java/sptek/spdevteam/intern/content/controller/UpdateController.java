@@ -2,6 +2,7 @@ package sptek.spdevteam.intern.content.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -231,7 +233,7 @@ public class UpdateController {
                     Integer imgSeq = imgSeqs.get(odr - 1);
                     Image findImage = updateService.getImage(imgSeq);
                     findImage.setImgOdr(odr);
-                    findImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+//                    findImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
 
                     updateService.updateImage(findImage);
                 }
@@ -266,19 +268,21 @@ public class UpdateController {
         return message;
     }
 
+
     @PostMapping("/image/delete")
-    public Message deleteImage(@RequestParam("imgSeq") Integer imgSeq) {
+    public Message deleteImage(@RequestParam(value = "imgSeq[]") List<Integer> imgSeqs) {
 
-        Image findImage = updateService.getImage(imgSeq);
-        findImage.setUseYn("N");
-        findImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.put("imgSeqs", imgSeqs);
+        paramMap.put("useYn", "N");
+        paramMap.put("modDt", Timestamp.valueOf(LocalDateTime.now()));
 
-        updateService.updateImage(findImage);
+        updateService.updateImages(paramMap);
 
+        System.out.println(imgSeqs);
         Message message = new Message();
         message.setMsg("정상적으로 데이터 삭제가 완료되었습니다.");
         return message;
-
     }
 
     static class Message {

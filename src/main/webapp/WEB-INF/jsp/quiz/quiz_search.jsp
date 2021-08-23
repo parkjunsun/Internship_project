@@ -402,37 +402,6 @@
     }
 
 
-    // function sendExcelData() {
-    //     const target = document.getElementById('searchType');
-    //     const searchType = target.options[target.selectedIndex].value;
-    //
-    //     const dspStDt = document.getElementById('startdate').value;
-    //     const dspEndDt = document.getElementById('enddate').value;
-    //     const dspYn = $(':radio[name="dspYn"]:checked').val();
-    //     const qzNm = document.getElementById('qzNm').value;
-    //
-    //     const params = {
-    //         "searchType": searchType,
-    //         "stDt": dspStDt,
-    //         "endDt": dspEndDt,
-    //         "dspYn": dspYn,
-    //         "qzNm": qzNm,
-    //     }
-    //
-    //     alert(params);
-    //
-    //     $.ajax({
-    //         url: "/quiz/excel/download2",
-    //         method: "post",
-    //         data: params,
-    //         sync: false,
-    //         success: function (data) {
-    //             alert("성공");
-    //         }
-    //     });
-    // }
-
-
     function checkAll(input) {
         const checkBoxes = document.getElementsByName('checkbox');
         checkBoxes.forEach((checkBox) => {

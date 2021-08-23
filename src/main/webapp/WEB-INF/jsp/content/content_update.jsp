@@ -679,6 +679,7 @@
         }
 
         var idx_list = [];
+        var removeList = [];
 
         function removeRow(e) {
             checkDetection();
@@ -690,14 +691,16 @@
                 const findInputHidden = ctnDiv.getElementsByTagName('input')[0];
                 const findImgSeq = findInputHidden.value;
 
-                $(document).ready(function () {
-                    $.ajax({
-                        url:'/content/image/delete',
-                        method: "post",
-                        data: {"imgSeq" : findImgSeq},
-                        sync: false
-                    });
-                });
+                removeList.push(findImgSeq);
+
+                // $(document).ready(function () {
+                //     $.ajax({
+                //         url:'/content/image/delete',
+                //         method: "post",
+                //         data: {"imgSeq" : findImgSeq},
+                //         sync: false
+                //     });
+                // });
             }
 
             const table = document.getElementById('extraContent');
@@ -961,6 +964,16 @@
 
 
         function checkSave() {
+
+            $(document).ready(function () {
+                $.ajax({
+                    url:'/content/image/delete',
+                    method: "post",
+                    data: {"imgSeq" : removeList},
+                    sync: false
+                });
+            });
+
             const contentName = document.getElementById("ctnNm");
             const reprImgLength = document.getElementsByClassName("reprImg").length;
             const ctnDetImgLength = document.getElementsByClassName("ctnDetImg").length;
@@ -1110,8 +1123,8 @@
                             <col width="18%">
                             <col width="7">
                             <col width="18%">
-                            <col width="8%">
-                            <col width="17%">
+                            <col width="10%">
+                            <col width="15%">
                         </colgroup>
                             <th style="text-align: center">콘텐츠명</th>
                             <td colspan="3">

@@ -5,6 +5,7 @@ import sptek.spdevteam.intern.content.domain.Content;
 import sptek.spdevteam.intern.content.domain.ContentDet;
 import sptek.spdevteam.intern.content.domain.Image;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface UpdateService {
@@ -18,6 +19,8 @@ public interface UpdateService {
     void updateContent(Content content);
 
     void updateImage(Image image);
+
+    void updateImages(HashMap<String, Object> paramMap);
 
     void updateContentDet(ContentDet contentDet);
 

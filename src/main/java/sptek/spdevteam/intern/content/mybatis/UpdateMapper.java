@@ -6,6 +6,7 @@ import sptek.spdevteam.intern.content.domain.Content;
 import sptek.spdevteam.intern.content.domain.ContentDet;
 import sptek.spdevteam.intern.content.domain.Image;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -20,6 +21,8 @@ public interface UpdateMapper {
     void updateContent(Content content);
 
     void updateImage(Image image);
+
+    void updateImages(HashMap<String, Object> paramMap);
 
     void updateContentDet(ContentDet contentDet);
 

@@ -100,6 +100,7 @@ public class QuizListController {
     public void excelDownLoad(HttpServletResponse response, @RequestParam("searchType") String searchType, @RequestParam("dspStDt") String dspStDt,
                               @RequestParam("dspEndDt") String dspEndDt, @RequestParam("dspYn") String dspYn, @RequestParam("qzNm") String qzNm) throws IOException {
 
+
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("searchType", searchType);
         paramMap.put("stDt", dspStDt);
@@ -108,6 +109,7 @@ public class QuizListController {
         paramMap.put("qzNm", qzNm);
 
         List<QuizDto> excelList = qzListService.getExcelList(paramMap);
+
 
         Workbook wb = new XSSFWorkbook();
         Sheet sheet = wb.createSheet("sheet");
@@ -128,7 +130,6 @@ public class QuizListController {
             cell.setCellStyle(middleArrange);
             cell.setCellValue(headers[i]);
         }
-
 
         //Body
         int seq = 1;

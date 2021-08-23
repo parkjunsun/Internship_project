@@ -115,4 +115,14 @@
           ,   img_odr = #{imgOdr}
         WHERE img_seq = #{imgSeq} AND img_grp_id = #{imgGrpId} AND img_ty_cd = #{imgTyCd}
     </update>
+
+    <update id="updateImages" parameterType="hashmap">
+        UPDATE internsc.tb_img
+        SET use_yn = #{useYn}
+        ,   mod_dt = #{modDt}
+        WHERE
+        <foreach collection="imgSeqs" item="imgSeq" separator="or" index="index">
+            img_seq = ${imgSeq}
+        </foreach>
+    </update>
 </mapper>
