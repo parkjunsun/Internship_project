@@ -39,7 +39,7 @@ public class RegisterController {
 
     private final RandomOutUtil randomOutUtil;
 
-    @Value("${uploadFile.path}")
+    @Value("/home/sptek/image")
     private String uploadFilePath;
 
     @GetMapping("/register")

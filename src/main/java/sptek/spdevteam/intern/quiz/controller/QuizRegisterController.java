@@ -47,7 +47,7 @@ public class QuizRegisterController {
     private final QuizRegisterService quizRegisterService;
 
 
-    @Value("/home/koji/SPTEK/images/")
+    @Value("/home/sptek/image")
     private String uploadFilePath;
 
     private final QuizRegisterService service;

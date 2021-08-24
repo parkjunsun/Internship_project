@@ -33,7 +33,7 @@ public class QuizUpdateController {
     private final RegisterService registerService;
     private final RandomOutUtil randomOutUtil;
 
-    @Value("/home/koji/SPTEK/images/")
+    @Value("/home/sptek/image")
     private String uploadFilePath;
 
 
