@@ -193,6 +193,12 @@
                 span.innerText = "/ " + pagination["pageCnt"];
                 maxPage.appendChild(span);
 
+                var maxPageStr = document.getElementById('maxPage').innerText;
+                var maxPageNum = maxPageStr.substr(2, maxPageStr.length);
+                if (maxPageNum === '0') {
+                    document.getElementById('dspPage').value = "";
+                }
+
                 const qzList = document.getElementById('qzList');
                 while (qzList.hasChildNodes()) {
                     qzList.removeChild(qzList.firstChild);

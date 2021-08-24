@@ -36,7 +36,6 @@ public class UpdateController {
     private static final String COMMON_SMALL_IMG = "I0003";
     private static final String CARD_DET_IMG = "I0004";
 
-
     @Value("${uploadFile.path}")
     private String uploadFilePath;
 

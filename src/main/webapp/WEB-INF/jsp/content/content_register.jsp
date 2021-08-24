@@ -255,7 +255,7 @@
 
                 if (document.getElementById("defaultImg" + cur)) {
                     var defaultImg = document.getElementById("defaultImg" + cur);
-                    defaultImg.remove();
+                    defaultImg.style.display = 'none';
                 }
 
                 var newImage = document.createElement("img");
@@ -278,6 +278,10 @@
                 alert("이미지 포맷이 맞지 않습니다.");
                 return false;
             }
+
+
+            // var name = document.getElementById('ctn_fileName' + cur);
+            // name.textContent = file.name;
 
         }
 
@@ -351,10 +355,15 @@
                 var img_show = document.getElementById('ctn_image-show' + String(i));
                 img_show.id = 'ctn_image-show' + String(i - 1);
 
+                // var fNm = document.getElementById('ctn_fileName' + String(i));
+                // fNm.id = 'ctn_fileName' + String(i - 1);
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
                 // inputFile.name = 'ctn_img' + String(i - 1);
+
+                var defaultImage = document.getElementById('defaultImg' + String(i));
+                defaultImage.id = 'defaultImg' + String(i - 1);
 
                 var removeBtn = document.getElementById('remove_btn' + String(i));
                 removeBtn.id = 'remove_btn' + String(i - 1)
@@ -365,6 +374,10 @@
             document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
             document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
 
+            // if (idx_list.length === 1) {
+            //     document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
+            //     document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
+            // }
         }
 
         function moveUpTr(node) {
@@ -399,11 +412,20 @@
             curCtnImgShowBlock.id = 'ctn_image-show' + preIdx;
             preCtnImgShowBlock.id = 'ctn_image-show' + curIdx;
 
+            // const curCtnFeNmBlock = document.getElementById('ctn_fileName' + curIdx);
+            // const preCtnFeNmBlock = document.getElementById('ctn_fileName' + preIdx);
+            // curCtnFeNmBlock.id = 'ctn_fileName' + preIdx;
+            // preCtnFeNmBlock.id = 'ctn_fileName' + curIdx;
 
             const curInputFileBlock = document.getElementById('ctn_img' + curIdx);
             const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
             curInputFileBlock.id = 'ctn_img' + preIdx;
             preInputFileBlock.id = 'ctn_img' + curIdx;
+
+            const curDefaultImageBlock = document.getElementById('defaultImg' + curIdx);
+            const preDefaultImageBlock = document.getElementById('defaultImg' + preIdx);
+            curDefaultImageBlock.id = 'defaultImg' + preIdx;
+            preDefaultImageBlock.id = 'defaultImg' + curIdx;
 
 
             const curRmBtnBlock = document.getElementById('remove_btn' + curIdx);
@@ -456,6 +478,11 @@
             const nextInputFileBlock = document.getElementById('ctn_img' + String(nextIdx));
             currentInputFileBlock.id = 'ctn_img' + String(nextIdx);
             nextInputFileBlock.id = 'ctn_img' + String(currentIdx);
+
+            const currentDefaultImageBlock = document.getElementById('defaultImg' + String(currentIdx));
+            const nextDefaultImageBlock = document.getElementById('defaultImg' + String(nextIdx));
+            currentDefaultImageBlock.id = 'defaultImg' + String(nextIdx);
+            nextDefaultImageBlock.id = 'defaultImg' + String(currentIdx);
 
 
             const currentRmBtnBlock = document.getElementById('remove_btn' + String(currentIdx));
@@ -529,7 +556,7 @@
 
             newCell2.append(i_up, i_down);
 
-
+            // newCell3.classList.add('bottom_td');
             const feDiv = document.createElement('div');
             feDiv.style.display = "inline-block";
             feDiv.style.marginRight = "30px";
