@@ -12,6 +12,8 @@ public interface ListService {
     public List<TempType> getTempList() throws Exception;
     public List<ContentExcel> getList(ContentExcel contentExcel) throws Exception;
     public List<ContentExcel> getBoardList(HashMap<String,Object> map) throws Exception;
+    public List<ContentExcel> getBoardListAll(HashMap<String,Object> map) throws Exception;
+
     public int getBoardListCnt(HashMap<String, Object> map) throws Exception;
 
     public void updateDspYn(HashMap<String, Object> map) throws Exception;

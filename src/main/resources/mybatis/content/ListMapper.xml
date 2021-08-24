@@ -70,6 +70,44 @@
         </if>
         LIMIT #{listSize} OFFSET #{startList}
     </select>
+    <select id="getBoardListAll" parameterType="hashmap" resultType="sptek.spdevteam.intern.content.domain.ContentExcel">
+        SELECT
+        ctn_seq as ctnSeq,
+        tpl_cd as tplCd,
+        src_cd as srcCd,
+        ctn_nm as ctnNm,
+        tplCd.cd_nm as tplNm,
+        srcCd.cd_nm as srcNm,
+        dsp_st_dt as dspStDt,
+        dsp_end_dt as dspEndDt,
+        ctn_div as ctnDiv,
+        dsp_yn as dspYn,
+        ctn.use_yn as useYn
+        FROM internsc.tb_ctn ctn
+        left outer join internsc.tb_cd tplCd on ctn.tpl_cd=tplCd.cd and tplCd.grp_cd = 'TPL_TY'
+        left outer join internsc.tb_cd srcCd on ctn.src_cd=srcCd.cd and srcCd.grp_cd = 'SRC_TY'
+        WHERE 1=1
+        AND dsp_st_dt <![CDATA[>=]]> to_timestamp(#{dspStDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
+        AND dsp_end_dt <![CDATA[<=]]> to_timestamp(#{dspEndDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+        <if test="ctnNm!=null and ctnNm!=''">
+            AND ctn_nm LIKE '%' || #{ctnNm} || '%'
+        </if>
+        <if test='dspYn!=null &amp;&amp; !dspYn.equals("all")'>
+            AND dsp_yn = #{dspYn}
+        </if>
+        <if test='srcCd!=null &amp;&amp; !srcCd.equals("all")'>
+            AND src_cd = #{srcCd}
+        </if>
+        <if test='tplCd!=null &amp;&amp; !tplCd.equals("all")'>
+            AND tpl_cd = #{tplCd}
+        </if>
+        <if test='ctnDiv!=null &amp;&amp; !ctnDiv.equals("all")'>
+            AND ctn_div = #{ctnDiv}
+        </if>
+        <if test='!orderBy.equals("all")'>
+            ORDER BY ${orderBy}
+        </if>
+    </select>
     <select id="getBoardListCnt" parameterType="hashmap" resultType="int">
         SELECT
             COUNT(*) as listCnt
@@ -100,5 +138,5 @@
         <foreach collection="items" item="item" separator="or" index="index">
             ctn_seq = ${item}
         </foreach>
-</update>
+    </update>
 </mapper>

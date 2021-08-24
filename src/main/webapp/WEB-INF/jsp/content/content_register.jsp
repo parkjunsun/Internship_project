@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="/js/build/jquery.datetimepicker.full.min.js"></script>
+    <link rel="stylesheet" href="/css/jquery.datetimepicker.min.css">
+    <script type="text/javascript" src="/js/moment.js"></script>
     <style>
 
         .bottom_td {
@@ -43,69 +46,151 @@
             document.getElementById('tplCd0').checked = true;
         };
 
-        $(function() {
-            //input을 datepicker로 선언
-            $("#dspStDt").datepicker({
-                dateFormat: 'yy-mm-dd' //달력 날짜 형태
-                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-                ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
-                ,changeYear: true //option값 년 선택 가능
-                ,changeMonth: true //option값  월 선택 가능
-                ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-                ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
-                ,buttonText: "선택" //버튼 호버 텍스트
-                ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
-                ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
-                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-                ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
-                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
-                ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-                ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
-                ,onSelect:function(d){
-                    var start = new Date($("#dspStDt").datepicker("getDate"));
-                    var end = new Date($("#dspEndDt").datepicker("getDate"));
-                    if (end - start < 0){
-                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-                        $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-                    }
+        // $(function() {
+        //     //input을 datepicker로 선언
+        //     $("#dspStDt").datepicker({
+        //         dateFormat: 'yy-mm-dd' //달력 날짜 형태
+        //         ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        //         ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+        //         ,changeYear: true //option값 년 선택 가능
+        //         ,changeMonth: true //option값  월 선택 가능
+        //         ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+        //         ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+        //         ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
+        //         ,buttonText: "선택" //버튼 호버 텍스트
+        //         ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+        //         ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
+        //         ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
+        //         ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
+        //         ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+        //         ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        //         ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+        //         ,onSelect:function(d){
+        //             var start = new Date($("#dspStDt").datepicker("getDate"));
+        //             var end = new Date($("#dspEndDt").datepicker("getDate"));
+        //             if (end - start < 0){
+        //                 alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+        //                 $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //             }
+        //
+        //         }
+        //     });
+        //     $("#dspEndDt").datepicker({
+        //         dateFormat: 'yy-mm-dd' //달력 날짜 형태
+        //         ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+        //         ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
+        //         ,changeYear: true //option값 년 선택 가능
+        //         ,changeMonth: true //option값  월 선택 가능
+        //         ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+        //         ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+        //         ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
+        //         ,buttonText: "선택" //버튼 호버 텍스트
+        //         ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
+        //         ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
+        //         ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
+        //         ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
+        //         ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+        //         ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+        //         ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+        //         ,onSelect:function(d){
+        //             var start = new Date($("#dspStDt").datepicker("getDate"));
+        //             var end = new Date($("#dspEndDt").datepicker("getDate"));
+        //             if (end - start < 0){
+        //                 alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+        //                 $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //             }
+        //         }
+        //     });
+        //
+        //
+        //     //초기값을 오늘 날짜로 설정해줘야 합니다.
+        //     $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //     $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+        //     $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
+        //
+        // });
+
+        function getCurrentDate()
+        {
+            var date = new Date();
+            var year = date.getFullYear().toString();
+
+            var month = date.getMonth() + 1;
+            month = month < 10 ? '0' + month.toString() : month.toString();
+
+            var day = date.getDate();
+            day = day < 10 ? '0' + day.toString() : day.toString();
+
+            var hour = date.getHours();
+            hour = hour < 10 ? '0' + hour.toString() : hour.toString();
+
+            var minutes = date.getMinutes();
+            var remain = minutes % 10;
+            minutes = minutes - remain;
+            minutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+
+            // return year + month + day + hour + minutes + seconds;
+            return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes
+        }
+
+
+
+        $(function () {
+            jQuery.datetimepicker.setLocale('kr');
+
+            $('#dspStDt').datetimepicker({
+                format: 'Y-m-d H:i',
+                // defaultDate: moment(getCurrentDate()).subtract(7, 'days').format("YYYY-MM-DD HH:mm"),
+                step: 10,
+                onSelectDate: function () {
+                    var start = $('#dspStDt').val();
+                    var front = start.substr(0, 14);
+                    var back = parseInt(start.substr(14, 2));
+
+                    var remain = back % 10;
+                    back = back - remain;
+                    back = back < 10 ? '0' + back.toString() : back.toString();
+
+                    var newStart = front + back;
+                    $('#dspStDt').val(newStart);
 
                 }
             });
-            $("#dspEndDt").datepicker({
-                dateFormat: 'yy-mm-dd' //달력 날짜 형태
-                ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-                ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
-                ,changeYear: true //option값 년 선택 가능
-                ,changeMonth: true //option값  월 선택 가능
-                ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-                ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-                ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
-                ,buttonText: "선택" //버튼 호버 텍스트
-                ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
-                ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
-                ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-                ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
-                ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
-                ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-                ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
-                ,onSelect:function(d){
-                    var start = new Date($("#dspStDt").datepicker("getDate"));
-                    var end = new Date($("#dspEndDt").datepicker("getDate"));
-                    if (end - start < 0){
-                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-                        $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-                    }
+
+            $('#dspEndDt').datetimepicker({
+                format: 'Y-m-d H:i',
+                // defaultDate: moment(getCurrentDate()).format("YYYY-MM-DD HH:mm"),
+                step: 10,
+                onSelectDate: function () {
+                    var start = $('#dspEndDt').val();
+                    var front = start.substr(0, 14);
+                    var back = parseInt(start.substr(14, 2));
+
+                    var remain = back % 10;
+                    back = back - remain;
+                    back = back < 10 ? '0' + back.toString() : back.toString();
+
+                    var newStart = front + back;
+                    $('#dspEndDt').val(newStart);
                 }
-            });
+            })
 
+            // $('#dspStDt').val(moment(getCurrentDate()).subtract(7, 'days').format("YYYY-MM-DD HH:mm"));
+            // $('#dspEndDt').val(moment(getCurrentDate()).format("YYYY-MM-DD HH:mm"));
 
-            //초기값을 오늘 날짜로 설정해줘야 합니다.
-            $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-            $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-            $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
+            $('#dspStDt').val("시작일");
+            $('#dspEndDt').val("종료일");
+
+            $('#stToggle').on('click', function () {
+                $('#dspStDt').datetimepicker('toggle');
+            })
+
+            $('#endToggle').on('click', function () {
+                $('#dspEndDt').datetimepicker('toggle');
+            })
 
         });
+
 
         function loadFile(input) {
             const file = input.files[0];	//선택된 파일 가져오기
@@ -122,6 +207,12 @@
             }
 
             if (extension === "gif" || extension === "jpg" || extension === "png") {
+
+                if (document.getElementById("defaultImg") != null) {
+                    const defaultImg = document.getElementById("defaultImg");
+                    defaultImg.remove();
+                }
+
                 const newImage = document.createElement("img");
                 newImage.setAttribute("class", 'reprImg');
 
@@ -134,8 +225,8 @@
                 newImage.style.objectFit = "contain";
 
                 const container = document.getElementById('image-show');
-                if (container.querySelector('.img') != null) {
-                    const oldImage = container.querySelector('.img');
+                if (container.querySelector('.reprImg') != null) {
+                    const oldImage = container.querySelector('.reprImg');
                     container.removeChild(oldImage);
                 }
                 container.appendChild(newImage);
@@ -161,6 +252,12 @@
             }
 
             if (extension === "gif" || extension === "jpg" || extension === "png") {
+
+                if (document.getElementById("defaultImg" + cur)) {
+                    var defaultImg = document.getElementById("defaultImg" + cur);
+                    defaultImg.remove();
+                }
+
                 var newImage = document.createElement("img");
                 newImage.setAttribute("class", "ctnDetImg");
 
@@ -172,8 +269,8 @@
                 newImage.style.objectFit = "contain";
 
                 var container = document.getElementById('ctn_image-show' + cur);
-                if (container.querySelector('.img') != null) {
-                    const oldImage = container.querySelector('.img');
+                if (container.querySelector('.ctnDetImg') != null) {
+                    const oldImage = container.querySelector('.ctnDetImg');
                     container.removeChild(oldImage);
                 }
                 container.appendChild(newImage);
@@ -181,10 +278,6 @@
                 alert("이미지 포맷이 맞지 않습니다.");
                 return false;
             }
-
-
-            // var name = document.getElementById('ctn_fileName' + cur);
-            // name.textContent = file.name;
 
         }
 
@@ -211,12 +304,19 @@
                     document.getElementById('down_arrow' + String(i)).style.cursor = 'pointer';
                     document.getElementById('up_arrow' + String(i)).classList.remove('disabled');
                     document.getElementById('up_arrow' + String(i)).style.cursor = 'pointer';
+
                 }
 
                 document.getElementById('up_arrow1').classList.add('disabled');
                 document.getElementById('up_arrow1').style.cursor = 'default';
                 document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
                 document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'pointer';
+            }
+
+            for (var i = 2; i <= ctn_index; i++) {
+                if (document.getElementById('down_arrow' + String(i)).classList.contains('disabled')) {
+                    document.getElementById('down_arrow' + String(i)).style.cursor = 'default';
+                }
             }
         }
 
@@ -251,8 +351,6 @@
                 var img_show = document.getElementById('ctn_image-show' + String(i));
                 img_show.id = 'ctn_image-show' + String(i - 1);
 
-                // var fNm = document.getElementById('ctn_fileName' + String(i));
-                // fNm.id = 'ctn_fileName' + String(i - 1);
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
@@ -267,10 +365,6 @@
             document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
             document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
 
-            // if (idx_list.length === 1) {
-            //     document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
-            //     document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
-            // }
         }
 
         function moveUpTr(node) {
@@ -305,17 +399,12 @@
             curCtnImgShowBlock.id = 'ctn_image-show' + preIdx;
             preCtnImgShowBlock.id = 'ctn_image-show' + curIdx;
 
-            // const curCtnFeNmBlock = document.getElementById('ctn_fileName' + curIdx);
-            // const preCtnFeNmBlock = document.getElementById('ctn_fileName' + preIdx);
-            // curCtnFeNmBlock.id = 'ctn_fileName' + preIdx;
-            // preCtnFeNmBlock.id = 'ctn_fileName' + curIdx;
 
             const curInputFileBlock = document.getElementById('ctn_img' + curIdx);
             const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
             curInputFileBlock.id = 'ctn_img' + preIdx;
             preInputFileBlock.id = 'ctn_img' + curIdx;
-            // curInputFileBlock.name = 'ctn_img' + preIdx;
-            // preInputFileBlock.name = 'ctn_img' + curIdx;
+
 
             const curRmBtnBlock = document.getElementById('remove_btn' + curIdx);
             const preRmBtnBlock = document.getElementById('remove_btn'+ preIdx);
@@ -363,18 +452,11 @@
             nextCtnImgShowBlock.id = 'ctn_image-show' + String(currentIdx);
 
 
-            // const currentCtnFeNmBlock = document.getElementById('ctn_fileName' + String(currentIdx));
-            // const nextCtnFeNmBlock = document.getElementById('ctn_fileName' + String(nextIdx));
-            // currentCtnFeNmBlock.id = 'ctn_fileName' + String(nextIdx);
-            // nextCtnFeNmBlock.id = 'ctn_fileName' + String(currentIdx);
-
-
             const currentInputFileBlock = document.getElementById('ctn_img' + String(currentIdx));
             const nextInputFileBlock = document.getElementById('ctn_img' + String(nextIdx));
             currentInputFileBlock.id = 'ctn_img' + String(nextIdx);
             nextInputFileBlock.id = 'ctn_img' + String(currentIdx);
-            // currentInputFileBlock.name = 'ctn_img' + String(nextIdx);
-            // nextInputFileBlock.name = 'ctn_img' + String(currentIdx);
+
 
             const currentRmBtnBlock = document.getElementById('remove_btn' + String(currentIdx));
             const nextRmBtnBlock = document.getElementById('remove_btn' + String(nextIdx));
@@ -447,20 +529,27 @@
 
             newCell2.append(i_up, i_down);
 
-            // newCell3.classList.add('bottom_td');
+
             const feDiv = document.createElement('div');
+            feDiv.style.display = "inline-block";
+            feDiv.style.marginRight = "30px";
             feDiv.classList.add('fileInput');
 
             const imgDiv = document.createElement('div');
             imgDiv.id = 'ctn_image-show' + String(my_index);
 
-            // const feNmP = document.createElement('p');
-            // feNmP.id = 'ctn_fileName' + String(my_index);
-            // feNmP.style.float = 'left';
+            const defaultImg = document.createElement("img");
+            defaultImg.id = 'defaultImg' + String(my_index);
+            defaultImg.src = "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg";
+            defaultImg.style.width = "100px";
+            defaultImg.style.height = "100px";
+
+            imgDiv.appendChild(defaultImg);
 
             feDiv.append(imgDiv);
 
             const div = document.createElement('div');
+            div.style.display = "inline-block";
 
             const label = document.createElement('label');
             label.classList.add('file-input');
@@ -489,16 +578,169 @@
             newCell4.append(remove_btn)
         }
 
+        function addUrlRow() {
+            const rootDiv = document.createElement('div');
+            rootDiv.classList.add('table-responsive');
+            rootDiv.id = 'urlDiv'
+
+            const div = document.createElement('div');
+            div.style.border = '1px solid black';
+            div.style.lineHeight = '45px';
+            div.style.height = '45px';
+
+            const span = document.createElement('span');
+            span.style.float = 'left';
+            span.style.marginLeft = '10px';
+            span.innerText = '콘텐츠 본문내용';
+
+            div.appendChild(span);
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-striped' , 'table-sm');
+            const colgroup = document.createElement('colgroup')
+            const col1 = document.createElement('col');
+            const col2 = document.createElement('col');
+            col1.style.width = '150px';
+            col2.style.width = '*';
+
+            colgroup.appendChild(col1);
+            colgroup.appendChild(col2);
+
+
+            const tbody = document.createElement('tbody');
+            const tr = document.createElement('tr');
+            const th = document.createElement('th');
+            th.innerText = 'URL 주소';
+            th.style.textAlign = 'center';
+            const td = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.classList.add("form-control");
+            input.name = 'inputUrl';
+
+            td.appendChild(input);
+
+            tr.appendChild(th);
+            tr.appendChild(td);
+
+            tbody.appendChild(tr);
+
+            table.appendChild(colgroup);
+            table.appendChild(tbody);
+
+            rootDiv.appendChild(div);
+            rootDiv.appendChild(table);
+
+            const form = document.getElementById('registerForm');
+            form.appendChild(rootDiv);
+        }
+
+        function addCardHead() {
+            const rootDiv = document.createElement('div');
+            rootDiv.classList.add('table-responsive');
+            rootDiv.id = 'cardDiv';
+
+            const div = document.createElement('div');
+            div.style.border = '1px solid black';
+            div.style.height = '45px';
+
+            const span = document.createElement('span');
+            span.style.float = 'left';
+            span.style.marginTop = '11px';
+            span.style.marginLeft = '10px';
+            span.innerText = '콘텐츠 본문내용';
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.style.float = 'right';
+            btn.style.height = '30px';
+            btn.style.marginTop = '6px';
+            btn.style.marginRight = '10px';
+            btn.id = 'add_btn';
+            btn.addEventListener('click', function () {addRow()});
+            btn.innerText = '콘텐츠 추가';
+
+            div.appendChild(span);
+            div.appendChild(btn);
+
+            const table = document.createElement('table');
+            table.classList.add('table', 'table-striped', 'table-sm');
+            table.id = 'extraContent';
+
+            const colgroup = document.createElement('colgroup');
+            colgroup.id = 'colgroup';
+            const col1 = document.createElement('col');
+            const col2 = document.createElement('col');
+            const col3 = document.createElement('col');
+            const col4 = document.createElement('col');
+
+            col1.style.width = '150px';
+            col2.style.width = '150px';
+            col3.style.width = '*';
+            col4.style.width = '150px';
+
+            colgroup.appendChild(col1);
+            colgroup.appendChild(col2);
+            colgroup.appendChild(col3);
+            colgroup.appendChild(col4);
+
+            const thead = document.createElement('thead');
+            thead.id = 'thead';
+            const tr = document.createElement('tr');
+            tr.style.height = '45px';
+
+            const th1 = document.createElement('th');
+            th1.scope = 'col';
+            th1.style.textAlign = 'center';
+            th1.innerText = '본문';
+            const th2 = document.createElement('th');
+            th2.scope = 'col';
+            th2.style.textAlign = 'center';
+            th2.innerText = '전시순서';
+            const th3 = document.createElement('th');
+            th3.scope = 'col';
+            th3.style.textAlign = 'center';
+            th3.innerText = '본문 이미지';
+            const th4 = document.createElement('th');
+            th4.scope = 'col';
+            th4.style.textAlign = 'center';
+            th4.innerText = '영역 삭제';
+
+            tr.appendChild(th1);
+            tr.appendChild(th2);
+            tr.appendChild(th3);
+            tr.appendChild(th4);
+
+            thead.appendChild(tr);
+
+            const tbody = document.createElement('tbody');
+            tbody.id = 'tbody';
+
+            table.appendChild(colgroup);
+            table.appendChild(thead);
+            table.appendChild(tbody);
+
+            rootDiv.appendChild(div);
+            rootDiv.appendChild(table);
+
+            const form = document.getElementById('registerForm');
+            form.appendChild(rootDiv);
+        }
 
          function changeMenu(e) {
-            const cardDiv = document.getElementById('cardDiv');
-            const urlDiv = document.getElementById('urlDiv');
+
             if (e.id === "tplCd1") {
-                cardDiv.style.display = 'none';
-                urlDiv.style.display = '';
+                const cardDiv = document.getElementById('cardDiv');
+                cardDiv.remove();
+                addUrlRow();
+                ctn_index = 0;
+
             } else {
-                cardDiv.style.display = '';
-                urlDiv.style.display = 'none';
+                const urlDiv = document.getElementById('urlDiv');
+                urlDiv.remove();
+                addCardHead();
+                ctn_index = 0;
+
             }
          }
 
@@ -508,10 +750,34 @@
             const ctnDetImgLength = document.getElementsByClassName("ctnDetImg").length;
             const inputUrl = document.getElementsByName("inputUrl")[0];
             const targetOption = document.getElementById("srcCd");
+            const tbody = document.getElementById('tbody');
+
+            const dspStDtTime = document.getElementById("dspStDt").value;
+            const dspEndDtTime = document.getElementById("dspEndDt").value;
+            const currentDateTime = getCurrentDate();
+
+
+            const dspStDt = dspStDtTime.substr(0, 10);
+            const dspEndDt = dspEndDtTime.substr(0, 10);
+
+            const currentDate = currentDateTime.substr(0, 10);
+
 
             if (contentName.value === "") {
                 alert("콘텐츠명을 작성해주세요.");
                 return false;
+            }
+
+            var re = /[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]/;
+            if (!re.test(dspStDtTime) || !re.test(dspEndDtTime)) {
+                alert("전시날짜를 선택해주세요.");
+                return false;
+            }
+
+
+            if (dspStDtTime < currentDateTime || dspStDt >= dspEndDt) {
+                 alert("전시기간이 잘못 설정되었습니다.");
+                 return false;
             }
 
 
@@ -530,28 +796,32 @@
                 return false;
             }
 
-             if (document.getElementById('tplCd0').checked === true && ctnDetImgLength === 0) {
+
+            if (document.getElementById('tplCd0').checked === true && tbody.childElementCount !== ctnDetImgLength) {
+                alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
+                return false;
+            }
+
+
+            if (document.getElementById('tplCd0').checked === true && ctnDetImgLength === 0) {
                  alert("콘텐츠 본문내용의 이미지가 등록 되어있지 않습니다.");
                  return false;
-             }
+            }
 
+            if (document.getElementById('tplCd1').checked === true && inputUrl.value === ''){
+                alert("콘텐츠 본문내용이 존재하지 않습니다.");
+                return false;
+            }
+            if (document.getElementById('tplCd1').checked === true && inputUrl.value !== '') {
+                if (inputUrl.value.substring(0, 7) !== 'http://' && inputUrl.value.substring(0, 8) !== 'https://') {
+                    alert("URL 주소 형식은 http:// 또는 https://로 시작되야합니다");
+                    return false;
+                }
+            }
 
-             if (document.getElementById('tplCd1').checked === true && inputUrl.value === ''){
-                 alert("콘텐츠 본문내용이 존재하지 않습니다.");
-                 return false;
-             }
-
-
-             if (document.getElementById('tplCd1').checked === true && inputUrl.value !== '') {
-                 if (inputUrl.value.substring(0, 7) !== 'http://' && inputUrl.value.substring(0, 8) !== 'https://') {
-                     alert("URL 주소 형식은 http:// 또는 https://로 시작되야합니다");
-                     return false;
-                 }
-             }
-
-             if (!confirm("저장하시겠습니까?")) {
-                 return false;
-             }
+            if (!confirm("저장하시겠습니까?")) {
+                return false;
+            }
          }
 
 
@@ -583,7 +853,7 @@
                 <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
                     <div class="btn-toolbar">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-primary" onClick="location.href='/temp/detail'">DetailPage</button>
+                            <button type="button" class="btn btn-primary" onClick="location.href='/temp/detail'" style="visibility: hidden">DetailPage</button>
                         </div>
                     </div>
                 </div>
@@ -600,18 +870,18 @@
                             <col width="*">
                         </colgroup>
                         <tr>
-                            <th>콘텐츠명</th>
+                            <th style="text-align: center">콘텐츠명</th>
                             <td>
                                 <input type="text" class="form-control" name="ctnNm" id="ctnNm" maxlength="50">
                             </td>
-                            <th>콘텐츠 구분</th>
+                            <th style="text-align: center">콘텐츠 구분</th>
                             <td colspan="3">
                                 <div>
-                                    <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="in" checked>
+                                    <input class="form-check-input" type="radio" name="ctnDiv" id="inside" value="IN" checked>
                                     <label class="form-check-label" for="inside">
                                         내부
                                     </label>
-                                    <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="out">
+                                    <input class="form-check-input" type="radio" name="ctnDiv" id="outside" value="OUT">
                                     <label class="form-check-label" for="outside">
                                         외부
                                     </label>
@@ -619,7 +889,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>템플릿 유형</th>
+                            <th style="text-align: center">템플릿 유형</th>
                             <td>
                                 <div>
                                     <c:forEach var="item" items="${tplList}" varStatus="status">
@@ -634,33 +904,35 @@
                             <td colspan="3"></td>
                         </tr>
                         <tr>
-                            <th>전시 기간</th>
+                            <th style="text-align: center">전시 기간</th>
                             <td>
                                 <input type="text" class="datepicker" name="dspStDt" id="dspStDt">
+                                <button type="button" id="stToggle" class="input-group-text" style="display: inline-block;  background-color: transparent; border:0 ;background-image: url(http://jqueryui.com/resources/demos/datepicker/images/calendar.gif); background-repeat: no-repeat; background-size: 23px 25px; width: 23px; height: 25px;"></button>
                                 ~
                                 <input type="text" class="datepicker" name="dspEndDt" id="dspEndDt">
+                                <button type="button" id="endToggle" class="input-group-text" style="display: inline-block; background-color: transparent; border:0; background-image: url(http://jqueryui.com/resources/demos/datepicker/images/calendar.gif); background-repeat: no-repeat; background-size: 23px 25px; width: 23px; height: 25px;"></button>
                             </td>
-                            <th>전시 상태</th>
+                            <th style="text-align: center">전시 상태</th>
                             <td>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="dspYn" id="display" value="y" checked>
+                                    <input class="form-check-input" type="radio" name="dspYn" id="display" value="Y" checked>
                                     <label class="form-check-label" for="display">
                                         전시
                                     </label>
-                                    <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="n">
+                                    <input class="form-check-input" type="radio" name="dspYn" id="not_display" value="N">
                                     <label class="form-check-label" for="not_display">
                                         전시안함
                                     </label>
                                 </div>
                             </td>
-                            <th>댓글가능 여부</th>
+                            <th style="text-align: center">댓글가능 여부</th>
                             <td>
                                 <div>
-                                    <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="y" checked>
+                                    <input class="form-check-input" type="radio" name="cmtYn" id="yes" value="Y" checked>
                                     <label class="form-check-label" for="yes">
                                         가능
                                     </label>
-                                    <input class="form-check-input" type="radio" name="cmtYn" id="no" value="n">
+                                    <input class="form-check-input" type="radio" name="cmtYn" id="no" value="N">
                                     <label class="form-check-label" for="no">
                                         불가능
                                     </label>
@@ -670,7 +942,7 @@
                         <tr>
                             <th></th>
                             <td></td>
-                            <th>콘텐츠 출처</th>
+                            <th style="text-align: center">콘텐츠 출처</th>
                             <td colspan="3">
                                 <select class="form-select w130" style="margin-left:3px; margin-right:3px; display: inline-block;" name="srcCd" id="srcCd">
                                     <option selected>전체</option>
@@ -681,26 +953,28 @@
                             </td>
                         </tr>
                         <tr>
-                            <th rowspan="2">대표이미지</th>
+                            <th rowspan="2" style="text-align: center">대표이미지</th>
                             <td rowspan="2">
-                                <div class="fileInput">
-                                    <div class="image-show" id="image-show"></div>
+                                <div class="fileInput" style="display: inline-block; margin-right: 30px;">
+                                    <div class="image-show" id="image-show">
+                                        <img src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg" name="defaultImg" id="defaultImg" style="width: 100px;height: 100px;">
+                                    </div>
                                 </div>
-                                <div>
+                                <div style="display: inline-block;">
                                     <label class="file-input" for="repr_img">
                                         찾기
                                         <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg, image/gif"  onchange="loadFile(this)" style="display: none;">
                                     </label>
                                 </div>
                             </td>
-                            <th>상담하기</th>
+                            <th style="text-align: center">상담하기</th>
                             <td colspan="3">
                                 <div>
-                                    <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="y" checked>
+                                    <input class="form-check-input" type="radio" name="cstYn" id="not_use" value="Y" checked>
                                     <label class="form-check-label" for="not_use">
                                         미사용
                                     </label>
-                                    <input class="form-check-input" type="radio" name="cstYn" id="use" value="n">
+                                    <input class="form-check-input" type="radio" name="cstYn" id="use" value="N">
                                     <label class="form-check-label" for="use">
                                         사용
                                     </label>
@@ -708,7 +982,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>팝업문구</th>
+                            <th style="text-align: center">팝업문구</th>
                             <td colspan="3">
                                 <input type="text" class="form-control" name="popMsg" id="popMsg" placeholder="25자 이내로 작성해 주세요" maxlength="25">
                             </td>
@@ -717,9 +991,9 @@
                     </table>
                 </div><br><br><br>
                 <div class="table-responsive" id="cardDiv">
-                    <div style="border: 1px solid black; height: 30px;">
-                        <span style="float:left;">콘텐츠 본문내용</span>
-                        <button type="button" style="float: right" id="add_btn" onclick="addRow()">콘텐츠 추가</button>
+                    <div style="border: 1px solid black; height: 45px;">
+                        <span style="float:left; margin-top: 11px; margin-left: 10px;">콘텐츠 본문내용</span>
+                        <button type="button" style="float: right; height: 30px; margin-top: 6px; margin-right: 10px;" id="add_btn" onclick="addRow()">콘텐츠 추가</button>
                     </div>
                     <table class="table table-striped table-sm" id="extraContent">
                         <colgroup id="colgroup">
@@ -729,7 +1003,7 @@
                             <col width="150px">
                         </colgroup>
                             <thead id="thead">
-                                <tr>
+                                <tr style="height: 45px;">
                                     <th scope="col" style="text-align: center;">본문</th>
                                     <th scope="col" style="text-align: center;">전시순서</th>
                                     <th scope="col" style="text-align: center">본문 이미지</th>
@@ -738,24 +1012,6 @@
                             </thead>
                             <tbody id="tbody">
                             </tbody>
-                    </table>
-                </div>
-<!-- -------------------------------------------------------------------------------------- -->
-                <div class="table-responsive" id="urlDiv" style="display: none">
-                    <div style="border: 1px solid black; height: 30px;">
-                        <span style="float:left;">콘텐츠 본문내용</span>
-                    </div>
-                    <table class="table table-striped table-sm">
-                        <colgroup>
-                            <col width="150px">
-                            <col width="*">
-                        </colgroup>
-                        <tbody>
-                            <th>URL 주소</th>
-                            <td>
-                                <input type="text" style="width: 1100px;" name="inputUrl">
-                            </td>
-                        </tbody>
                     </table>
                 </div>
             </form>

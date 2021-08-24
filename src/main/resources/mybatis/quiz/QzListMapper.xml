@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sptek.spdevteam.intern.quiz.mybatis.QzListMapper">
+    <select id="getExcelList" parameterType="hashmap" resultType="sptek.spdevteam.intern.quiz.domain.QuizDto">
+        SELECT
+            qz_seq as qzSeq,
+            img_grp_id as imgGrpId,
+            qz_nm as qzNm,
+            st_dt as stDt,
+            end_dt as endDt,
+            psh_yn as pshYn,
+            dsp_yn as dspYn,
+            mx_prt as mxPrt,
+            reg_dt as regDt,
+            mod_dt as modDt,
+            view_cnt as viewCnt,
+            use_yn as useYn
+        FROM internsc.tb_qz
+        WHERE 1=1
+            <if test='searchType.equals("regDay")'>
+                AND reg_dt BETWEEN to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS') AND to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+            </if>
+            <if test='searchType.equals("period")'>
+                AND st_dt <![CDATA[>=]]> to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
+                AND end_dt <![CDATA[<=]]> to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+            </if>
+            <if test='dspYn!=null &amp;&amp; !dspYn.equals("all")'>
+                AND dsp_yn = #{dspYn}
+            </if>
+            <if test='qzNm!=null and qzNm!=""'>
+                AND qz_nm LIKE '%' || #{qzNm} || '%'
+            </if>
+
+            ORDER BY end_dt DESC ,qz_seq DESC ,dsp_yn DESC
+    </select>
+
+    <select id="getBoardList" parameterType="hashmap" resultType="sptek.spdevteam.intern.quiz.domain.QuizDto">
+        SELECT
+            qz_seq as qzSeq,
+            img_grp_id as imgGrpId,
+            qz_nm as qzNm,
+            st_dt as stDt,
+            end_dt as endDt,
+            psh_yn as pshYn,
+            dsp_yn as dspYn,
+            mx_prt as mxPrt,
+            reg_dt as regDt,
+            mod_dt as modDt,
+            view_cnt as viewCnt,
+            use_yn as useYn
+        FROM internsc.tb_qz
+        WHERE 1=1
+        <if test='searchType.equals("regDay")'>
+            AND reg_dt BETWEEN to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS') AND to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test='searchType.equals("period")'>
+            AND st_dt <![CDATA[>=]]> to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
+            AND end_dt <![CDATA[<=]]> to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test='dspYn!=null and !dspYn.equals("all")'>
+            AND dsp_yn = #{dspYn}
+        </if>
+        <if test='qzNm!=null and qzNm!=""'>
+            AND qz_nm LIKE '%' || #{qzNm} || '%'
+        </if>
+
+        <if test='searchType.equals("regDay")'>
+            ORDER BY reg_dt DESC, qz_seq DESC
+        </if>
+        <if test='searchType.equals("period")'>
+            ORDER BY st_dt DESC, qz_seq DESC
+        </if>
+        LIMIT #{listSize} OFFSET #{startList}
+    </select>
+
+    <select id="getListCnt" parameterType="hashmap" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM internsc.tb_qz
+        WHERE 1=1
+        <if test='searchType.equals("regDay")'>
+            AND reg_dt BETWEEN to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS') AND to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test='searchType.equals("period")'>
+            AND st_dt <![CDATA[>=]]> to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
+            AND end_dt <![CDATA[<=]]> to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS')
+        </if>
+        <if test='dspYn!=null and !dspYn.equals("all")'>
+            AND dsp_yn = #{dspYn}
+        </if>
+        <if test='qzNm!=null and qzNm!=""'>
+            AND qz_nm LIKE '%' || #{qzNm} || '%'
+        </if>
+    </select>
+
+    <update id="updateDspYn" parameterType="hashmap">
+        UPDATE internsc.tb_qz
+        SET dsp_yn = #{dspYn}
+        WHERE
+        <foreach collection="items" item="item" separator="or" index="index">
+            qz_seq = ${item}
+        </foreach>
+    </update>
+</mapper>

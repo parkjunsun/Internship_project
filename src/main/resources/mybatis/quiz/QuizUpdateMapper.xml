@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sptek.spdevteam.intern.quiz.mybatis.QuizUpdateMapper">
+    <select id="getQuiz" parameterType="int" resultType="sptek.spdevteam.intern.quiz.domain.QuizDto">
+        SELECT
+            qz_seq as qzSeq,
+            img_grp_id AS imgGrpId,
+            qz_nm AS qzNm,
+            to_char(to_timestamp(st_dt||' 00:00:00.000','YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS stDt,
+            to_char(to_timestamp(end_dt||' 00:00:00.000','YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS endDt,
+            psh_yn AS pshYn,
+            dsp_yn AS dspYn,
+            mx_prt AS mxPrt,
+            to_char(to_timestamp(reg_dt||' 00:00:00.000','YYYY-MM-DD HH24:MI'), 'YYYY-MM-DD HH24:MI') AS regDt,
+            mod_dt AS modDt,
+            view_cnt AS viewCnt,
+            use_yn AS useYn
+        FROM
+            internsc.tb_qz
+        where
+            qz_seq = ${qzSeq}
+    </select>
+    <select id="getQuizDtl" parameterType="int" resultType="sptek.spdevteam.intern.quiz.domain.QuizDtl">
+        SELECT
+            qz_det_seq as quizDetSeq,
+            qz_seq as quizSeq,
+            type_cd as quizTyCd,
+            img_grp_id as imgGrpId,
+            qz_dtl_seq as quizDtlSeq,
+            qz_qst as quizQst,
+            ans_use_yn as ansUseYn,
+            cmt_use_yn as cmtUseYn,
+            cmt_cnt as cmtCnt,
+            ab_img_yn as abImgYn,
+            qz_ans as quizAns,
+            crt_ans_clv as crtAnsClv,
+            wrg_ans_clv as wrgAnsClv,
+            not_use_clv as notUseClv
+        FROM
+            internsc.tb_qz_dtl
+        where
+            qz_seq = ${qzSeq}
+        order by qz_dtl_seq
+    </select>
+    <select id="getImages" parameterType="String" resultType="sptek.spdevteam.intern.content.domain.Image">
+        SELECT
+            img_seq as imgSeq,
+            img_grp_id as imgGrpId,
+            img_ty_cd as imgTyCd,
+            path,
+            fe_nm as feNm,
+            enc_fe_nm as encFeNm,
+            fe_ext as feExt,
+            fe_sz as feSz,
+            reg_dt as regDt,
+            mod_dt as modDt,
+            use_yn as useYn,
+            img_odr as imgOdr
+        FROM internsc.tb_img
+        WHERE img_grp_id = #{imgGrpId} AND use_yn = #{useYn}
+        ORDER BY img_odr
+    </select>
+    <select id="getOpt" parameterType="int" resultType="sptek.spdevteam.intern.quiz.domain.QuizOption">
+        SELECT
+            opt_seq as optSeq,
+            img_grp_id as imgGrpId,
+            qz_seq as qzSeq,
+            qz_det_seq as qzDetSeq,
+            opt_cnt as optCnt,
+            use_yn as useYn
+        FROM internsc.tb_opt
+        WHERE qz_det_seq=${qzDetSeq}
+          and use_yn='Y'
+        order by qz_det_seq
+    </select>
+    <select id="getTotalPtc" parameterType="int" resultType="int">
+        select
+            count(*)
+        from internsc.tb_ptc ptc
+                 inner join internsc.tb_qz_dtl tqd
+                            on ptc.qz_det_seq = tqd.qz_det_seq
+        where tqd.qz_seq = ${qzSeq}
+    </select>
+    <select id="getPtcAns" parameterType="int" resultType="sptek.spdevteam.intern.quiz.domain.PtcAns">
+        select
+            ptc_ans as ptcAns,
+            count(ptc_ans) as ansCnt
+        from internsc.tb_ptc
+        where qz_det_seq = ${qzDetSeq}
+        group by ptc_ans
+    </select>
+    <update id="disableImg" parameterType="int">
+        UPDATE internsc.tb_img
+        set use_yn = 'n'
+        where img_seq = ${imgSeq}
+    </update>
+    <update id="updateQzImgGrpId" parameterType="hashmap">
+        UPDATE internsc.tb_qz
+        set img_grp_id = #{imgGrpId}
+        where qz_seq = cast(#{qzSeq} as int)
+    </update>
+    <update id="updateQuiz" parameterType="hashmap">
+        UPDATE internsc.tb_qz
+        set qz_nm = #{qzNm},
+            st_dt = to_timestamp(#{stDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS'),
+            end_dt = to_timestamp(#{endDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS'),
+            psh_yn = #{pshYn},
+            mx_prt = cast(#{mxPrt} as int),
+            mod_dt = current_timestamp
+        where qz_seq = cast(#{qzSeq} as int)
+    </update>
+    <update id="updateQuizDtl" parameterType="sptek.spdevteam.intern.quiz.domain.QuizDtl">
+        UPDATE internsc.tb_qz_dtl
+        set type_cd = #{quizTyCd},
+            qz_qst = #{quizQst},
+            ans_use_yn = #{ansUseYn},
+            cmt_use_yn = #{cmtUseYn},
+            qz_dtl_seq = cast(#{quizDtlSeq} as int),
+            cmt_cnt = #{cmtCnt},
+            ab_img_yn = #{abImgYn},
+            qz_ans = cast(#{quizAns} as int),
+            crt_ans_clv = cast(#{crtAnsClv} as int),
+            wrg_ans_clv = cast(#{wrgAnsClv} as int),
+            not_use_clv = cast(#{notUseClv} as int),
+            mod_dt = current_timestamp
+        where qz_det_seq = cast(#{quizDetSeq} as int)
+    </update>
+    <update id="updateQuizOption" parameterType="sptek.spdevteam.intern.quiz.domain.QuizOption">
+        UPDATE internsc.tb_opt
+        set img_grp_id = #{imgGrpId},
+            opt_cnt = #{optCnt},
+            use_yn = #{useYn}
+        where opt_seq = cast(#{optSeq} as int)
+    </update>
+    <update id="updateImg" parameterType="sptek.spdevteam.intern.content.domain.Image">
+        update internsc.tb_img
+        set
+            img_grp_id = #{imgGrpId},
+            img_ty_cd = #{imgTyCd},
+            path = #{path},
+            fe_nm = #{feNm},
+            enc_fe_nm = #{encFeNm},
+            fe_ext = #{feExt},
+            fe_sz = #{feSz},
+            reg_dt = #{regDt},
+            mod_dt = #{modDt},
+            use_yn = #{useYn},
+            img_odr = #{imgOdr}
+        where img_seq = #{imgSeq}
+    </update>
+</mapper>

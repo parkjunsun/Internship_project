@@ -14,5 +14,6 @@ public interface ListMapper {
     List<ContentExcel> getBoardList(HashMap<String, Object> map);
     int getBoardListCnt(HashMap<String, Object> map );
     void updateDspYn(HashMap<String, Object> map);
+    List<ContentExcel> getBoardListAll(HashMap<String, Object> map);
 
 }

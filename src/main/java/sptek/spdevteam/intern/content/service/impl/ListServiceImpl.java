@@ -41,6 +41,11 @@ public class ListServiceImpl implements ListService {
     }
 
     @Override
+    public List<ContentExcel> getBoardListAll(HashMap<String, Object> map) throws Exception {
+        return listMapper.getBoardListAll(map);
+    }
+
+    @Override
     public int getBoardListCnt(HashMap<String, Object> map) throws Exception {
         return listMapper.getBoardListCnt(map);
     }

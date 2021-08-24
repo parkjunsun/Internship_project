@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sptek.spdevteam.intern.quiz.mybatis.QuizRegisterMapper">
+    <select id="getTypes" resultType="sptek.spdevteam.intern.quiz.domain.QuizType">
+        select
+            cd as quizCd,
+            cd_nm as quizNm
+        from
+            internsc.tb_cd
+        where
+            grp_cd = 'QZ_TY'
+    </select>
+    <select id="getQuizSeq" resultType="_int" parameterType="java.util.HashMap">
+        select
+            qz_seq
+        from
+            internsc.tb_qz
+        where
+            img_grp_id = #{imgGrpId}
+    </select>
+    <select id="getQuizDtlSeq" resultType="_int" parameterType="java.util.HashMap">
+        select
+            qz_det_seq
+        from
+            internsc.tb_qz_dtl
+        where
+            img_grp_id = #{imgGrpId}
+            and
+            qz_dtl_seq = cast(#{sequence} as int)
+    </select>
+    <insert id="quizSave" parameterType="sptek.spdevteam.intern.quiz.domain.Quiz">
+        INSERT INTO internsc.tb_qz
+        (
+            img_grp_id,
+            qz_nm,
+            st_dt,
+            end_dt,
+            psh_yn,
+            dsp_yn,
+            mx_prt
+        )
+        VALUES
+        (
+            #{imgGrpId},
+            #{quizNm},
+            to_timestamp(#{dspStDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS'),
+            to_timestamp(#{dspEndDt}||' 23:59:59.999','YYYY-MM-DD HH24:MI:SS'),
+            #{pushYn},
+            #{dspYn},
+            cast(#{maxPrt} as int)
+        )
+    </insert>
+    <insert id="quizDtlSave" parameterType="sptek.spdevteam.intern.quiz.domain.QuizDetail">
+        INSERT INTO internsc.tb_qz_dtl
+        (
+            qz_seq,
+            type_cd,
+            img_grp_id,
+            qz_dtl_seq,
+            qz_qst,
+            ans_use_yn,
+            cmt_use_yn,
+            cmt_cnt,
+            ab_img_yn,
+            qz_ans,
+            crt_ans_clv,
+            wrg_ans_clv,
+            not_use_clv
+        )
+        VALUES
+        (
+            cast(#{quizSeq} as int),
+            #{quizTyCd},
+            #{imgGrpId},
+            cast(#{quizDtlSeq} as int),
+            #{quizQst},
+            #{ansUseYn},
+            #{cmtUseYn},
+            #{cmtCnt},
+            #{abImgYn},
+            cast(#{quizAns} as int),
+            cast(#{crtAnsClv} as int),
+            cast(#{wrgAnsClv} as int),
+            cast(#{notUseClv} as int)
+        )
+    </insert>
+    <insert id="quizOptionSave" parameterType="sptek.spdevteam.intern.quiz.domain.QuizOption">
+        INSERT INTO internsc.tb_opt
+        (
+            img_grp_id,
+            qz_seq,
+            qz_det_seq,
+            opt_cnt
+        )
+        VALUES
+        (
+            #{imgGrpId},
+            cast(#{quizSeq} as int),
+            cast(#{quizDetSeq} as int),
+            #{optCnt}
+        )
+    </insert>
+
+</mapper>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sptek.spdevteam.intern.content.mybatis.UpdateMapper">
+    <select id="getContent" parameterType="int" resultType="sptek.spdevteam.intern.content.domain.Content">
+        SELECT
+            ctn_seq as ctnSeq,
+            tpl_cd as tplCd,
+            src_cd as srcCd,
+            img_grp_id as imgGrpId,
+            ctn_nm as ctnNm,
+            dsp_st_dt as dspStDt,
+            dsp_end_dt as dspEndDt,
+            ctn_div as ctnDiv,
+            dsp_yn as dspYn,
+            cmt_yn as cmtYn,
+            cst_yn as cstYn,
+            pop_msg as popMsg,
+            view_cnt as viewCnt,
+            reg_dt regDt,
+            mod_dt as modDt,
+            use_yn as useYn
+        FROM internsc.tb_ctn
+        WHERE ctn_seq = #{ctnSeq}
+    </select>
+
+    <select id="getImages" parameterType="String" resultType="sptek.spdevteam.intern.content.domain.Image">
+        SELECT
+            img_seq as imgSeq,
+            img_grp_id as imgGrpId,
+            img_ty_cd as imgTyCd,
+            path,
+            fe_nm as feNm,
+            enc_fe_nm as encFeNm,
+            fe_ext as feExt,
+            fe_sz as feSz,
+            reg_dt as regDt,
+            mod_dt as modDt,
+            use_yn as useYn,
+            img_odr as imgOdr
+        FROM internsc.tb_img
+        WHERE img_grp_id = #{imgGrpId} AND use_yn = #{useYn}
+        ORDER BY img_odr
+    </select>
+
+    <select id="getImage" parameterType="Integer" resultType="sptek.spdevteam.intern.content.domain.Image">
+        SELECT
+            img_seq as imgSeq,
+            img_grp_id as imgGrpId,
+            img_ty_cd as imgTyCd,
+            path,
+            fe_nm as feNm,
+            enc_fe_nm as encFeNm,
+            fe_ext as feExt,
+            fe_sz as feSz,
+            reg_dt as regDt,
+            mod_dt as modDt,
+            use_yn as useYn,
+            img_odr as imgOdr
+        FROM internsc.tb_img
+        WHERE img_seq = #{imgSeq}
+    </select>
+
+    <select id="getCtnDet" parameterType="Integer" resultType="sptek.spdevteam.intern.content.domain.ContentDet">
+        SELECT
+            ctn_det_seq as ctnDetSeq,
+            ctn_seq as ctnSeq,
+            img_grp_id as imgGrpId,
+            tpl_cd as tplCd,
+            url_addr as urlAddr,
+            reg_dt as regDt,
+            mod_dt as modDt,
+            use_yn as useYn
+        FROM internsc.tb_ctn_det
+        WHERE ctn_seq = #{ctnSeq}
+    </select>
+
+    <select id="getSrcName" parameterType="String" resultType="String">
+        SELECT cd_nm
+        FROM internsc.tb_cd
+        WHERE grp_cd = 'SRC_TY' AND cd = #{srcCd}
+    </select>
+
+
+    <update id="updateContent" parameterType="sptek.spdevteam.intern.content.domain.Content">
+        UPDATE internsc.tb_ctn
+        SET src_cd = #{srcCd}
+        ,   ctn_nm = #{ctnNm}
+        ,   ctn_div = #{ctnDiv}
+        ,   dsp_yn = #{dspYn}
+        ,   dsp_end_dt = to_timestamp(#{dspEndDt}||' 00:00:00.000','YYYY-MM-DD HH24:MI:SS')
+        ,   cmt_yn = #{cmtYn}
+        ,   cst_yn = #{cstYn}
+        ,   pop_msg = #{popMsg}
+        ,   mod_dt = #{modDt}
+        ,   use_yn = #{useYn}
+        WHERE ctn_seq = #{ctnSeq}
+    </update>
+
+    <update id="updateContentDet" parameterType="sptek.spdevteam.intern.content.domain.ContentDet">
+        UPDATE internsc.tb_ctn_det
+        SET url_addr = #{urlAddr}
+        ,   mod_dt = #{modDt}
+        WHERE ctn_det_seq = #{ctnDetSeq}
+    </update>
+
+    <update id="updateImage" parameterType="sptek.spdevteam.intern.content.domain.Image">
+        UPDATE internsc.tb_img
+        SET path = #{path}
+          ,   fe_nm = #{feNm}
+          ,   enc_fe_nm = #{encFeNm}
+          ,   fe_ext = #{feExt}
+          ,   fe_sz = #{feSz}
+          ,   mod_dt = #{modDt}
+          ,   use_yn = #{useYn}
+          ,   img_odr = #{imgOdr}
+        WHERE img_seq = #{imgSeq} AND img_grp_id = #{imgGrpId} AND img_ty_cd = #{imgTyCd}
+    </update>
+
+    <update id="updateImages" parameterType="hashmap">
+        UPDATE internsc.tb_img
+        SET use_yn = #{useYn}
+        ,   mod_dt = #{modDt}
+        WHERE
+        <foreach collection="imgSeqs" item="imgSeq" separator="or" index="index">
+            img_seq = ${imgSeq}
+        </foreach>
+    </update>
+</mapper>
