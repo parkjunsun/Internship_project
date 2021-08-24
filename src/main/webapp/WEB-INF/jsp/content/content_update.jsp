@@ -282,7 +282,8 @@
                     inputHidden.value = ctnDetImages[i]["imgSeq"];
 
                     if (document.getElementById('defaultImg' + cur) != null) {
-                        document.getElementById('defaultImg' + cur).remove();
+                        // document.getElementById('defaultImg' + cur).remove();
+                        document.getElementById('defaultImg' + cur).style.display = 'none';
                     }
 
                     var container = document.getElementById('ctn_image-show' + cur);
@@ -442,69 +443,6 @@
 
         };
 
-        <%--$(function() {--%>
-        <%--    //input을 datepicker로 선언--%>
-        <%--    $("#dspStDt").datepicker({--%>
-        <%--        dateFormat: 'yy-mm-dd' //달력 날짜 형태--%>
-        <%--        ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시--%>
-        <%--        ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서--%>
-        <%--        ,changeYear: true //option값 년 선택 가능--%>
-        <%--        ,changeMonth: true //option값  월 선택 가능--%>
-        <%--        ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시--%>
-        <%--        ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로--%>
-        <%--        ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함--%>
-        <%--        ,buttonText: "선택" //버튼 호버 텍스트--%>
-        <%--        ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트--%>
-        <%--        ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트--%>
-        <%--        ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip--%>
-        <%--        ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트--%>
-        <%--        ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip--%>
-        <%--        ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)--%>
-        <%--        ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)--%>
-        <%--        ,onSelect:function(d){--%>
-        <%--            var start = new Date($("#dspStDt").datepicker("getDate"));--%>
-        <%--            var end = new Date($("#dspEndDt").datepicker("getDate"));--%>
-        <%--            if (end - start < 0){--%>
-        <%--                alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");--%>
-        <%--                $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)--%>
-        <%--            }--%>
-
-        <%--        }--%>
-        <%--    });--%>
-        <%--    $("#dspEndDt").datepicker({--%>
-        <%--        dateFormat: 'yy-mm-dd' //달력 날짜 형태--%>
-        <%--        ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시--%>
-        <%--        ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서--%>
-        <%--        ,changeYear: true //option값 년 선택 가능--%>
-        <%--        ,changeMonth: true //option값  월 선택 가능--%>
-        <%--        ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시--%>
-        <%--        ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로--%>
-        <%--        ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함--%>
-        <%--        ,buttonText: "선택" //버튼 호버 텍스트--%>
-        <%--        ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트--%>
-        <%--        ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트--%>
-        <%--        ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip--%>
-        <%--        ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트--%>
-        <%--        ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip--%>
-        <%--        ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)--%>
-        <%--        ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)--%>
-        <%--        ,onSelect:function(d){--%>
-        <%--            var start = new Date($("#dspStDt").datepicker("getDate"));--%>
-        <%--            var end = new Date($("#dspEndDt").datepicker("getDate"));--%>
-        <%--            if (end - start < 0){--%>
-        <%--                alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");--%>
-        <%--                $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)--%>
-        <%--            }--%>
-        <%--        }--%>
-        <%--    });--%>
-
-
-        <%--    //초기값을 오늘 날짜로 설정해줘야 합니다.--%>
-        <%--    $('#dspStDt').datepicker('setDate', '${content.dspStDt}'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)--%>
-        <%--    $('#dspEndDt').datepicker('setDate', '${content.dspEndDt}'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)--%>
-        <%--    $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});--%>
-
-        <%--});--%>
 
         $(function () {
             jQuery.datetimepicker.setLocale('kr');
@@ -616,7 +554,7 @@
 
                 if (document.getElementById("defaultImg" + cur) != null) {
                     var defaultImg = document.getElementById("defaultImg" + cur);
-                    defaultImg.remove();
+                    defaultImg.style.display = 'none';
                 }
 
                 var newImage = document.createElement("img");
@@ -693,14 +631,6 @@
 
                 removeList.push(findImgSeq);
 
-                // $(document).ready(function () {
-                //     $.ajax({
-                //         url:'/content/image/delete',
-                //         method: "post",
-                //         data: {"imgSeq" : findImgSeq},
-                //         sync: false
-                //     });
-                // });
             }
 
             const table = document.getElementById('extraContent');
@@ -733,6 +663,9 @@
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
+
+                var defaultImg = document.getElementById('defaultImg' + String(i));
+                defaultImg.id = 'defaultImg' + String(i - 1);
 
 
                 var removeBtn = document.getElementById('remove_btn' + String(i));
@@ -787,6 +720,11 @@
             curInputFileBlock.id = 'ctn_img' + preIdx;
             preInputFileBlock.id = 'ctn_img' + curIdx;
 
+            const curDefaultImageBlock = document.getElementById('defaultImg' + curIdx);
+            const preDefaultImageBlock = document.getElementById('defaultImg' + preIdx);
+            curDefaultImageBlock.id = 'defaultImg' + preIdx;
+            preDefaultImageBlock.id = 'defaultImg' + curIdx;
+
 
             const curRmBtnBlock = document.getElementById('remove_btn' + curIdx);
             const preRmBtnBlock = document.getElementById('remove_btn'+ preIdx);
@@ -840,6 +778,10 @@
             currentInputFileBlock.id = 'ctn_img' + String(nextIdx);
             nextInputFileBlock.id = 'ctn_img' + String(currentIdx);
 
+            const currentDefaultImageBlock = document.getElementById('defaultImg' + String(currentIdx));
+            const nextDefaultImageBlock = document.getElementById('defaultImg' + String(nextIdx));
+            currentDefaultImageBlock.id = 'defaultImg' + String(nextIdx);
+            nextDefaultImageBlock.id = 'defaultImg' + String(currentIdx);
 
             const currentRmBtnBlock = document.getElementById('remove_btn' + String(currentIdx));
             const nextRmBtnBlock = document.getElementById('remove_btn' + String(nextIdx));

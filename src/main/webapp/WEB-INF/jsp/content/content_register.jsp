@@ -255,7 +255,7 @@
 
                 if (document.getElementById("defaultImg" + cur)) {
                     var defaultImg = document.getElementById("defaultImg" + cur);
-                    defaultImg.remove();
+                    defaultImg.style.display = 'none';
                 }
 
                 var newImage = document.createElement("img");
@@ -356,6 +356,9 @@
                 inputFile.id = 'ctn_img' + String(i - 1);
                 // inputFile.name = 'ctn_img' + String(i - 1);
 
+                var defaultImage = document.getElementById('defaultImg' + String(i));
+                defaultImage.id = 'defaultImg' + String(i - 1);
+
                 var removeBtn = document.getElementById('remove_btn' + String(i));
                 removeBtn.id = 'remove_btn' + String(i - 1)
             }
@@ -404,6 +407,11 @@
             const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
             curInputFileBlock.id = 'ctn_img' + preIdx;
             preInputFileBlock.id = 'ctn_img' + curIdx;
+
+            const curDefaultImageBlock = document.getElementById('defaultImg' + curIdx);
+            const preDefaultImageBlock = document.getElementById('defaultImg' + preIdx);
+            curDefaultImageBlock.id = 'defaultImg' + preIdx;
+            preDefaultImageBlock.id = 'defaultImg' + curIdx;
 
 
             const curRmBtnBlock = document.getElementById('remove_btn' + curIdx);
@@ -456,6 +464,11 @@
             const nextInputFileBlock = document.getElementById('ctn_img' + String(nextIdx));
             currentInputFileBlock.id = 'ctn_img' + String(nextIdx);
             nextInputFileBlock.id = 'ctn_img' + String(currentIdx);
+
+            const currentDefaultImageBlock = document.getElementById('defaultImg' + String(currentIdx));
+            const nextDefaultImageBlock = document.getElementById('defaultImg' + String(nextIdx));
+            currentDefaultImageBlock.id = 'defaultImg' + String(nextIdx);
+            nextDefaultImageBlock.id = 'defaultImg' + String(currentIdx);
 
 
             const currentRmBtnBlock = document.getElementById('remove_btn' + String(currentIdx));
