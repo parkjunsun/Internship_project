@@ -388,24 +388,24 @@
         sendData();
     }
 
-    function pageCheck(pageNum) {
-        if (isNaN(pageNum)) {
-            alert("숫자가 아닙니다.");
-            return false;
-        }
-
-        if (parseInt(pageNum) > glb_pagination["pageCnt"]) {
-            alert("최종 페이지를 초과했습니다.");
-            return false;
-        }
-
-        if (parseInt(pageNum) < 1) {
-            alert("입력 범위를 초과했습니다.");
-            return false;
-        }
-
-        sendData();
-    }
+    // function pageCheck(pageNum) {
+    //     if (isNaN(pageNum)) {
+    //         alert("숫자가 아닙니다.");
+    //         return false;
+    //     }
+    //
+    //     if (parseInt(pageNum) > glb_pagination["pageCnt"]) {
+    //         alert("최종 페이지를 초과했습니다.");
+    //         return false;
+    //     }
+    //
+    //     if (parseInt(pageNum) < 1) {
+    //         alert("입력 범위를 초과했습니다.");
+    //         return false;
+    //     }
+    //
+    //     sendData();
+    // }
 
 
     function checkAll(input) {
@@ -556,7 +556,7 @@
                     </div>
                 </div>
             </div>
-            <form action="/quiz/excel/download" style="display: inline" method="post" id="excelDownLoadForm">
+            <form action="/quiz/excel/download" style="display: inline" method="post" id="excelDownLoadForm" onsubmit="return false;">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
                     <table class="table table-sm seaerch-table" >
                         <tbody>
@@ -675,7 +675,7 @@
                                             <option value="100">100개</option>
                                         </select>
                                     </label>
-                                    <input type="text" name="dspPage" class="form-control" id="dspPage" onkeypress="if(event.keyCode == 13) pageCheck($('#dspPage').val());" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
+                                    <input type="text" name="dspPage" class="form-control" id="dspPage" value="${pagination.page}" style="width:50px;height:40px;margin-right:3px;display:inline-block;">
                                     <span id="maxPage" style="font-size: 15px;">${pagination.endPage}</span>
                                 </div>
                             </td>

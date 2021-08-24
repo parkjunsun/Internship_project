@@ -193,47 +193,99 @@
 
 
         function loadFile(input) {
+
+
+            // const fileSize = input.size;
+            // const MAX_SIZE = 315000;
+            //
+            // if (fileSize >= MAX_SIZE) {
+            //     alert("이미지 포맷이 맞지 않습니다.");
+            //     return false;
+            // }
+
             const file = input.files[0];	//선택된 파일 가져오기
 
             const fileName = file.name;
-            const extension = fileName.substring(fileName.indexOf('.') + 1, fileName.length);
+            const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-            const fileSize = input.size;
-            const MAX_SIZE = 315000;
 
-            if (fileSize >= MAX_SIZE) {
-                alert("이미지 포맷이 맞지 않습니다.");
-                return false;
-            }
+            if (input.files && input.files[0]) {
 
-            if (extension === "gif" || extension === "jpg" || extension === "png") {
-
-                if (document.getElementById("defaultImg") != null) {
-                    const defaultImg = document.getElementById("defaultImg");
-                    defaultImg.remove();
+                if ($.inArray(extension, ['png', 'jpg']) == -1) {
+                    alert("이미지 포맷이 맞지 않습니다.");
+                    return;
                 }
 
-                const newImage = document.createElement("img");
-                newImage.setAttribute("class", 'reprImg');
+                const reader = new FileReader();
+                reader.onload = e => {
+                    var img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function () {
+                        var w = this.width;
+                        var h = this.height;
+                        if (w === 750 && h === 420) {
+                            if (document.getElementById("defaultImg") != null) {
+                                const defaultImg = document.getElementById("defaultImg");
+                                defaultImg.remove();
+                            }
 
-                //이미지 source 가져오기
-                newImage.src = URL.createObjectURL(file);
+                            const newImage = document.createElement("img");
+                            newImage.setAttribute("class", 'reprImg');
 
-                newImage.style.width = "150px;";
-                newImage.style.height = "150px;";
-                newImage.style.visibility = "visible";
-                newImage.style.objectFit = "contain";
+                            //이미지 source 가져오기
+                            newImage.src = URL.createObjectURL(file);
 
-                const container = document.getElementById('image-show');
-                if (container.querySelector('.reprImg') != null) {
-                    const oldImage = container.querySelector('.reprImg');
-                    container.removeChild(oldImage);
+                            newImage.style.width = "150px;";
+                            newImage.style.height = "150px;";
+                            newImage.style.visibility = "visible";
+                            newImage.style.objectFit = "contain";
+
+                            const container = document.getElementById('image-show');
+                            if (container.querySelector('.reprImg') != null) {
+                                const oldImage = container.querySelector('.reprImg');
+                                container.removeChild(oldImage);
+                            }
+                            container.appendChild(newImage);
+                        } else {
+                            alert("이미지 사이즈가 맞지 않습니다.");
+                            return false;
+                        }
+                    }
                 }
-                container.appendChild(newImage);
-            } else {
-                alert("이미지 포맷이 맞지 않습니다.");
-                return false;
+                reader.readAsDataURL(input.files[0]);
             }
+
+
+
+            // if (extension === "gif" || extension === "jpg" || extension === "png" || extension === "jpeg") {
+            //
+            //     if (document.getElementById("defaultImg") != null) {
+            //         const defaultImg = document.getElementById("defaultImg");
+            //         defaultImg.remove();
+            //     }
+            //
+            //     const newImage = document.createElement("img");
+            //     newImage.setAttribute("class", 'reprImg');
+            //
+            //     //이미지 source 가져오기
+            //     newImage.src = URL.createObjectURL(file);
+            //
+            //     newImage.style.width = "150px;";
+            //     newImage.style.height = "150px;";
+            //     newImage.style.visibility = "visible";
+            //     newImage.style.objectFit = "contain";
+            //
+            //     const container = document.getElementById('image-show');
+            //     if (container.querySelector('.reprImg') != null) {
+            //         const oldImage = container.querySelector('.reprImg');
+            //         container.removeChild(oldImage);
+            //     }
+            //     container.appendChild(newImage);
+            // } else {
+            //     alert("이미지 포맷이 맞지 않습니다.");
+            //     return false;
+            // }
+
         }
 
         function ctn_loadFile(input) {
@@ -241,43 +293,79 @@
 
             var file = input.files[0];
             const fileName = file.name;
-            const extension = fileName.substring(fileName.indexOf('.') + 1, fileName.length)
+            const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-            const fileSize = input.size;
-            const MAX_SIZE = 1125000
+            if (input.files && input.files[0]) {
+                if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
+                    alert("이미지 포맷이 맞지 않습니다.");
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = e => {
+                    var img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function () {
+                        var w = this.width;
+                        var h = this.height;
+                        if (w === 750 && h === 1500) {
+                            if (document.getElementById("defaultImg" + cur)) {
+                                var defaultImg = document.getElementById("defaultImg" + cur);
+                                defaultImg.style.display = 'none';
+                            }
 
-            if (fileSize >= MAX_SIZE) {
-                alert("이미지 포맷이 맞지 않습니다.");
-                return false;
+                            var newImage = document.createElement("img");
+                            newImage.setAttribute("class", "ctnDetImg");
+
+                            newImage.src = URL.createObjectURL(file);
+
+                            newImage.style.width = "150px";
+                            newImage.style.height = "150px";
+                            newImage.style.visibility = "visible";
+                            newImage.style.objectFit = "contain";
+
+                            var container = document.getElementById('ctn_image-show' + cur);
+                            if (container.querySelector('.ctnDetImg') != null) {
+                                const oldImage = container.querySelector('.ctnDetImg');
+                                container.removeChild(oldImage);
+                            }
+                            container.appendChild(newImage);
+                        } else {
+                            alert("이미지 사이즈가 맞지 않습니다.");
+                            return false;
+                        }
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
             }
 
-            if (extension === "gif" || extension === "jpg" || extension === "png") {
 
-                if (document.getElementById("defaultImg" + cur)) {
-                    var defaultImg = document.getElementById("defaultImg" + cur);
-                    defaultImg.style.display = 'none';
-                }
-
-                var newImage = document.createElement("img");
-                newImage.setAttribute("class", "ctnDetImg");
-
-                newImage.src = URL.createObjectURL(file);
-
-                newImage.style.width = "150px";
-                newImage.style.height = "150px";
-                newImage.style.visibility = "visible";
-                newImage.style.objectFit = "contain";
-
-                var container = document.getElementById('ctn_image-show' + cur);
-                if (container.querySelector('.ctnDetImg') != null) {
-                    const oldImage = container.querySelector('.ctnDetImg');
-                    container.removeChild(oldImage);
-                }
-                container.appendChild(newImage);
-            } else {
-                alert("이미지 포맷이 맞지 않습니다.");
-                return false;
-            }
+            // if (extension === "gif" || extension === "jpg" || extension === "png" || extension === "jpeg") {
+            //
+            //     if (document.getElementById("defaultImg" + cur)) {
+            //         var defaultImg = document.getElementById("defaultImg" + cur);
+            //         defaultImg.style.display = 'none';
+            //     }
+            //
+            //     var newImage = document.createElement("img");
+            //     newImage.setAttribute("class", "ctnDetImg");
+            //
+            //     newImage.src = URL.createObjectURL(file);
+            //
+            //     newImage.style.width = "150px";
+            //     newImage.style.height = "150px";
+            //     newImage.style.visibility = "visible";
+            //     newImage.style.objectFit = "contain";
+            //
+            //     var container = document.getElementById('ctn_image-show' + cur);
+            //     if (container.querySelector('.ctnDetImg') != null) {
+            //         const oldImage = container.querySelector('.ctnDetImg');
+            //         container.removeChild(oldImage);
+            //     }
+            //     container.appendChild(newImage);
+            // } else {
+            //     alert("이미지 포맷이 맞지 않습니다.");
+            //     return false;
+            // }
 
 
             // var name = document.getElementById('ctn_fileName' + cur);
@@ -591,9 +679,14 @@
             inputFile.setAttribute('accept', 'image/png, image/jpeg, image/gif');
             inputFile.addEventListener('change', function () {ctn_loadFile(this)});
 
+            const imgSizeDiv = document.createElement('div');
+            imgSizeDiv.style.marginLeft = '12px';
+            imgSizeDiv.style.color = '#dc3545';
+            imgSizeDiv.innerText = '가로: 750px 세로: 1500px';
+
             label.append(inputFile)
             div.append(label);
-            newCell3.append(feDiv, div);
+            newCell3.append(feDiv, div, imgSizeDiv);
 
             newCell4.classList.add("bottom_td");
             const remove_btn = document.createElement('button')
@@ -802,7 +895,7 @@
             }
 
 
-            if (dspStDtTime < currentDateTime || dspStDt >= dspEndDt) {
+            if (dspStDtTime < currentDateTime || dspStDtTime >= dspEndDtTime) {
                  alert("전시기간이 잘못 설정되었습니다.");
                  return false;
             }
@@ -990,8 +1083,11 @@
                                 <div style="display: inline-block;">
                                     <label class="file-input" for="repr_img">
                                         찾기
-                                        <input type="file" name="repr_img" id="repr_img" accept="image/png, image/jpeg, image/gif"  onchange="loadFile(this)" style="display: none;">
+                                        <input type="file" name="repr_img" id="repr_img"  accept=".gif, .jpg, .png" onchange="return loadFile(this)" style="display: none;">
                                     </label>
+                                </div>
+                                <div style="margin-left: 12px; color:#dc3545">
+                                    가로: 750px, 세로: 420px
                                 </div>
                             </td>
                             <th style="text-align: center">상담하기</th>
