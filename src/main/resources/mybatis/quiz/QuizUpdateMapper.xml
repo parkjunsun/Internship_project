@@ -82,12 +82,23 @@
         where tqd.qz_seq = ${qzSeq}
     </select>
     <select id="getPtcAns" parameterType="int" resultType="sptek.spdevteam.intern.quiz.domain.PtcAns">
-        select
-            ptc_ans as ptcAns,
-            count(ptc_ans) as ansCnt
-        from internsc.tb_ptc
-        where qz_det_seq = ${qzDetSeq}
-        group by ptc_ans
+        with table1 (ptcAns, ansCnt) as
+            (
+             select '0', coalesce((select
+                                       count(ptc_ans) as ansCnt
+                                   from internsc.tb_ptc
+                                   where qz_det_seq = ${qzDetSeq}
+                                     and ptc_ans = '0'
+                                   group by ptc_ans),0)
+             union all
+             select '1', coalesce((select
+                                       count(ptc_ans) as ansCnt
+                                   from internsc.tb_ptc
+                                   where qz_det_seq = ${qzDetSeq}
+                                     and ptc_ans = '1'
+                                   group by ptc_ans),0)
+            )
+        select * from table1
     </select>
     <update id="disableImg" parameterType="int">
         UPDATE internsc.tb_img

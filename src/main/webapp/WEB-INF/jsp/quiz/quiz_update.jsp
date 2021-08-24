@@ -66,25 +66,50 @@
         });
 
         <%--console.log(quizTypes);--%>
+        function getCurrentDate()
+        {
+            var date = new Date();
+            var year = date.getFullYear().toString();
+
+            var month = date.getMonth() + 1;
+            month = month < 10 ? '0' + month.toString() : month.toString();
+
+            var day = date.getDate();
+            day = day < 10 ? '0' + day.toString() : day.toString();
+
+            var hour = date.getHours();
+            hour = hour < 10 ? '0' + hour.toString() : hour.toString();
+
+            var minutes = date.getMinutes();
+            var remain = minutes % 10;
+            minutes = minutes - remain;
+            minutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
+
+            // return year + month + day + hour + minutes + seconds;
+            return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes
+        }
 
         $(function() {
 
             $("#datetimepicker1").datetimepicker({
                 locale: 'ko',
-                format: 'YYYY-MM-DD HH:mm' //달력 날짜 형태
+                format: 'YYYY-MM-DD HH:mm', //달력 날짜 형태
             });
 
+
             $("#datetimepicker1").on("change.datetimepicker", ({date, oldDate}) => {
-                var start = new Date(document.getElementById("dspStDt").value);
-                var end = new Date(document.getElementById("dspEndDt").value);
-                var chkdate=Date.parse(start);
-                if (isNaN(chkdate)==true) {
-                    alert('날짜 형식이 맞지 않습니다 (YYYY-MM-DD HH:mm)');
-                    $('#datetimepicker1').datetimepicker('date', end);
-                }
-                if (end - start < 0){
-                    alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-                    $('#datetimepicker1').datetimepicker('date', oldDate);
+                if(document.getElementById("dspStDt").value!=""){
+                    var start = new Date(document.getElementById("dspStDt").value);
+                    var end = new Date(document.getElementById("dspEndDt").value);
+                    var chkdate=Date.parse(start);
+                    if (isNaN(chkdate)==true) {
+                        alert('날짜 형식이 맞지 않습니다 (YYYY-MM-DD HH:mm)');
+                        $('#datetimepicker1').datetimepicker('date', end);
+                    }
+                    if (end - start < 0){
+                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+                        $('#datetimepicker1').datetimepicker('date', oldDate);
+                    }
                 }
             })
 
@@ -94,16 +119,18 @@
             });
 
             $("#datetimepicker2").on("change.datetimepicker", ({date, oldDate}) => {
-                var start = new Date(document.getElementById("dspStDt").value);
-                var end = new Date(document.getElementById("dspEndDt").value);
-                var chkdate=Date.parse(end);
-                if (isNaN(chkdate)==true) {
-                    alert('날짜 형식이 맞지 않습니다 (YYYY-MM-DD HH:mm)');
-                    $('#datetimepicker2').datetimepicker('date', start);
-                }
-                if (end - start < 0){
-                    alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-                    $('#datetimepicker2').datetimepicker('date', oldDate);
+                if(document.getElementById("dspEndDt").value!=""){
+                    var start = new Date(document.getElementById("dspStDt").value);
+                    var end = new Date(document.getElementById("dspEndDt").value);
+                    var chkdate=Date.parse(end);
+                    if (isNaN(chkdate)==true) {
+                        alert('날짜 형식이 맞지 않습니다 (YYYY-MM-DD HH:mm)');
+                        $('#datetimepicker2').datetimepicker('date', start);
+                    }
+                    if (end - start < 0){
+                        alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
+                        $('#datetimepicker2').datetimepicker('date', oldDate);
+                    }
                 }
             })
 

@@ -18,6 +18,6 @@ public class HomeController {
         // 소스추가
         log.page("/","home()");
         System.out.println("HomeController.home");
-        return "redirect:/temp/list";
+        return "redirect:/content/search";
     }
 }
