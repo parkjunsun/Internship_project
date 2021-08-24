@@ -117,7 +117,10 @@
                     tr.appendChild(index);
 
                     var ctnNm = document.createElement('td');
-                    ctnNm.innerText = content[c]['ctnNm'];
+                    var ctnNm_a = document.createElement('a');
+                    ctnNm_a.href = '/content/update/' + content[c]["ctnSeq"];
+                    ctnNm_a.innerText = content[c]['ctnNm'];
+                    ctnNm.appendChild(ctnNm_a);
                     tr.appendChild(ctnNm);
 
                     var ctnCd = document.createElement('td');
