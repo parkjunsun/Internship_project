@@ -558,7 +558,7 @@
                     </div>
                 </div>
             </div>
-            <form action="/quiz/excel/download" style="display: inline" method="post" id="excelDownLoadForm" onsubmit="return false;">
+            <form action="/quiz/excel/download" style="display: inline" method="post" id="excelDownLoadForm">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3">
                     <table class="table table-sm seaerch-table" >
                         <tbody>
