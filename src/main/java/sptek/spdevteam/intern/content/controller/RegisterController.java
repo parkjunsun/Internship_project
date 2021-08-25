@@ -195,7 +195,4 @@ public class RegisterController {
         return "redirect:/content/update/" + Integer.toString(ctnSeq);
     }
 
-
-
-
 }
