@@ -22,6 +22,13 @@
 
     // datepicker 초기화
     $(function() {
+
+        document.addEventListener('keydown', function(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+            }
+        }, true);
+
         //input을 datepicker로 선언
         $("#startdate").datepicker({
             dateFormat: 'yy-mm-dd' //달력 날짜 형태
