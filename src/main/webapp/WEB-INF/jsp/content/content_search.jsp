@@ -514,11 +514,13 @@
                 , method: "post"
                 , data: params
                 , sync: false
-                , success: function (data){
+                , success: function (){
                     alert('<spring:message code="alert1.1"/>');
                     $('#testModal').modal('hide');
                 }
             })
+            alert('<spring:message code="alert1.1"/>');
+            $('#testModal').modal('hide');
         }
     }
 

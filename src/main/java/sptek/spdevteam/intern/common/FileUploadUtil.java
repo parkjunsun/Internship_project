@@ -43,6 +43,9 @@ public class FileUploadUtil {
     public void UploadImage(String encFileName) throws IOException {
         String pathName = getPath(encFileName);
         File dest = new File(pathName);
+        dest.setWritable(true);
+        dest.setReadable(true); 
+
         multipartFile.transferTo(dest);
     }
 
