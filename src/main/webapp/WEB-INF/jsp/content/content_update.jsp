@@ -305,10 +305,6 @@
             }
 
 
-            // const today = getCurrentDate().substr(0, 10);
-            // const dspStDt = document.getElementById("dspStDt").value.substr(0, 10);
-            // const dspEndDt = document.getElementById("dspEndDt").value.substr(0, 10);
-
             const today = getCurrentDate();
             const dspStDt = document.getElementById("dspStDt").value;
             const dspEndDt = document.getElementById("dspEndDt").value;
@@ -509,7 +505,7 @@
             const fileName = file.name;
             const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-            if (input.files && input.files[0]) {
+            if (input.files && file) {
                 if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
                     alert("이미지 포맷이 맞지 않습니다.");
                     return;
@@ -527,8 +523,8 @@
                             //이미지 source 가져오기
                             const newImage = document.getElementsByClassName('reprImg')[0];
                             newImage.src = URL.createObjectURL(file);
-                            newImage.style.width = "150px;";
-                            newImage.style.height = "150px;";
+                            newImage.style.width = "200px";
+                            newImage.style.height = "200px";
                             newImage.style.visibility = "visible";
                             newImage.style.objectFit = "contain";
 
@@ -544,27 +540,6 @@
                     }
                 }
             }
-
-
-            // if (extension === "gif" || extension === "jpg" || extension === "png" || extension === "jpeg") {
-            //     //이미지 source 가져오기
-            //     const newImage = document.getElementsByClassName('reprImg')[0];
-            //     newImage.src = URL.createObjectURL(file);
-            //     newImage.style.width = "150px;";
-            //     newImage.style.height = "150px;";
-            //     newImage.style.visibility = "visible";
-            //     newImage.style.objectFit = "contain";
-            //
-            //     const container = document.getElementById('image-show');
-            //     if (container.querySelector('.reprImg') != null) {
-            //         const oldImage = container.querySelector('.reprImg');
-            //         container.removeChild(oldImage);
-            //     }
-            //
-            // } else {
-            //     alert("이미지 포맷이 맞지 않습니다.");
-            //     return false;
-            // }
         }
 
         function ctn_loadFile(input) {
@@ -575,7 +550,7 @@
             const fileName = file.name;
             const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-            if (input.files && input.files[0]) {
+            if (input.files && file) {
                 if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
                     alert("이미지 포맷이 맞지 않습니다.");
                     return;
@@ -617,34 +592,6 @@
                 }
                 reader.readAsDataURL(input.files[0]);
             }
-
-            // if (extension === "gif" || extension === "jpg" || extension === "png" || extension === "jpeg") {
-            //
-            //     if (document.getElementById("defaultImg" + cur) != null) {
-            //         var defaultImg = document.getElementById("defaultImg" + cur);
-            //         defaultImg.style.display = 'none';
-            //     }
-            //
-            //     var newImage = document.createElement("img");
-            //     newImage.setAttribute("class", "ctnDetImg");
-            //
-            //     newImage.src = URL.createObjectURL(file);
-            //
-            //     newImage.style.width = "150px";
-            //     newImage.style.height = "150px";
-            //     newImage.style.visibility = "visible";
-            //     newImage.style.objectFit = "contain";
-            //
-            //     var container = document.getElementById('ctn_image-show' + cur);
-            //     if (container.querySelector('.ctnDetImg') != null) {
-            //         const oldImage = container.querySelector('.ctnDetImg');
-            //         container.removeChild(oldImage);
-            //     }
-            //     container.appendChild(newImage);
-            // } else {
-            //     alert("이미지 포맷이 맞지 않습니다.");
-            //     return false;
-            // }
         }
 
         function checkArrowAble() {
@@ -744,8 +691,6 @@
 
             document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
             document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
-
-
 
         }
 
@@ -860,7 +805,6 @@
             table.insertBefore(nextTr, currentTr);
 
             checkArrowAble();
-
         }
 
         var ctn_index = 0;
@@ -1025,7 +969,6 @@
             }
 
 
-
             if (targetOption.options[targetOption.selectedIndex].text === "전체") {
                 alert("콘텐츠 출처가 선택되지 않았습니다.");
                 return false;
@@ -1035,7 +978,6 @@
                 alert("대표 이미지가 등록 되어있지 않습니다.");
                 return false;
             }
-
 
 
             if ("${tplCd}" === 'T0001') {
@@ -1100,7 +1042,6 @@
                 location.href = '/content/search';
             }
         }
-
 
     </script>
 </head>

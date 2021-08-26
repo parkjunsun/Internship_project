@@ -46,69 +46,7 @@
             document.getElementById('tplCd0').checked = true;
         };
 
-        // $(function() {
-        //     //input을 datepicker로 선언
-        //     $("#dspStDt").datepicker({
-        //         dateFormat: 'yy-mm-dd' //달력 날짜 형태
-        //         ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-        //         ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
-        //         ,changeYear: true //option값 년 선택 가능
-        //         ,changeMonth: true //option값  월 선택 가능
-        //         ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-        //         ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-        //         ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
-        //         ,buttonText: "선택" //버튼 호버 텍스트
-        //         ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
-        //         ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
-        //         ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-        //         ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
-        //         ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
-        //         ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-        //         ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
-        //         ,onSelect:function(d){
-        //             var start = new Date($("#dspStDt").datepicker("getDate"));
-        //             var end = new Date($("#dspEndDt").datepicker("getDate"));
-        //             if (end - start < 0){
-        //                 alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-        //                 $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-        //             }
-        //
-        //         }
-        //     });
-        //     $("#dspEndDt").datepicker({
-        //         dateFormat: 'yy-mm-dd' //달력 날짜 형태
-        //         ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
-        //         ,showMonthAfterYear:true // 월- 년 순서가아닌 년도 - 월 순서
-        //         ,changeYear: true //option값 년 선택 가능
-        //         ,changeMonth: true //option값  월 선택 가능
-        //         ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
-        //         ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
-        //         ,buttonImageOnly: true //버튼 이미지만 깔끔하게 보이게함
-        //         ,buttonText: "선택" //버튼 호버 텍스트
-        //         ,yearSuffix: "년" //달력의 년도 부분 뒤 텍스트
-        //         ,monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 텍스트
-        //         ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip
-        //         ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 텍스트
-        //         ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
-        //         ,minDate: "-5Y" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
-        //         ,maxDate: "+5y" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
-        //         ,onSelect:function(d){
-        //             var start = new Date($("#dspStDt").datepicker("getDate"));
-        //             var end = new Date($("#dspEndDt").datepicker("getDate"));
-        //             if (end - start < 0){
-        //                 alert("전시 시작일이 미래인 콘텐츠는 전시설정을 할 수 없습니다.");
-        //                 $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-        //             }
-        //         }
-        //     });
-        //
-        //
-        //     //초기값을 오늘 날짜로 설정해줘야 합니다.
-        //     $('#dspStDt').datepicker('setDate', '-7D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-        //     $('#dspEndDt').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
-        //     $("img.ui-datepicker-trigger").css({'cursor':'pointer', 'margin-left':'5px'});
-        //
-        // });
+
 
         function getCurrentDate()
         {
@@ -129,10 +67,8 @@
             minutes = minutes - remain;
             minutes = minutes < 10 ? '0' + minutes.toString() : minutes.toString();
 
-            // return year + month + day + hour + minutes + seconds;
             return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes
         }
-
 
 
         $(function () {
@@ -175,8 +111,6 @@
                 }
             })
 
-            // $('#dspStDt').val(moment(getCurrentDate()).subtract(7, 'days').format("YYYY-MM-DD HH:mm"));
-            // $('#dspEndDt').val(moment(getCurrentDate()).format("YYYY-MM-DD HH:mm"));
 
             $('#dspStDt').val("시작일");
             $('#dspEndDt').val("종료일");
@@ -194,24 +128,14 @@
 
         function loadFile(input) {
 
-
-            // const fileSize = input.size;
-            // const MAX_SIZE = 315000;
-            //
-            // if (fileSize >= MAX_SIZE) {
-            //     alert("이미지 포맷이 맞지 않습니다.");
-            //     return false;
-            // }
-
             const file = input.files[0];	//선택된 파일 가져오기
 
             const fileName = file.name;
             const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
 
-            if (input.files && input.files[0]) {
-
-                if ($.inArray(extension, ['png', 'jpg']) == -1) {
+            if (input.files && file) {
+                if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
                     alert("이미지 포맷이 맞지 않습니다.");
                     return;
                 }
@@ -226,7 +150,7 @@
                         if (w === 750 && h === 420) {
                             if (document.getElementById("defaultImg") != null) {
                                 const defaultImg = document.getElementById("defaultImg");
-                                defaultImg.remove();
+                                defaultImg.style.display = 'none';
                             }
 
                             const newImage = document.createElement("img");
@@ -235,8 +159,8 @@
                             //이미지 source 가져오기
                             newImage.src = URL.createObjectURL(file);
 
-                            newImage.style.width = "150px;";
-                            newImage.style.height = "150px;";
+                            newImage.style.width = "150px";
+                            newImage.style.height = "150px";
                             newImage.style.visibility = "visible";
                             newImage.style.objectFit = "contain";
 
@@ -254,38 +178,6 @@
                 }
                 reader.readAsDataURL(input.files[0]);
             }
-
-
-
-            // if (extension === "gif" || extension === "jpg" || extension === "png" || extension === "jpeg") {
-            //
-            //     if (document.getElementById("defaultImg") != null) {
-            //         const defaultImg = document.getElementById("defaultImg");
-            //         defaultImg.remove();
-            //     }
-            //
-            //     const newImage = document.createElement("img");
-            //     newImage.setAttribute("class", 'reprImg');
-            //
-            //     //이미지 source 가져오기
-            //     newImage.src = URL.createObjectURL(file);
-            //
-            //     newImage.style.width = "150px;";
-            //     newImage.style.height = "150px;";
-            //     newImage.style.visibility = "visible";
-            //     newImage.style.objectFit = "contain";
-            //
-            //     const container = document.getElementById('image-show');
-            //     if (container.querySelector('.reprImg') != null) {
-            //         const oldImage = container.querySelector('.reprImg');
-            //         container.removeChild(oldImage);
-            //     }
-            //     container.appendChild(newImage);
-            // } else {
-            //     alert("이미지 포맷이 맞지 않습니다.");
-            //     return false;
-            // }
-
         }
 
         function ctn_loadFile(input) {
@@ -295,7 +187,7 @@
             const fileName = file.name;
             const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
 
-            if (input.files && input.files[0]) {
+            if (input.files && file) {
                 if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
                     alert("이미지 포맷이 맞지 않습니다.");
                     return;
@@ -318,8 +210,8 @@
 
                             newImage.src = URL.createObjectURL(file);
 
-                            newImage.style.width = "150px";
-                            newImage.style.height = "150px";
+                            newImage.style.width = "200px";
+                            newImage.style.height = "200px";
                             newImage.style.visibility = "visible";
                             newImage.style.objectFit = "contain";
 
@@ -337,40 +229,6 @@
                 }
                 reader.readAsDataURL(input.files[0]);
             }
-
-
-            // if (extension === "gif" || extension === "jpg" || extension === "png" || extension === "jpeg") {
-            //
-            //     if (document.getElementById("defaultImg" + cur)) {
-            //         var defaultImg = document.getElementById("defaultImg" + cur);
-            //         defaultImg.style.display = 'none';
-            //     }
-            //
-            //     var newImage = document.createElement("img");
-            //     newImage.setAttribute("class", "ctnDetImg");
-            //
-            //     newImage.src = URL.createObjectURL(file);
-            //
-            //     newImage.style.width = "150px";
-            //     newImage.style.height = "150px";
-            //     newImage.style.visibility = "visible";
-            //     newImage.style.objectFit = "contain";
-            //
-            //     var container = document.getElementById('ctn_image-show' + cur);
-            //     if (container.querySelector('.ctnDetImg') != null) {
-            //         const oldImage = container.querySelector('.ctnDetImg');
-            //         container.removeChild(oldImage);
-            //     }
-            //     container.appendChild(newImage);
-            // } else {
-            //     alert("이미지 포맷이 맞지 않습니다.");
-            //     return false;
-            // }
-
-
-            // var name = document.getElementById('ctn_fileName' + cur);
-            // name.textContent = file.name;
-
         }
 
 
@@ -443,12 +301,9 @@
                 var img_show = document.getElementById('ctn_image-show' + String(i));
                 img_show.id = 'ctn_image-show' + String(i - 1);
 
-                // var fNm = document.getElementById('ctn_fileName' + String(i));
-                // fNm.id = 'ctn_fileName' + String(i - 1);
 
                 var inputFile = document.getElementById('ctn_img' + String(i));
                 inputFile.id = 'ctn_img' + String(i - 1);
-                // inputFile.name = 'ctn_img' + String(i - 1);
 
                 var defaultImage = document.getElementById('defaultImg' + String(i));
                 defaultImage.id = 'defaultImg' + String(i - 1);
@@ -462,10 +317,6 @@
             document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
             document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
 
-            // if (idx_list.length === 1) {
-            //     document.getElementById('down_arrow' + String(ctn_index)).classList.add('disabled');
-            //     document.getElementById('down_arrow' + String(ctn_index)).style.cursor = 'default';
-            // }
         }
 
         function moveUpTr(node) {
@@ -500,10 +351,6 @@
             curCtnImgShowBlock.id = 'ctn_image-show' + preIdx;
             preCtnImgShowBlock.id = 'ctn_image-show' + curIdx;
 
-            // const curCtnFeNmBlock = document.getElementById('ctn_fileName' + curIdx);
-            // const preCtnFeNmBlock = document.getElementById('ctn_fileName' + preIdx);
-            // curCtnFeNmBlock.id = 'ctn_fileName' + preIdx;
-            // preCtnFeNmBlock.id = 'ctn_fileName' + curIdx;
 
             const curInputFileBlock = document.getElementById('ctn_img' + curIdx);
             const preInputFileBlock = document.getElementById('ctn_img' + preIdx);
@@ -644,7 +491,6 @@
 
             newCell2.append(i_up, i_down);
 
-            // newCell3.classList.add('bottom_td');
             const feDiv = document.createElement('div');
             feDiv.style.display = "inline-block";
             feDiv.style.marginRight = "30px";
