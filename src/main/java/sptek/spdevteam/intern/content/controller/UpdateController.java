@@ -250,7 +250,7 @@ public class UpdateController {
 
         }
 
-        return "redirect:/content/search";
+        return "redirect:/content/update/" + ctnSeq;
     }
 
     @PostMapping("/delete")

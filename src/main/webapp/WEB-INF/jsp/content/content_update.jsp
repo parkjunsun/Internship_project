@@ -1192,7 +1192,7 @@
                             <td rowspan="2" colspan="3">
                                 <div class="fileInput" style="display: inline-block; margin-right: 30px;">
                                     <div class="image-show" id="image-show"></div>
-                                    <img class="reprImg" src="/image/${reprImg.encFeNm}.${reprImg.feExt}">
+                                    <img class="reprImg" src="/image/${reprImg.encFeNm}.${reprImg.feExt}" style="width: 200px; height: 200px;">
                                 </div>
                                 <div style="display: inline-block;">
                                     <label class="file-input" for="repr_img">
