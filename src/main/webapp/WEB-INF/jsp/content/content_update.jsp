@@ -269,7 +269,7 @@
                     var newImage = document.createElement("img");
                     newImage.setAttribute("class", "ctnDetImg");
 
-                    newImage.src = "/image/" + ctnDetImages[i]["encFeNm"] + '.' + ctnDetImages[i]["feExt"];
+                    newImage.src = "https://internship-admin.s3.ap-northeast-2.amazonaws.com/" + ctnDetImages[i]["path"];
 
                     newImage.style.width = "150px";
                     newImage.style.height = "150px";
@@ -508,8 +508,10 @@
             if (input.files && file) {
                 if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
                     alert("이미지 포맷이 맞지 않습니다.");
+                    input.value = "";
                     return;
                 }
+
 
                 const reader = new FileReader();
                 reader.onload = e => {
@@ -533,12 +535,15 @@
                                 const oldImage = container.querySelector('.reprImg');
                                 container.removeChild(oldImage);
                             }
+                            container.appendChild(newImage);
                         } else {
                             alert("이미지 사이즈가 맞지 않습니다.");
-                            return false;
+                            input.value = "";
+                            return;
                         }
                     }
                 }
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
@@ -553,6 +558,7 @@
             if (input.files && file) {
                 if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
                     alert("이미지 포맷이 맞지 않습니다.");
+                    input.value = "";
                     return;
                 }
                 const reader = new FileReader();
@@ -586,6 +592,7 @@
                             container.appendChild(newImage);
                         } else {
                             alert("이미지 포맷이 맞지 않습니다.");
+                            input.value = "";
                             return false;
                         }
                     }
@@ -1192,7 +1199,8 @@
                             <td rowspan="2" colspan="3">
                                 <div class="fileInput" style="display: inline-block; margin-right: 30px;">
                                     <div class="image-show" id="image-show"></div>
-                                    <img class="reprImg" src="/image/${reprImg.encFeNm}.${reprImg.feExt}" style="width: 200px; height: 200px;">
+<%--                                    <img class="reprImg" src="/image/${reprImg.encFeNm}.${reprImg.feExt}" style="width: 200px; height: 200px;">--%>
+                                    <img class="reprImg" src="https://internship-admin.s3.ap-northeast-2.amazonaws.com/${reprImg.path}" style="width: 200px; height: 200px;">
                                 </div>
                                 <div style="display: inline-block;">
                                     <label class="file-input" for="repr_img">
@@ -1232,20 +1240,6 @@
                             <th style="text-align: center">팝업문구</th>
                             <td colspan="3">
                                 <input type="text" class="form-control" name="popMsg" id="popMsg" value="${content.popMsg}" placeholder="25자 이내로 작성해 주세요" maxlength="25" onchange="checkDetection()">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th rowspan="2" style="text-align: center">대표이미지 개별등록</th>
-                            <td colspan="7">
-                                <div style="width: 500px; height: 500px; float: left; margin-left: 30px;">
-                                    <span style="margin-left: 170px; font-weight: bold">[빅 사이즈]</span><br><br>
-                                    <img class="bigImg" src="/image/${bigImg.encFeNm}.${bigImg.feExt}">
-                                </div>
-                                <div style="width: 500px; height: 500px; float: left">
-                                    <span style="margin-left: 65px; font-weight: bold">[작은 이미지형 및 연관 게시물 썸네일]</span><br><br>
-                                    <img class="smallImg" src="/image/${smallImg.encFeNm}.${smallImg.feExt}">
-                                </div>
-
                             </td>
                         </tr>
                         </tbody>

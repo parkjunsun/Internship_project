@@ -137,6 +137,7 @@
             if (input.files && file) {
                 if ($.inArray(extension, ['png', 'jpg', 'gif']) == -1) {
                     alert("이미지 포맷이 맞지 않습니다.");
+                    input.value = "";
                     return;
                 }
 
@@ -172,6 +173,7 @@
                             container.appendChild(newImage);
                         } else {
                             alert("이미지 사이즈가 맞지 않습니다.");
+                            input.value = "";
                             return false;
                         }
                     }

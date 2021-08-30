@@ -240,7 +240,15 @@ public class ListController {
         Pagination pagination = new Pagination();
         map.replace("listSize", Integer.parseInt(map.get("listSize").toString()));
         pagination.setListSize(Integer.parseInt(map.get("listSize").toString()));
-        pagination.pageInfo(Integer.parseInt(map.get("page").toString()),Integer.parseInt(map.get("range").toString()),listCnt);
+
+        int page;
+        if (map.get("page").equals("")) {
+            page = 1;
+        } else {
+            page = Integer.parseInt(map.get("page").toString());
+        }
+
+        pagination.pageInfo(page, Integer.parseInt(map.get("range").toString()),listCnt);
         map.put("startList", pagination.getStartList());
 
         List<ContentExcel> contentExcelList = listService.getBoardList(map);

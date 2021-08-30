@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sptek.spdevteam.intern.common.CommonService;
 import sptek.spdevteam.intern.common.FileUploadUtil;
+import sptek.spdevteam.intern.common.S3Uploader;
 import sptek.spdevteam.intern.content.domain.*;
 import sptek.spdevteam.intern.content.service.RegisterService;
 import sptek.spdevteam.intern.content.service.UpdateService;
@@ -24,10 +25,6 @@ import java.util.List;
 @RequestMapping("/content")
 public class UpdateController {
 
-    private final CommonService commonService;
-    private final UpdateService updateService;
-    private final RegisterService registerService;
-
     private static final String CARD_TYPE = "T0001";
     private static final String URL_TYPE = "T0002";
 
@@ -35,6 +32,14 @@ public class UpdateController {
     private static final String COMMON_BIG_IMG = "I0002";
     private static final String COMMON_SMALL_IMG = "I0003";
     private static final String CARD_DET_IMG = "I0004";
+
+    private static final String UPDATE = "2000";
+
+    private final CommonService commonService;
+    private final UpdateService updateService;
+    private final RegisterService registerService;
+
+    private final S3Uploader s3Uploader;
 
     @Value("${uploadFile.path}")
     private String uploadFilePath;
@@ -51,9 +56,6 @@ public class UpdateController {
         if (findContent.getUseYn().equals("N")) {
             return "content/content_error";
         }
-
-//        findContent.setDspStDt(findContent.getDspStDt().substring(0, 10));
-//        findContent.setDspEndDt(findContent.getDspEndDt().substring(0, 10));
 
 
         findContent.setDspStDt(findContent.getDspStDt().substring(0, 16));
@@ -83,10 +85,6 @@ public class UpdateController {
         for (Image image : images) {
             if (image.getImgTyCd().equals(COMMON_REPR_IMG)) {
                 model.addAttribute("reprImg", image);
-            } else if (image.getImgTyCd().equals(COMMON_BIG_IMG)) {
-                model.addAttribute("bigImg", image);
-            } else if (image.getImgTyCd().equals(COMMON_SMALL_IMG)) {
-                model.addAttribute("smallImg", image);
             } else if (image.getImgTyCd().equals(CARD_DET_IMG)){
                 ctnDetImages.add(image);
             }
@@ -138,102 +136,31 @@ public class UpdateController {
             }
         }
 
-
         if (!multipartFile.isEmpty()) {
-            FileUploadUtil fileUploadUtil = new FileUploadUtil(multipartFile, uploadFilePath);
-
-            String encFileName = fileUploadUtil.getEncFileName();
-            reprImage.setPath(fileUploadUtil.getPath(encFileName));
-            reprImage.setFeNm(fileUploadUtil.getFileName());
-            reprImage.setEncFeNm(encFileName);
-            reprImage.setFeExt(fileUploadUtil.getExtension());
-            reprImage.setFeSz(fileUploadUtil.getSize());
-            reprImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-            reprImage.setUseYn("Y");
-            reprImage.setImgOdr(0);
-
-            fileUploadUtil.UploadImage(encFileName);
-            updateService.updateImage(reprImage);
+            s3Uploader.uploadUpdate(multipartFile, "static", reprImage, 0);
         }
 
         if (multipartFiles != null) {
             int odr = 1;
             for (MultipartFile file : multipartFiles) {
-
                 if (!file.isEmpty()) {
-//                    Image ctnDetImage = ctnDetImages.get(odr - 1);
                     if (imgSeqs != null) {
                         if (odr - 1 >= imgSeqs.size()) {
-                            Image newImage = new Image();
-
-                            FileUploadUtil util = new FileUploadUtil(file, uploadFilePath);
-
-                            newImage.setImgGrpId(content.getImgGrpId());
-                            newImage.setImgTyCd(CARD_DET_IMG);
-
-                            String encFileName = util.getEncFileName();
-                            newImage.setPath(util.getPath(encFileName));
-                            newImage.setFeNm(util.getFileName());
-                            newImage.setEncFeNm(encFileName);
-                            newImage.setFeExt(util.getExtension());
-                            newImage.setFeSz(util.getSize());
-                            newImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
-                            newImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-                            newImage.setUseYn("Y");
-                            newImage.setImgOdr(odr);
-
-                            util.UploadImage(encFileName);
-                            registerService.imgSave(newImage);
+                            s3Uploader.uploadSave(file, "static", content.getImgGrpId(), CARD_DET_IMG, odr);
 
                         } else {
-
                             Integer imgSeq = imgSeqs.get(odr - 1);
                             Image ctnDetImage = updateService.getImage(imgSeq);
-
-                            FileUploadUtil ctnDetUploadUtil = new FileUploadUtil(file, uploadFilePath);
-
-                            String ctnDetEncFileName = ctnDetUploadUtil.getEncFileName();
-
-                            ctnDetImage.setPath(ctnDetUploadUtil.getPath(ctnDetEncFileName));
-                            ctnDetImage.setFeNm(ctnDetUploadUtil.getFileName());
-                            ctnDetImage.setEncFeNm(ctnDetEncFileName);
-                            ctnDetImage.setFeExt(ctnDetUploadUtil.getExtension());
-                            ctnDetImage.setFeSz(ctnDetUploadUtil.getSize());
-                            ctnDetImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-                            ctnDetImage.setUseYn("Y");
-                            ctnDetImage.setImgOdr(odr);
-
-                            ctnDetUploadUtil.UploadImage(ctnDetEncFileName);
-                            updateService.updateImage(ctnDetImage);
+                            s3Uploader.uploadUpdate(file, "static", ctnDetImage, odr);
                         }
                     } else {
-                        Image newImage = new Image();
-
-                        FileUploadUtil util = new FileUploadUtil(file, uploadFilePath);
-
-                        newImage.setImgGrpId(content.getImgGrpId());
-                        newImage.setImgTyCd(CARD_DET_IMG);
-
-                        String encFileName = util.getEncFileName();
-                        newImage.setPath(util.getPath(encFileName));
-                        newImage.setFeNm(util.getFileName());
-                        newImage.setEncFeNm(encFileName);
-                        newImage.setFeExt(util.getExtension());
-                        newImage.setFeSz(util.getSize());
-                        newImage.setRegDt(Timestamp.valueOf(LocalDateTime.now()));
-                        newImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
-                        newImage.setUseYn("Y");
-                        newImage.setImgOdr(odr);
-
-                        util.UploadImage(encFileName);
-                        registerService.imgSave(newImage);
+                        s3Uploader.uploadSave(file, "static", content.getImgGrpId(), CARD_DET_IMG, odr);
                     }
                 } else {
                     // 파일 찾기를 누르지 않은 것은 input hidden값을 받아서 ctnDetImage에 업데이트 시켜야한다.
                     Integer imgSeq = imgSeqs.get(odr - 1);
                     Image findImage = updateService.getImage(imgSeq);
                     findImage.setImgOdr(odr);
-//                    findImage.setModDt(Timestamp.valueOf(LocalDateTime.now()));
 
                     updateService.updateImage(findImage);
                 }
