@@ -817,7 +817,7 @@
         <!-- Content Body 영역 // -->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="no_border_head">
-                <span class="tab_span flSpan">콘텐츠 등록</span>
+                <span class="tab_span flSpan">콘텐츠 등록11111111</span>
                 <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
                     <div class="btn-toolbar">
                         <div class="btn-group">

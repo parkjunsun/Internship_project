@@ -30,7 +30,6 @@ public class S3Uploader {
     private final RegisterService registerService;
     private final UpdateService updateService;
 
-    private final RandomOutUtil randomOutUtil;
 
     @Value("${uploadFile.path}")
     public String localImgSavePath;
@@ -87,6 +86,7 @@ public class S3Uploader {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
+
 
     private Optional<File> convert(MultipartFile file) throws IOException{
         File convertFile = new File(localImgSavePath + file.getOriginalFilename());
