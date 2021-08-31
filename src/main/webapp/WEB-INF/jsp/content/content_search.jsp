@@ -575,7 +575,7 @@
 
             <!-- 헤드라인// -->
             <div class="no_border_head">
-                <span class="tab_span flSpan">콘텐츠조회1233</span>
+                <span class="tab_span flSpan">콘텐츠조회123</span>
                 <div class="d-flex justify-content-end flex-wrap flex-md-nowrap">
                     <div class="btn-toolbar">
                         <div class="btn-group">
