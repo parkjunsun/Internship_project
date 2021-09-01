@@ -17,6 +17,7 @@ target/
 src/main/resources/application-local.properties
 src/main/resources/application-stg.properties
 src/main/resources/application-credentials.yml
+src/main/java/sptek/spdevteam/intern/AmazonS3Config.java
 .idea
 *.iws
 *.iml
