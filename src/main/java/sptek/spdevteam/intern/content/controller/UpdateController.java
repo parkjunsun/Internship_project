@@ -41,7 +41,7 @@ public class UpdateController {
 
     private final S3Uploader s3Uploader;
 
-    @Value("/home/ec2-user/")
+    @Value("${uploadFile.path}")
     private String uploadFilePath;
 
     @GetMapping("/update/{ctnSeq}")

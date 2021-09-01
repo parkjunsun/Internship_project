@@ -31,10 +31,10 @@ public class S3Uploader {
     private final UpdateService updateService;
 
 
-    @Value("/home/ec2-user/")
+    @Value("${uploadFile.path}")
     public String localImgSavePath;
 
-    @Value("internship-admin")
+    @Value("${cloud.aws.s3.bucket}")
     public String bucket;
 
     public void uploadSave(MultipartFile multipartFile, String dirName, String imgGrpId, String imgTyCd, int odr) throws IOException {
