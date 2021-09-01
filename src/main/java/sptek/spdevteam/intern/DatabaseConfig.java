@@ -18,16 +18,16 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class DatabaseConfig {
 
-    @Value("${spring.datasource.driver-class-name}")
+    @Value("org.postgresql.Driver")
     private String dbDriverClassName;
 
-    @Value("${spring.datasource.url}")
+    @Value("jdbc:postgresql://3.36.111.192:5432/sptekdb")
     private String dbJdbcUrl;
 
-    @Value("${spring.datasource.username}")
+    @Value("sptek")
     private String dbUsername;
 
-    @Value("${spring.datasource.password}")
+    @Value("passw0rd")
     private String dbPassword;
 
     @Bean
