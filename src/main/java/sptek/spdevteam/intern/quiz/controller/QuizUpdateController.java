@@ -33,7 +33,7 @@ public class QuizUpdateController {
     private final RegisterService registerService;
     private final RandomOutUtil randomOutUtil;
 
-    @Value("${uploadFile.path}")
+    @Value("/home/ec2-user/")
     private String uploadFilePath;
 
 

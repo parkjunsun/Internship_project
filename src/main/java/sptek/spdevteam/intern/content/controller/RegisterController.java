@@ -33,7 +33,7 @@ public class RegisterController {
 
     private final S3Uploader s3Uploader;
 
-    @Value("${uploadFile.path}")
+    @Value("/home/ec2-user/")
     private String uploadFilePath;
 
     @GetMapping("/register")

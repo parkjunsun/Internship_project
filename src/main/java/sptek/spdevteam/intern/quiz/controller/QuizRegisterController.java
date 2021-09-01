@@ -47,7 +47,7 @@ public class QuizRegisterController {
     private final QuizRegisterService quizRegisterService;
 
 
-    @Value("${uploadFile.path}")
+    @Value("/home/ec2-user/")
     private String uploadFilePath;
 
     private final QuizRegisterService service;
