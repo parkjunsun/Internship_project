@@ -148,7 +148,6 @@
     </dependencies>
 
     <build>
-<!--        <finalName>ROOT.war</finalName>-->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
